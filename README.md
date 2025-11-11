@@ -5,6 +5,8 @@ Includes stacking, customizable colors, and sound effects — ready to drop into
 
 👉 Check out the example setup in the included [.rbxm](https://github.com/Coffilhg/Useful-Modules/blob/NotificationsGui/NotificationsGuiComponentExample.rbxm) file!
 
+### Always make sure to have a RemoteEvent named "Notify" inside of ReplicatedStorage!
+
 # Useful-Modules
 All or most of the Modules here should also be available at
 https://create.roblox.com/store/models?creatorName=Coffilhg
