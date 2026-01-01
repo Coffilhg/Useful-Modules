@@ -20,7 +20,7 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
-    Module Version: 1.0.0
+    Module Version: 1.0.1
 --]]--
 
 
@@ -32,7 +32,7 @@ local Signal = require(script.GoodSignal_By_Stravant) -- or wherever it's locate
 
 --- /E Dependencies (Not By @Coffilhg) ---
 
-	
+
 
 local module = {}
 
@@ -45,7 +45,7 @@ Ray | Rect | UDim | UDim2 | Vector2 | Vector3
 
 export type CoffeeBaseValue = {
 	Value: SupportedTypesList,
-	Changed: typeof(Signal.new()), -- Signal
+	Changed: Signal.Signal,
 	Destroy: (self: CoffeeBaseValue) -> (),
 	GetPath: (self: CoffeeBaseValue) -> {string},
 	_Value: SupportedTypesList,
@@ -54,8 +54,8 @@ export type CoffeeBaseValue = {
 }
 
 export type CoffeeFolder = {
-	ChildAdded: typeof(Signal.new()), -- Signal
-	ChildRemoved: typeof(Signal.new()), -- Signal
+	ChildAdded: Signal.Signal,
+	ChildRemoved: Signal.Signal,
 	Insert: (self: CoffeeFolder, newValue: CoffeeBaseValue | CoffeeFolder | SupportedTypesList | PrimitiveTable) -> (),
 	GetPath: (self: CoffeeFolder) -> {string},
 	GetChildren: (self: CoffeeFolder) -> {[string | number]: CoffeeFolder | CoffeeBaseValue},
@@ -110,7 +110,7 @@ local function InsertMethod(self : CoffeeFolder, newValue : CoffeeBaseValue | Co
 		warn("Can't :Insert to a Dictionary!")
 		return
 	end
-	
+
 	local index = #self + 1
 
 	self[index] = newValue
@@ -130,11 +130,11 @@ local function DestroyMethod(self : CoffeeFolder)
 	for _, item in pairs(self._data) do
 		if item.Destroy then item:Destroy() end
 	end
-	
+
 	rawset(self, "_data", nil)
 	rawset(self, "_parent", nil)
 	rawset(self, "_key", nil)
-	
+
 	setmetatable(self, nil)
 end
 
@@ -303,20 +303,20 @@ function Folder:__newindex(key : string | number, newValue : CoffeeBaseValue | C
 	local data = rawget(self, "_data")
 
 	local oldItem = data[key]
-	
+
 	if oldItem then
 		if newValue == nil then
 			rawset(data, key, nil)
 			self.ChildRemoved:Fire(key)
-			
+
 			if oldItem["Destroy"] then oldItem:Destroy() end
-			
+
 			return -- same as return nil
 		else
 			--- OnItemOverwriteFlag ---
 			-- uncomment the line below to ENABLE ChildRemoved firing upon Overwriting a key/index
 			-- self.ChildRemoved:Fire(key)
-			
+
 			if oldItem["Destroy"] then oldItem:Destroy() end
 		end
 	end
@@ -343,7 +343,7 @@ function Folder:__newindex(key : string | number, newValue : CoffeeBaseValue | C
 	rawset(itemToStore, "_parent", self)
 
 	rawset(itemToStore, "_key", key)
-	
+
 	if rawget(data, key) then
 		rawset(data, key, itemToStore)
 	else
@@ -374,7 +374,7 @@ end
 -- Creates a new CoffeeFolder instance, mimicking a Roblox Folder Instance.
 -- @param data Optional initial table to populate the folder with.
 -- @return A CoffeeFolder instance with ChildAdded, ChildRemoved, and tree-traversal methods.
-function CoffeeFolder.new(data)
+function CoffeeFolder.new(data) : CoffeeFolder
 	local self = setmetatable({}, Folder)
 	rawset(self, "_data", {})
 	rawset(self, "ChildAdded", Signal.new())
