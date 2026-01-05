@@ -18,13 +18,13 @@ This library intentionally favors **explicitness, performance, and Roblox semant
 * `CoffeeFolder` - virtual equivalent of `Folder`
 * `CoffeeBaseValue` - virtual equivalent of `BaseValue`
 * Supports most Roblox primitive datatypes (`CFrame`, `Color3`, `Vector3`, etc.)
-* `ChildAdded`, `ChildRemoved`, and `Changed` signals (via GoodSignal by Stravant)
+* `ChildAdded`, `ChildRemoved`, `Destroying` and `Changed` signals (via GoodSignal by Stravant)
 * Automatic wrapping:
 
   * primitives → `CoffeeBaseValue`
   * tables → `CoffeeFolder`
 * Deterministic tree paths via `GetPath()`
-* Safe recursive destruction
+* Deterministic recursive destruction
 
 ---
 
@@ -135,7 +135,7 @@ Attempting to insert into a dictionary will warn and do nothing.
 
 ## ⚠️ Important Behavior Notes
 
-### Overwriting keys does **NOT** fire signals by default
+### Overwriting keys now ALWAYS fires signals by default
 
 When you overwrite an existing key or index in a `CoffeeFolder`:
 
@@ -143,14 +143,18 @@ When you overwrite an existing key or index in a `CoffeeFolder`:
 data.Stats.Honey = 25
 ```
 
-* `ChildAdded` **does NOT fire**
-* `ChildRemoved` **does NOT fire**
-* the old object **is destroyed**
+* First the `ChildRemoved` **fires**
+* Then the `ChildAdded` **fires**
+* The old object **is destroyed**
 
-**If you want overwrite events**, see the comments directly above
-`Folder:__newindex` in the source and enable them manually. (There are instructions)
+This behavior is **intentional and NOT configurable**.
+**If you want to avoid such behavior**, do this:
 
-This behavior is **intentional and configurable**.
+```luau
+-- instead of overwriting the index as in example above (data.Stats.Honey = 25)
+-- use the API!
+data.Stats.Honey.Value = 25
+```
 
 ---
 

@@ -20,7 +20,7 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
-    Module Version: 1.0.1
+    Module Version: 2.0.0
 --]]--
 
 
@@ -46,6 +46,7 @@ Ray | Rect | UDim | UDim2 | Vector2 | Vector3
 export type CoffeeBaseValue = {
 	Value: SupportedTypesList,
 	Changed: Signal.Signal,
+	Destroying: Signal.Signal, -- Fired before destruction
 	Destroy: (self: CoffeeBaseValue) -> (),
 	GetPath: (self: CoffeeBaseValue) -> {string},
 	_Value: SupportedTypesList,
@@ -56,6 +57,7 @@ export type CoffeeBaseValue = {
 export type CoffeeFolder = {
 	ChildAdded: Signal.Signal,
 	ChildRemoved: Signal.Signal,
+	Destroying: Signal.Signal, -- Fired before destruction
 	Insert: (self: CoffeeFolder, newValue: CoffeeBaseValue | CoffeeFolder | SupportedTypesList | PrimitiveTable) -> (),
 	GetPath: (self: CoffeeFolder) -> {string},
 	GetChildren: (self: CoffeeFolder) -> {[string | number]: CoffeeFolder | CoffeeBaseValue},
@@ -125,8 +127,12 @@ end
 -- Destroys the Folder and all of its children recursively.
 -- Disconnects all internal signals.
 local function DestroyMethod(self : CoffeeFolder)
+	self.Destroying:Fire()
+	self.Destroying:DisconnectAll()
+	
 	self.ChildAdded:DisconnectAll()
 	self.ChildRemoved:DisconnectAll()
+	
 	for _, item in pairs(self._data) do
 		if item.Destroy then item:Destroy() end
 	end
@@ -189,6 +195,7 @@ function Value.new(defaultValue : SupportedTypesList) : CoffeeBaseValue
 	local self = setmetatable({}, Value)
 	self._Value = defaultValue
 	self.Changed = Signal.new()
+	self.Destroying = Signal.new()
 	rawset(self, "GetPath", GetPathMethod)
 
 	return self
@@ -229,6 +236,8 @@ end
 
 -- Destroys the Value instance, disconnecting all Changed signal callbacks and clearing the metatable.
 function Value:Destroy()
+	self.Destroying:Fire()
+	self.Destroying:DisconnectAll()
 	self.Changed:DisconnectAll()
 	setmetatable(self, nil)
 end
@@ -251,6 +260,7 @@ function CoffeeBaseValue.validateUnlinkedClass(v)
 	return type(v) == "table"
 		and	v["_Value"] ~= nil
 		and	v["Changed"] ~= nil
+		and v["Destroying"] ~= nil
 end
 
 
@@ -272,26 +282,8 @@ local Folder = {}
 -- Intercepts assignment to the Folder. 
 -- Handles child removal (if nil), wrapping raw data into CoffeeObjects, and parent-linking.
 -- Fires ChildAdded or ChildRemoved signals accordingly.
--- Overwriting an existing key/index does NOT fire ChildAdded and ChildRemoved, so
--- Feel Free To Change The Following:
---[=[--
--- ChildRemoved:
-select the text and use CTRL+F to find the spot
-the text: 			--- OnItemOverwriteFlag ---
-
--- ChildAdded:
-	if rawget(data, key) then
-		rawset(data, key, itemToStore)
-	else
-		rawset(data, key, itemToStore)
-		self.ChildAdded:Fire(key, itemToStore)
-	end
-	
--- Replace the ⬆️ part with ⬇️ part to ENABLE ChildAdded firing upon Overwriting a key/index:
-
-	rawset(data, key, itemToStore)
-	self.ChildAdded:Fire(key, itemToStore)
---]=]--
+-- Overwriting an existing key/index ALWAYS fires ChildRemoved and then ChildAdded, this
+-- is intended behavior in the V2.0.0, unlike the V1.0.0.
 
 -- Handles the assignment of new children to the Folder.
 -- Automatically wraps raw tables in CoffeeFolders and supported primitives in CoffeeBaseValues.
@@ -302,21 +294,17 @@ function Folder:__newindex(key : string | number, newValue : CoffeeBaseValue | C
 	--print("kv:", key, newValue)
 	local data = rawget(self, "_data")
 
-	local oldItem = data[key]
+	local oldItem = rawget(data, key)
 
 	if oldItem then
 		if newValue == nil then
 			rawset(data, key, nil)
 			self.ChildRemoved:Fire(key)
-
+			
 			if oldItem["Destroy"] then oldItem:Destroy() end
 
 			return -- same as return nil
 		else
-			--- OnItemOverwriteFlag ---
-			-- uncomment the line below to ENABLE ChildRemoved firing upon Overwriting a key/index
-			-- self.ChildRemoved:Fire(key)
-
 			if oldItem["Destroy"] then oldItem:Destroy() end
 		end
 	end
@@ -343,13 +331,21 @@ function Folder:__newindex(key : string | number, newValue : CoffeeBaseValue | C
 	rawset(itemToStore, "_parent", self)
 
 	rawset(itemToStore, "_key", key)
-
-	if rawget(data, key) then
-		rawset(data, key, itemToStore)
-	else
-		rawset(data, key, itemToStore)
-		self.ChildAdded:Fire(key, itemToStore)
+	
+	-- Listen for child self-destruction
+	if itemToStore["Destroying"] then
+		itemToStore["Destroying"]:Connect(function()
+			local destroyedItem = rawget(data, key)
+			
+			if data and destroyedItem == itemToStore then
+				rawset(data, key, nil)
+				self.ChildRemoved:Fire(key)
+			end
+		end)
 	end
+
+	rawset(data, key, itemToStore)
+	self.ChildAdded:Fire(key, itemToStore)
 end
 
 -- Provides access to children stored in the internal _data table.
@@ -379,6 +375,7 @@ function CoffeeFolder.new(data) : CoffeeFolder
 	rawset(self, "_data", {})
 	rawset(self, "ChildAdded", Signal.new())
 	rawset(self, "ChildRemoved", Signal.new())
+	rawset(self, "Destroying", Signal.new())
 	rawset(self, "_IsArrayORTuple", IsArrayORTupleMethod)
 	rawset(self, "Insert", InsertMethod)
 	rawset(self, "GetPath", GetPathMethod)
@@ -412,6 +409,7 @@ function CoffeeFolder.validateUnlinkedClass(v)
 		and	v["_data"] ~= nil
 		and	v["ChildAdded"] ~= nil
 		and	v["ChildRemoved"] ~= nil
+		and v["Destroying"] ~= nil
 end
 
 return module
