@@ -20,7 +20,7 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
-    Module Version: 2.0.0
+    Module Version: 2.1.0
 --]]--
 
 
@@ -49,7 +49,6 @@ export type CoffeeBaseValue = {
 	Destroying: Signal.Signal, -- Fired before destruction
 	Destroy: (self: CoffeeBaseValue) -> (),
 	GetPath: (self: CoffeeBaseValue) -> {string},
-	_Value: SupportedTypesList,
 	_parent: CoffeeFolder?,
 	_key: string?
 }
@@ -193,9 +192,9 @@ function Value.new(defaultValue : SupportedTypesList) : CoffeeBaseValue
 	assert(supportedTypes[typeof(defaultValue)], `\n>\tCoffeeBaseValue Does Not Support typeof: "{typeof(defaultValue)}";\n>\tAll supported Types:\n>\t{supportedTypesDebugMessage};`)
 
 	local self = setmetatable({}, Value)
-	self._Value = defaultValue
-	self.Changed = Signal.new()
-	self.Destroying = Signal.new()
+	rawset(self, "Value", defaultValue)
+	rawset(self, "Changed", Signal.new())
+	rawset(self, "Destroying", Signal.new())
 	rawset(self, "GetPath", GetPathMethod)
 
 	return self
@@ -209,20 +208,22 @@ function Value:__newindex(key, newValue)
 	if key == "Value" then
 		assert(supportedTypes[typeof(newValue)], `\n>\tCoffeeBaseValue Does Not Support typeof: "{typeof(newValue)}";\n>\tAll supported Types:\n>\t{supportedTypesDebugMessage};`)
 
-		local previousValue = self._Value
-		self._Value = newValue
-		self.Changed:Fire(previousValue, newValue)
-	else
+		local previousValue = self.Value
 		rawset(self, key, newValue)
+		self.Changed:Fire(previousValue, newValue)
+
+		return
 	end
+
+	rawset(self, key, newValue)
 end
 
 -- Retrieves the value of a key from the Value instance, returning the stored value for the Value property.
 -- @param key The key to access (e.g., "Value").
--- @return The value associated with the key, or the stored _Value for "Value".
+-- @return The value associated with the key, or the stored Value for "Value".
 function Value:__index(key)
 	if key == "Value" then
-		return self._Value
+		return self.Value
 	end
 	return rawget(Value, key)
 end
@@ -231,7 +232,7 @@ end
 -- Auto fired when doing print(Value)
 -- @return A string describing the type and value of the instance.
 function Value:__tostring()
-	return `{typeof(self._Value)}: {self._Value}`
+	return `{typeof(self.Value)}: {self.Value}`
 end
 
 -- Destroys the Value instance, disconnecting all Changed signal callbacks and clearing the metatable.
@@ -258,9 +259,9 @@ end
 
 function CoffeeBaseValue.validateUnlinkedClass(v)
 	return type(v) == "table"
-		and	v["_Value"] ~= nil
-		and	v["Changed"] ~= nil
-		and v["Destroying"] ~= nil
+		and	rawget(v, "Value") ~= nil
+		and	rawget(v, "Changed") ~= nil
+		and rawget(v, "Destroying") ~= nil
 end
 
 
@@ -370,7 +371,7 @@ end
 -- Creates a new CoffeeFolder instance, mimicking a Roblox Folder Instance.
 -- @param data Optional initial table to populate the folder with.
 -- @return A CoffeeFolder instance with ChildAdded, ChildRemoved, and tree-traversal methods.
-function CoffeeFolder.new(data) : CoffeeFolder
+function CoffeeFolder.new(data : {}?) : CoffeeFolder
 	local self = setmetatable({}, Folder)
 	rawset(self, "_data", {})
 	rawset(self, "ChildAdded", Signal.new())
@@ -382,7 +383,7 @@ function CoffeeFolder.new(data) : CoffeeFolder
 	rawset(self, "GetChildren", GetChildrenMethod)
 	rawset(self, "Destroy", DestroyMethod)
 
-	if not data or type(data) ~= "table" then
+	if type(data) ~= "table" then
 		return self
 	end
 
@@ -406,10 +407,10 @@ end
 -- @return True if the object has the required internal Folder properties.
 function CoffeeFolder.validateUnlinkedClass(v)
 	return type(v) == "table"
-		and	v["_data"] ~= nil
-		and	v["ChildAdded"] ~= nil
-		and	v["ChildRemoved"] ~= nil
-		and v["Destroying"] ~= nil
+		and	rawget(v, "_data") ~= nil
+		and	rawget(v, "ChildAdded") ~= nil
+		and	rawget(v, "ChildRemoved") ~= nil
+		and rawget(v, "Destroying") ~= nil
 end
 
 return module
