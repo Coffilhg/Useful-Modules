@@ -20,7 +20,7 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
-    Module Version: 2.1.1
+    Module Version: 2.1.2
 --]]--
 
 
@@ -195,7 +195,7 @@ function Value:__newindex(key, newValue)
 		assert(supportedTypes[typeof(newValue)], `\n>\tCoffeeBaseValue Does Not Support typeof: "{typeof(newValue)}";\n>\tAll supported Types:\n>\t{supportedTypesDebugMessage};`)
 
 		local previousValue = self._Value
-		rawset(self, key, newValue)
+		self._Value = newValue
 		self.Changed:Fire(previousValue, newValue)
 
 		return
