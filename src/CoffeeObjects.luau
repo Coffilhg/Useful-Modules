@@ -20,7 +20,7 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
-    Module Version: 2.1.0
+    Module Version: 2.1.1
 --]]--
 
 
@@ -49,6 +49,7 @@ export type CoffeeBaseValue = {
 	Destroying: Signal.Signal, -- Fired before destruction
 	Destroy: (self: CoffeeBaseValue) -> (),
 	GetPath: (self: CoffeeBaseValue) -> {string},
+	_Value: SupportedTypesList,
 	_parent: CoffeeFolder?,
 	_key: string?
 }
@@ -185,21 +186,6 @@ supportedTypesTemp = nil
 
 local Value = {}
 
--- Creates a new Value instance with a default value, mimicking Roblox BaseValue instances (Limited To Supported Types; Supports Some, That BaseValues Don't).
--- @param defaultValue The initial value for the Value instance. Must be one of SupportedTypesList.
--- @return A Value instance with properties Value, Changed, and Destroy.
-function Value.new(defaultValue : SupportedTypesList) : CoffeeBaseValue
-	assert(supportedTypes[typeof(defaultValue)], `\n>\tCoffeeBaseValue Does Not Support typeof: "{typeof(defaultValue)}";\n>\tAll supported Types:\n>\t{supportedTypesDebugMessage};`)
-
-	local self = setmetatable({}, Value)
-	rawset(self, "Value", defaultValue)
-	rawset(self, "Changed", Signal.new())
-	rawset(self, "Destroying", Signal.new())
-	rawset(self, "GetPath", GetPathMethod)
-
-	return self
-end
-
 -- Handles assignment to the Value instance, enforcing type validation for the Value property.
 -- Fires the Changed signal when the Value property is updated.
 -- @param key The key being assigned to (e.g., "Value").
@@ -208,7 +194,7 @@ function Value:__newindex(key, newValue)
 	if key == "Value" then
 		assert(supportedTypes[typeof(newValue)], `\n>\tCoffeeBaseValue Does Not Support typeof: "{typeof(newValue)}";\n>\tAll supported Types:\n>\t{supportedTypesDebugMessage};`)
 
-		local previousValue = self.Value
+		local previousValue = self._Value
 		rawset(self, key, newValue)
 		self.Changed:Fire(previousValue, newValue)
 
@@ -220,10 +206,10 @@ end
 
 -- Retrieves the value of a key from the Value instance, returning the stored value for the Value property.
 -- @param key The key to access (e.g., "Value").
--- @return The value associated with the key, or the stored Value for "Value".
+-- @return The value associated with the key, or the stored _Value for "Value".
 function Value:__index(key)
 	if key == "Value" then
-		return self.Value
+		return self._Value
 	end
 	return rawget(Value, key)
 end
@@ -232,7 +218,7 @@ end
 -- Auto fired when doing print(Value)
 -- @return A string describing the type and value of the instance.
 function Value:__tostring()
-	return `{typeof(self.Value)}: {self.Value}`
+	return `{typeof(self._Value)}: {self._Value}`
 end
 
 -- Destroys the Value instance, disconnecting all Changed signal callbacks and clearing the metatable.
@@ -243,11 +229,19 @@ function Value:Destroy()
 	setmetatable(self, nil)
 end
 
--- Creates a new Value instance with a default value, mimicking Roblox BaseValue instances.
+-- Creates a new Value instance with a default value, mimicking Roblox BaseValue instances. (Limited To Supported Types; Supports some types, that BaseValues don't).
 -- @param defaultValue The initial value for the Value instance. Must be one of SupportedTypesList.
 -- @return A Value instance with properties Value, Changed, and Destroy.
-function CoffeeBaseValue.new(defaultValue : SupportedTypesList)
-	return Value.new(defaultValue)
+function CoffeeBaseValue.new(defaultValue : SupportedTypesList) : CoffeeBaseValue
+	assert(supportedTypes[typeof(defaultValue)], `\n>\tCoffeeBaseValue Does Not Support typeof: "{typeof(defaultValue)}";\n>\tAll supported Types:\n>\t{supportedTypesDebugMessage};`)
+
+	local self = setmetatable({}, Value)
+	rawset(self, "_Value", defaultValue)
+	rawset(self, "Changed", Signal.new())
+	rawset(self, "Destroying", Signal.new())
+	rawset(self, "GetPath", GetPathMethod)
+
+	return self
 end
 
 -- Validates whether a given object is a valid Value instance.
@@ -258,8 +252,10 @@ function CoffeeBaseValue.validateClass(v)
 end
 
 function CoffeeBaseValue.validateUnlinkedClass(v)
+	-- rawget is used to avoid triggering Folder:__index when
+	-- doing CoffeeBaseValue.validateUnlinkedClass(CoffeeFolder)
 	return type(v) == "table"
-		and	rawget(v, "Value") ~= nil
+		and	rawget(v, "_Value") ~= nil
 		and	rawget(v, "Changed") ~= nil
 		and rawget(v, "Destroying") ~= nil
 end
