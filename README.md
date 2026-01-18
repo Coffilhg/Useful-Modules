@@ -21,6 +21,7 @@ ServerMessages:SendMessage("Hello World!", "[System]:")
 
 ## Notes
 - Please do not use </br> as it breaks Roblox's built-in RichText styles, even though it is documented as one of the RichText supported tags. Use \n instead.
+- **Premium Players** - All Players with Enum.MembershipType other than Enum.MembershipType.None
 
 ---
 
