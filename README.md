@@ -28,13 +28,15 @@ GreatUIDrag
 ```
 
 Then require it:
-``local GreatUIDrag = require(path.To.GreatUIDrag)``
+```lua
+local GreatUIDrag = require(path.To.GreatUIDrag)
+```
 
 ---
 
 ## Quick Start
 
-```
+```lua
 GreatUIDrag(
     Frame,          -- GuiObject to move
     Frame.Header    -- Drag handle (TextButton / ImageButton)
@@ -43,7 +45,7 @@ GreatUIDrag(
 
 or more explicit
 
-```
+```lua
 local drag = GreatUIDrag(
     Frame,                  -- GuiObject to move
     Frame.Header,           -- Drag handle (TextButton / ImageButton)
@@ -58,7 +60,7 @@ local drag = GreatUIDrag(
 
 ## API
 
-```
+```lua
 GreatUIDrag(
     dragElement: GuiObject,
     dragHandle: TextButton | ImageButton | {TextButton | ImageButton},
@@ -91,6 +93,7 @@ GreatUIDrag(
 
 ### `paddingOptions` (optional)
 > CSS-like syntax:
+
 | Input                      | Result                                                                       |
 |----------------------------|------------------------------------------------------------------------------|
 | Empty (`nil`) or `{}`      | Defaults to 30px padding on all sides                                        |
@@ -98,6 +101,7 @@ GreatUIDrag(
 | `{y, x}`                   | Horizontal (top+bottom) padding is `y`; Vertical (right+left) padding is `x` |
 | `{y1, x, y2}`              | Top padding = `y1`, sides (right+left) padding = `x`, Bottom padding = `y2`  |
 | `top, right, bottom, left` | full control                                                                 |
+
 > Each value can be an UDim or a number, which will be converted into UDim.new(0, number) (pixels)
 
 ### `sensibilityMultiplier` (optional)
@@ -106,7 +110,7 @@ GreatUIDrag(
 
 ## Returned Object (`DragElement`) Methods
 
-```
+```lua
 local MyDragElement = GreatUIDrag(...)
 ```
 
