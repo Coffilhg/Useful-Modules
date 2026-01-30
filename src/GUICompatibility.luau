@@ -100,6 +100,11 @@ function module:GetGuiInsetSize() : CoffeeObjects.CoffeeBaseValue
 	return GuiInsetSize --math.abs(someGUI.AbsoluteSize.Y - cloneGUI.AbsoluteSize.Y)
 end
 
+function module:UpdateAndGetGuiInsetSize() : CoffeeObjects.CoffeeBaseValue
+	updateGuiInsetSizeValue()
+	return module:GetGuiInsetSize()
+end
+
 -- Returns the difference in size between DeviceSafeInsets vs None Safe Insets
 -- This is useful for scaling Gui, that has to be accurately 100% of the screen width - just set it's Size property to UDim2.new(1, module:GetSafeInsetsSize().X, 0.1, 0)
 function module:GetSafeInsetsSize()
