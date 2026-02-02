@@ -26,7 +26,7 @@ One (of the many possible) practical use case is **reducing high-frequency remot
 
 Instead of repeatedly sending long strings or table paths:
 
-```lua
+```luau
 --- Server-side ---
 --onValueChangedCallback(newValue)
 local valuePath = "Currencies.Main" -- ~15 bytes (string) + roblox built in headers
@@ -40,7 +40,7 @@ Below is one possible example flow:
 * Resolves a path using `Arrangement[key]`
 * Sends only the integer index + payload
 
-```lua
+```luau
 local ValuePathArrangements = Arrangement.new()
 --- your code ---
 --onValueChangedCallback(newValue)
@@ -53,7 +53,7 @@ ValueUpdateRemoteEvent:FireClient(player, valuePath, newValue)
 * If the index is known → resolve instantly
 * If unknown → request the decoded key once and cache it
 
-```lua
+```luau
 --- Client-side ---
 local ValuePathArrangementsCache = {}
 
@@ -65,7 +65,7 @@ ValueUpdateRemoteEvent.OnClientEvent:Connect(function(valuePathIndex, newValue)
 end)
 ```
 
-```lua
+```luau
 --- Server-side ---
 GetPathArrangementRemoteFunction.OnServerInvoke = function(player : Player, index : number)
     -- add your own logic to protect yourself from misinput index (not number type, inf, NaN)
