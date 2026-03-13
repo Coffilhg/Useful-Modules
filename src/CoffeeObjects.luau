@@ -20,7 +20,7 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
-    Module Version: 2.2.0
+    Module Version: 2.2.1
 --]]--
 
 
@@ -251,6 +251,10 @@ function Value:Destroy()
 	self.Destroying:Fire()
 	self.Destroying:DisconnectAll()
 	self.Changed:DisconnectAll()
+
+	rawset(self, "_parent", nil)
+	rawset(self, "_key", nil)
+
 	setmetatable(self, nil)
 end
 
@@ -392,10 +396,27 @@ function Folder:__iter()
 	return next, rawget(self, "_data")
 end
 
--- Returns the count of children if the folder is an array.
+-- Returns the count of children if the folder is an array/tuple.
 -- Note: This will return 0 for dictionary-like folders.
+-- Takes O(n) time for true arrays/tuples!
+-- Avoids quirky roblox count, so that _IsArrayORTuple method works correctly.
+-- > print(#{[1] = "x", [3] = "y"}) -- outputs: 1; 
+-- Counting elements in a 30-element CoffeeFolder 1M times takes ~0.22s - efficient for Roblox use. https://github.com/Coffilhg/Useful-Modules/blob/CoffeeObjects/src/Tests/Benchmark__len.luau
 function Folder:__len()
-	return #rawget(self, "_data")
+	local data = rawget(self, "_data")
+	local length = #data
+	
+	if length == 0 then
+		return 0
+	end
+	
+	for i = 1, length do
+		if data[i] == nil then
+			return 0
+		end
+	end
+	
+	return length
 end
 
 
