@@ -20,7 +20,7 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
-    Module Version: 2.1.3
+    Module Version: 2.2.0
 --]]--
 
 
@@ -43,24 +43,38 @@ ColorSequence | Content | EnumItem |
 Font | NumberRange | NumberSequence |
 Ray | Rect | UDim | UDim2 | Vector2 | Vector3
 
-export type PrimitiveTable = {
-	[string | number]: CoffeeBaseValue | CoffeeFolder | SupportedTypesList | PrimitiveTable,
-}
+export type TableIndex = string | number
+export type TableValue = CoffeeBaseValue | CoffeeFolder | CoffeeBaseValueStrict<SupportedTypesList> | CoffeeFolderStrict<PrimitiveTable> | SupportedTypesList | PrimitiveTable
+export type PrimitiveTable = {[TableIndex]: TableValue}
 
 export type CoffeeFolder = {
 	ChildAdded: Signal.Signal<TableIndex, CoffeeBaseValue | CoffeeFolder>, -- fires with the key and item that were added
 	ChildRemoved: Signal.Signal<TableIndex>, -- fires with the key that was destroyed
 	Destroying: Signal.Signal<>, -- Fired before destruction
-	Insert: (self: CoffeeFolder, newValue: CoffeeBaseValue | CoffeeFolder | SupportedTypesList | PrimitiveTable) -> (),
+	Insert: (self: CoffeeFolder, newValue: TableValue) -> (),
 	GetPath: (self: CoffeeFolder) -> {string},
-	GetChildren: (self: CoffeeFolder) -> {[string | number]: CoffeeFolder | CoffeeBaseValue},
+	GetChildren: (self: CoffeeFolder) -> {[TableIndex]: CoffeeFolder | CoffeeBaseValue},
 	Destroy: (self: CoffeeFolder) -> (),
 	_IsArrayORTuple: (self: CoffeeFolder) -> boolean,
-	_data: {[string | number]: CoffeeFolder | CoffeeBaseValue},
+	_data: {[TableIndex]: CoffeeFolder | CoffeeBaseValue},
 	_parent: CoffeeFolder?,
 	_key: string?,
-	[string | number]: any,
+	[TableIndex]: any,
 }
+
+export type CoffeeFolderStrict<T> = { -- T must be {[TableIndex]: CoffeeFolder | CoffeeBaseValue}
+	ChildAdded: Signal.Signal<TableIndex, CoffeeBaseValue | CoffeeFolder>, -- fires with the key and item that were added
+	ChildRemoved: Signal.Signal<TableIndex>, -- fires with the key that was destroyed
+	Destroying: Signal.Signal<>, -- Fired before destruction
+	Insert: (self: CoffeeFolderStrict<T>, newValue: TableValue) -> (),
+	GetPath: (self: CoffeeFolderStrict<T>) -> {string},
+	GetChildren: (self: CoffeeFolderStrict<T>) -> T,
+	Destroy: (self: CoffeeFolderStrict<T>) -> (),
+	_IsArrayORTuple: (self: CoffeeFolderStrict<T>) -> boolean,
+	_data: T,
+	_parent: CoffeeFolder?,
+	_key: string?,
+} & T -- Perfect for autocomplete because index leads to internal _data, which is T
 
 export type CoffeeBaseValue = {
 	Value: SupportedTypesList,
@@ -73,11 +87,22 @@ export type CoffeeBaseValue = {
 	_key: string?,
 }
 
+export type CoffeeBaseValueStrict<T> = { -- T is ONE of the types from SupportedTypesList
+	Value: T,
+	Changed: Signal.Signal<T, T>, -- fires with previousValue and newValue
+	Destroying: Signal.Signal<>, -- Fired before destruction
+	Destroy: (self: CoffeeBaseValueStrict<T>) -> (),
+	GetPath: (self: CoffeeBaseValueStrict<T>) -> {string},
+	_Value: T,
+	_parent: CoffeeFolder?,
+	_key: string?,
+}
+
 --- GetPathMethod REQUIRED by CoffeeBaseValue AND CoffeeFolder ---
 
 -- Traverses up the hierarchy via _parent references to reconstruct the object's location.
 -- @return An array of keys (strings or numbers) representing the path from the root.
-local function GetPathMethod(self: CoffeeBaseValue | CoffeeFolder) : {[number]: string | number}
+local function GetPathMethod(self: CoffeeBaseValue | CoffeeFolder) : {[number]: TableIndex}
 	local path = {}
 	local current = self
 	local parent = rawget(current, "_parent")
@@ -107,7 +132,7 @@ end
 -- Appends a new value to the end of the folder, provided the folder is an array/tuple.
 -- Automatically wraps raw tables into CoffeeFolders and primitives into CoffeeBaseValues.
 -- @param newValue The value to be wrapped and inserted.
-local function InsertMethod(self : CoffeeFolder, newValue : CoffeeBaseValue | CoffeeFolder | SupportedTypesList | PrimitiveTable)
+local function InsertMethod(self : CoffeeFolder, newValue : TableValue)
 	if not self:_IsArrayORTuple() then
 		warn("Can't :Insert to a Dictionary!")
 		return
@@ -120,7 +145,7 @@ end
 
 -- Returns the internal data table containing all children.
 -- @return A dictionary of keys to CoffeeBaseValues or CoffeeFolders.
-local function GetChildrenMethod(self : CoffeeFolder) : {[string | number]: CoffeeFolder | CoffeeBaseValue}
+local function GetChildrenMethod(self : CoffeeFolder) : {[TableIndex]: CoffeeFolder | CoffeeBaseValue}
 	return self._data
 end
 
@@ -244,6 +269,16 @@ function CoffeeBaseValue.new(defaultValue : SupportedTypesList) : CoffeeBaseValu
 	return self
 end
 
+-- Does the same as CoffeeBaseValue.new;
+-- The type of the initial defaultValue value will now follow in autocomplete for this CoffeeBaseValue.
+-- You can still do CoffeeBaseValue.Value = a type different from the default, but at this point just use non-strict.
+-- @param defaultValue The initial value for the Value instance. Must be one of SupportedTypesList (T is inferred from it).
+-- @return A CoffeeBaseValueStrict<T> (Value) instance with typed Value property.
+function CoffeeBaseValue.strictNew<T>(defaultValue : T & SupportedTypesList) : CoffeeBaseValueStrict<T>
+	local self = CoffeeBaseValue.new(defaultValue) :: CoffeeBaseValueStrict<T>
+	return self
+end
+
 -- Validates whether a given object is a valid Value instance.
 -- @param v The object to validate.
 -- @return True if the object is a Value instance, false otherwise.
@@ -286,7 +321,7 @@ local Folder = {}
 -- Automatically wraps raw tables in CoffeeFolders and supported primitives in CoffeeBaseValues.
 -- @param key The key/index for the new child.
 -- @param newValue The value to store. If nil, the child is removed and destroyed.
-function Folder:__newindex(key : string | number, newValue : CoffeeBaseValue | CoffeeFolder | SupportedTypesList | PrimitiveTable)
+function Folder:__newindex(key : TableIndex, newValue : TableValue)
 	--print("new index inside", self)
 	--print("kv:", key, newValue)
 	local data = rawget(self, "_data")
@@ -348,7 +383,7 @@ end
 -- Provides access to children stored in the internal _data table.
 -- @param key The name or index of the child to retrieve.
 -- @return The CoffeeBaseValue or CoffeeFolder associated with the key.
-function Folder:__index(key : string | number)
+function Folder:__index(key : TableIndex)
 	return rawget(self._data, key)
 end
 
@@ -367,7 +402,7 @@ end
 -- Creates a new CoffeeFolder instance, mimicking a Roblox Folder Instance.
 -- @param data Optional initial table to populate the folder with.
 -- @return A CoffeeFolder instance with ChildAdded, ChildRemoved, and tree-traversal methods.
-function CoffeeFolder.new(data : {}?) : CoffeeFolder
+function CoffeeFolder.new(data : ({} & PrimitiveTable)?) : CoffeeFolder
 	local self = setmetatable({}, Folder)
 	rawset(self, "_data", {})
 	rawset(self, "ChildAdded", Signal.new())
@@ -388,6 +423,17 @@ function CoffeeFolder.new(data : {}?) : CoffeeFolder
 		self[k] = v -- newindex will handle this
 	end
 
+	return self
+end
+
+-- Creates a strictly-typed CoffeeFolder instance (for better autocomplete and type inference).
+-- See examples at https://github.com/Coffilhg/Useful-Modules/blob/CoffeeObjects/src/Examples/StrictTypesAndObjects.luau
+-- Behaves identically to CoffeeFolder.new, but the returned object's children are typed as T.
+-- The structure of the initial data table will now follow in autocomplete for this CoffeeFolderStrict<T>.
+-- @param data Optional initial table to populate the folder with (T is inferred from it).
+-- @return A CoffeeFolderStrict<T> instance.
+function CoffeeFolder.strictNew<T>(data : T & PrimitiveTable) : CoffeeFolderStrict<T>
+	local self = CoffeeFolder.new(data) :: CoffeeFolderStrict<T>
 	return self
 end
 
