@@ -20,7 +20,7 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
-    Module Version: 2.1.2
+    Module Version: 2.1.3
 --]]--
 
 
@@ -43,21 +43,14 @@ ColorSequence | Content | EnumItem |
 Font | NumberRange | NumberSequence |
 Ray | Rect | UDim | UDim2 | Vector2 | Vector3
 
-export type CoffeeBaseValue = {
-	Value: SupportedTypesList,
-	Changed: Signal.Signal,
-	Destroying: Signal.Signal, -- Fired before destruction
-	Destroy: (self: CoffeeBaseValue) -> (),
-	GetPath: (self: CoffeeBaseValue) -> {string},
-	_Value: SupportedTypesList,
-	_parent: CoffeeFolder?,
-	_key: string?
+export type PrimitiveTable = {
+	[string | number]: CoffeeBaseValue | CoffeeFolder | SupportedTypesList | PrimitiveTable,
 }
 
 export type CoffeeFolder = {
-	ChildAdded: Signal.Signal,
-	ChildRemoved: Signal.Signal,
-	Destroying: Signal.Signal, -- Fired before destruction
+	ChildAdded: Signal.Signal<TableIndex, CoffeeBaseValue | CoffeeFolder>, -- fires with the key and item that were added
+	ChildRemoved: Signal.Signal<TableIndex>, -- fires with the key that was destroyed
+	Destroying: Signal.Signal<>, -- Fired before destruction
 	Insert: (self: CoffeeFolder, newValue: CoffeeBaseValue | CoffeeFolder | SupportedTypesList | PrimitiveTable) -> (),
 	GetPath: (self: CoffeeFolder) -> {string},
 	GetChildren: (self: CoffeeFolder) -> {[string | number]: CoffeeFolder | CoffeeBaseValue},
@@ -66,11 +59,18 @@ export type CoffeeFolder = {
 	_data: {[string | number]: CoffeeFolder | CoffeeBaseValue},
 	_parent: CoffeeFolder?,
 	_key: string?,
-	[string | number]: any 
+	[string | number]: any,
 }
 
-export type PrimitiveTable = {
-	[string | number]: CoffeeBaseValue | CoffeeFolder | SupportedTypesList | PrimitiveTable,
+export type CoffeeBaseValue = {
+	Value: SupportedTypesList,
+	Changed: Signal.Signal<SupportedTypesList, SupportedTypesList>, -- fires with previousValue and newValue
+	Destroying: Signal.Signal<>, -- Fired before destruction
+	Destroy: (self: CoffeeBaseValue) -> (),
+	GetPath: (self: CoffeeBaseValue) -> {string},
+	_Value: SupportedTypesList,
+	_parent: CoffeeFolder?,
+	_key: string?,
 }
 
 --- GetPathMethod REQUIRED by CoffeeBaseValue AND CoffeeFolder ---
