@@ -1,0 +1,6 @@
+[package]
+name = "coffilhg/modulenamelowercase"
+author = "Coffilhg"
+content_root = "src"
+version = "1.0.0"
+license = "Apache-2.0"
