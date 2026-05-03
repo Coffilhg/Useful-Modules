@@ -8,10 +8,10 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 | Module (Linked To Branch) | Available on Wally? | LICENSE |
 | --- | --- | --- |
 | **[Arrangement](<https://github.com/Coffilhg/Useful-Modules/tree/Arrangement>)** | ❌ | Apache-2.0 |
-| **[CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)** | `CoffeeObjects = "coffilhg/coffeeobjects@1.0.1"` | Apache-2.0 |
+| **[CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)** | ```CoffeeObjects = "coffilhg/coffeeobjects@1.0.1"``` | Apache-2.0 |
 | **[CoffeeRemotes](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotes>)** | ❌ | Apache-2.0 |
 | **[Counter](<https://github.com/Coffilhg/Useful-Modules/tree/Counter>)** | ❌ | Apache-2.0 |
-| **[EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)** | `EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.0"` | Apache-2.0 |
+| **[EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)** | ```EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.0"``` | Apache-2.0 |
 | **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)** | ❌ | Apache-2.0 |
 | **[GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)** | ❌ | Apache-2.0 |
 | **[ServerMessages](<https://github.com/Coffilhg/Useful-Modules/tree/ServerMessages>)** | ❌ | Apache-2.0 |
