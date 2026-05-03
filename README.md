@@ -4,7 +4,23 @@ All or most of the Modules here should also be available on **Wally** and/or **h
 Feel free to suggest changes or make them yourself!
 Each branch is a separate module/collection, the LICENSE may vary (but is mostly Apache-2.0). Please make sure to look into README/NOTICE files before use. If the LICENSE requires attribution or whatsoever, don't miss out!
 
-**Main branch is a template**
+## Quick Module Lookup
+| Module (Linked To Branch) | Available on Wally? | LICENSE |
+| --- | --- | --- |
+| **[Arrangement](<https://github.com/Coffilhg/Useful-Modules/tree/Arrangement>)** | ❌ | Apache-2.0 |
+| **[CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)** | `CoffeeObjects = "coffilhg/coffeeobjects@1.0.1"` | Apache-2.0 |
+| **[CoffeeRemotes](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotes>)** | ❌ | Apache-2.0 |
+| **[Counter](<https://github.com/Coffilhg/Useful-Modules/tree/Counter>)** | ❌ | Apache-2.0 |
+| **[EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)** | `EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.0"` | Apache-2.0 |
+| **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)** | ❌ | Apache-2.0 |
+| **[GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)** | ❌ | Apache-2.0 |
+| **[ServerMessages](<https://github.com/Coffilhg/Useful-Modules/tree/ServerMessages>)** | ❌ | Apache-2.0 |
+
+<!--
+| **[ModuleName](<https://github.com/Coffilhg/Useful-Modules/tree/Modulename>)** | `coffeeobjects = "coffilhg/modulenamelowrcase@1.0.0"`/❌ | Apache-2.0 |
+-->
+
+**Main branch is a template branch!**
 
 <!--
 --- README's Template ---
