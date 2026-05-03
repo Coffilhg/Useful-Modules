@@ -3,8 +3,9 @@ Easier way to use TweenService:SmoothDamp() - keeps the required variables in a 
 
 ---
 
-## Available [Here](src/init.luau)!
+## Available Here!
 - **[Wally](<https://wally.run>)** ~ ``EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.0"``
+- **[This repository](src/init.luau) ~ [src/init.luau](src/init.luau)**
 <!--- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[EasySmoothDamp](<https://create.roblox.com/store/asset/114136223178149/CoffeeBaseValue>)**-->
 
 ---
@@ -19,7 +20,7 @@ Easier way to use TweenService:SmoothDamp() - keeps the required variables in a 
 
 ## Installation
 
-Use the [previous section](README.md#L6) to obtain the Module
+Use the "*Available Here!*" section to obtain the Module
 
 Require the Module:
 ```lua
@@ -245,8 +246,11 @@ print(SmoothDamper:IsFinished()) -- true
 **EasySmoothDamp**
 - `.new(CurrentValue : T, CurrentGoal : T, CurrentSpeed : (T)?, SmoothTime : number?, MaxSpeed : number?): SmoothDamper<T>`
 > T is one of the SmoothDampSupported types - number | Vector2 | Vector3 | CFrame
+
 > CurrentValue and CurrentGoal must be the same type
+
 > CurrentSpeed will be automatically set to the type of CurrentValue, even if a wrong CurrentSpeed type is given (doesn't throw errors)
+
 > CurrentValue, CurrentGoal and CurrentSpeed can only be reassigned to the same initial type T later.
 - `.SetEPSILON(newEPSILONValue : number?)`
 > Default EPSILON is 1e-3 (0.001); Given no newEPSILONValue applies the default.
@@ -254,6 +258,7 @@ print(SmoothDamper:IsFinished()) -- true
 **SmoothDamper**
 - `:Update(deltaTime: number?): (T, boolean?)`
 > Calls TweenService:SmoothDamp with the given deltaTime or calculates the deltaTime automatically (time since creation via .new or last :Update call)
+
 > returns CurrentValue, and if self.IsReturnIsFinishedStateOnUpdateEnabled is true, also returns the result of :IsFinished()
 - `:IsFinished(): boolean`
 > Checks whether the difference between CurrentValue and CurrentGoal is less than EPSILON
