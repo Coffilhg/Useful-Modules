@@ -1,5 +1,5 @@
 {
-  "name": "ModuleName",
+  "name": "CoffeeParser",
   "tree": {
     "$path": "src"
   }
