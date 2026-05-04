@@ -34,11 +34,11 @@ local Counter = {}
 
 -- Type Defs
 export type Counter = setmetatable<{
- count: number,
- startValue: number,
- interval: number,
- _taskId: number,
- Changed: Signal.Connection
+    count: number,
+    startValue: number,
+    interval: number,
+    _taskId: number,
+    Changed: Signal.Signal<>,
 }, typeof(Counter)>
 
 
@@ -47,12 +47,13 @@ export type Counter = setmetatable<{
 --@param default number? - start value for counter (also uses for ':clear()' fn)
 --@return self Counter
 function Counter.new(interval : number?, default: number?): Counter
-        local startValue: number = ((default and type(default) == "number") and default) or 0
+    local startValue: number = type(default) == "number" and default or 0
+    
 	return setmetatable(
 		{
 			count = startValue,
-                        startValue = startValue, 
-			interval = (interval and type(interval) == "number") and interval or 60,
+            startValue = startValue, 
+			interval = type(interval) == "number" and interval or 60,
 			_taskId = 0,
 			Changed = Signal.new(),
 		}, Counter
@@ -65,7 +66,8 @@ function Counter:clear(): Counter
 	if self.count == self.startValue then
 		return self -- already startValue, no need to increment the _taskId
 	end
-	self._taskId += 1 -- cancels all task delays, that were create before
+	
+	self._taskId += 1 -- cancels all task delays, that were created before
 	self.count = self.startValue
 	return self
 end
@@ -75,11 +77,14 @@ end
 --@return self Counter
 function Counter:setInterval(interval : number?): Counter
 	-- this will fire __newindex, which handles everything
-	self.interval = (interval and type(interval) == "number") and interval or 60
+	self.interval = type(interval) == "number" and interval or 60
+	self:clear()
 	return self
 end
 
 -- destroy whole Counter with cleanup
+-- remember to erase all references so the
+-- base table is GC'ed!
 function Counter:destroy(): ()
 	self._taskId += 1
 	self.Changed:Destroy()
@@ -89,34 +94,31 @@ end
 
 --- Metamethods ---
 
--- making availavle to use 'Counter' with all available fns
+-- making available to use 'Counter' with all available functions
 Counter.__index = Counter
 
--- set new index to Counter, also handle 'clear()' if '__newindex' it's an interval
---@param key Key
---@param value Value
-function Counter:__newindex<Key, Value>(key: Key, value: Value): ()
-       if key == "count" then
-	   error("Cannot set 'count' directly. Use __call or clear()", 2)
-       end
-       if key == "interval" then
-           self:clear()
-       end
-       rawset(self, key, value)
-   end
+-- __newindex removed because it wasn't working anyways
+-- you're free to change anything, but this is not
+-- recommended and might lead to errors;
+-- Recommended usage - :setInterval method;
+-- to fix this a proxy approach could've been used, but
+-- this module is intended to be fast rather than safe
+-- proxy approach means more table acesses per use
+-- for pro-users - do your stuff and call :clear method!
 
 -- converts 'Counter' to string for debug/output
 --@return string
 function Counter:__tostring(): string
-       return `Counter(count={self.count}, startValue={self.startValue}, _taskId={self._taskId})`
+    return `Counter(count={self.count}, startValue={self.startValue}, _taskId={self._taskId})`
 end
 
 -- increments the count, fires 'Changed' signal, schedules an automatic decrement after interval,
 -- and returns newCount (=+1 from old)
 --@return newCount number - new count 
 function Counter:__call()
-	self.count += 1
-        local newCount: number = self.count
+	local newCount: number = self.count + 1
+	
+	self.count = newCount
 	self.Changed:Fire()
 
 	local taskId = self._taskId
