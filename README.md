@@ -9,9 +9,12 @@ Created with the idea that we have only 4MiB per key in datastores and no native
 ---
 
 ## Available Here!
-- **[Wally](<https://wally.run>)** ~ ```lua
-CoffeeParser = coffilhg/coffeeparser@1.0.0```
 - **[This repository](src/init.luau) ~ [src/init.luau](src/init.luau)**
+- **[Wally](<https://wally.run/package/coffilhg/coffeeparser>)**
+```lua
+CoffeeParser = coffilhg/coffeeparser@1.0.1
+```
+
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[CoffeeParser](<https://create.roblox.com/store/asset/114136223178149/CoffeeBaseValue>)**-->
 
 ## To-Do

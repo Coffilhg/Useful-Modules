@@ -20,7 +20,7 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser
-    Module Version: 1.0.0
+    Module Version: 1.0.1
 --]]--
 --!strict
 

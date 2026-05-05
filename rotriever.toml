@@ -2,5 +2,5 @@
 name = "coffilhg/coffeeparser"
 author = "Coffilhg"
 content_root = "src"
-version = "1.0.0"
+version = "1.0.1"
 license = "Apache-2.0"

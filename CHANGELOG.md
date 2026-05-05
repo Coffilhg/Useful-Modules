@@ -1,6 +1,7 @@
-# v1.0.0
+# v1.0.1
 - Hotfix precisionFormatter variable was missing
 - Better **[compare.luau](tests/compare.luau)**
+- Updated on Wally
 
 # v1.0.0
 
