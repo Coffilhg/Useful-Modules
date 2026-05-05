@@ -11,7 +11,7 @@ Created with the idea that we have only 4MiB per key in datastores and no native
 ## Available Here!
 - **[This repository](src/init.luau) ~ [src/init.luau](src/init.luau)**
 - **[Wally](<https://wally.run/package/coffilhg/coffeeparser>)**
-```lua
+```toml
 CoffeeParser = coffilhg/coffeeparser@1.0.1
 ```
 
