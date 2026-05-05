@@ -13,13 +13,18 @@ print("Start execution")
 
 
 
-local Tolerance = 1e-5
+const Tolerance : number = 1e-5
+const Color3Tolerance : number = 1/255
 local TypeofsWithFuzzyEqMethod = {
 	["CFrame"] = true,
 	["Vector2"] = true,
 	["Vector3"] = true
 }
-local function CompareNumber(a: number, b: number)
+local function CompareNumber(a: number, b: number, tolerance: number?)
+	if type(tolerance) ~= "number" then
+		tolerance = Tolerance
+	end
+	
 	if a == b then
 		-- just equal numbers (no difference)
 		return true
@@ -29,7 +34,7 @@ local function CompareNumber(a: number, b: number)
 		return true
 	end
 
-	return math.abs(a - b) < Tolerance
+	return math.abs(a - b) < tolerance
 end
 local function CompareUserdata<T>(original: T, copy: T)
 	local oTypeof = typeof(original)
@@ -55,9 +60,9 @@ local function CompareUserdata<T>(original: T, copy: T)
 	if TypeofsWithFuzzyEqMethod[oTypeof] then
 		isEqual = (original :: CFrame | Vector2 | Vector3):FuzzyEq(copy, Tolerance)
 	elseif oTypeof == "Color3" then
-		isEqual = CompareNumber(original.R, copy.R) and
-			CompareNumber(original.G, copy.G) and
-			CompareNumber(original.B, copy.B)
+		isEqual = CompareNumber(original.R, copy.R, Color3Tolerance) and
+			CompareNumber(original.G, copy.G, Color3Tolerance) and
+			CompareNumber(original.B, copy.B, Color3Tolerance)
 	end
 	
 	if not isEqual then
@@ -73,17 +78,6 @@ local function CompareUserdata<T>(original: T, copy: T)
 	end
 	
 	return isEqual
-	
-	
-	
-	--[[
-	"BrickColor" | "Color3" |
-	"ColorSequence" | "Content" | "EnumItem" |
-	"Font" | "NumberRange" | "NumberSequence" |
-	"Ray" | "Rect" | "UDim" | "UDim2" |
-	"ColorSequenceKeypoint" | "NumberSequenceKeypoint"
-	]]
-	
 end
 local function DeepCompareBuffer(original: buffer, copy: buffer)
 	if buffer.len(original) ~= buffer.len(copy) then return false end
@@ -324,7 +318,7 @@ local isEqual, difference = DeepCompare(testData, decoded)
 print("Data preserved after encode/decode:", isEqual)
 
 if isEqual then
-	print("Data preserved perfectly!")
+	print("Data preserved perfectly! (Given that some values were rounded and are slightly different from original)")
 else
 	print("Mismatch or multiple detected! Please review:")
 	print(difference)

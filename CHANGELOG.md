@@ -1,4 +1,8 @@
 # v1.0.0
+- Hotfix precisionFormatter variable was missing
+- Better **[compare.luau](tests/compare.luau)**
+
+# v1.0.0
 
 ## CoffeeParser Release ~ Wally Publish
 - More optimized Decode behavior

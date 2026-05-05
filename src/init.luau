@@ -40,6 +40,7 @@ const prefixMatchPattern : string = `^{encodePrefix:gsub("([^%w])", "%%%1")}.%(`
 -- then + 1 for the "(" and + 1 to skip over "("
 const decodeSubLengthBase : number = #encodePrefix + 1
 const decodeSubLength : number = decodeSubLengthBase + 2
+const precisionFormatter : string = "%."..(type(precision) == "number" and precision or 3).."f"
 
 --[=[--
 --	Minified Roblox Datatype prefix codes:
