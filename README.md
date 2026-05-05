@@ -9,13 +9,13 @@ Created with the idea that we have only 4MiB per key in datastores and no native
 ---
 
 ## Available Here!
-<!-- **[Wally](<https://wally.run>)** ~ ``coffilhg/coffeeparser@1.0.0``-->
+**[Wally](<https://wally.run>)** ~ ``CoffeeParser = coffilhg/coffeeparser@1.0.0``
 - **[This repository](src/init.luau) ~ [src/init.luau](src/init.luau)**
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[CoffeeParser](<https://create.roblox.com/store/asset/114136223178149/CoffeeBaseValue>)**-->
 
 ## To-Do
 
-- [ ] Minify the datatype prefix codes.
+- [x] Minify the datatype prefix codes.
 - [ ] Add support to allow SupportedTypes act as table keys/indexing
 - [ ] Add handlers for types (if possible): Axes, Faces, Region3, Region3int16, Vector2int16, Vector3int16, PhysicalProperties, DateTime, FloatCurveKey, RotationCurveKey, ValueCurveKey, TweenInfo, CatalogSearchParams
 - [ ] Expand the README

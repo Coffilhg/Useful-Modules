@@ -20,21 +20,26 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser
-    Module Version: 0.9.5
+    Module Version: 1.0.0
 --]]--
 --!strict
 
 -- Standalone CoffeeParser for Roblox datatypes
 
 -- Customizable constants (FEEL FREE TO MODIFY)
-local debugEnabled : boolean = false
-local debugSeverity : number = 0
-local precision : number = 3
-local encodePrefix : string = "_C-"
+const debugEnabled : boolean = false
+const debugSeverity : number = 0
+const precision : number = 3
+const encodePrefix : string = "_C-"
 -- Precalculated constants (DO NOT MODIFY)
-local prefixMatchPattern = `^{encodePrefix}`
-local decodeSubLength = #encodePrefix+1
-local precisionFormatter = "%."..precision.."f"
+
+-- encodePrefix:gsub("([^%w])", "%%%1") is needed to escape functions of the magical characters
+-- though this actually escapes EVERY non-alphanumeric character automatically
+const prefixMatchPattern : string = `^{encodePrefix:gsub("([^%w])", "%%%1")}.%(`
+-- Calculation: prefix length + 1 for the "."
+-- then + 1 for the "(" and + 1 to skip over "("
+const decodeSubLengthBase : number = #encodePrefix + 1
+const decodeSubLength : number = decodeSubLengthBase + 2
 
 --[=[--
 --	Minified Roblox Datatype prefix codes:
@@ -1058,14 +1063,16 @@ local function decodeData(
 				resultData[key] = 0/0  -- NaN
 				continue
 			end
-
-			if not string.match(value :: string, prefixMatchPattern) then
+			
+			--if not string.match(value :: string, prefixMatchPattern) then
+			if not (value :: string):match(prefixMatchPattern) then
 				-- just a usual string
 				resultData[key] = value
 				continue
 			end
-
-			local result = string.split(string.sub(value :: string, decodeSubLength), "(")
+			--[[--
+			--string.split(string.sub(value :: string, decodeSubLength), "(")
+			local result = value:sub(decodeSubLength)
 			if not result then
 				resultData[key] = value
 				continue
@@ -1074,7 +1081,11 @@ local function decodeData(
 			--- attempt decoding (might also be a user string; not likely, but just handling this would be great)
 			local datatype = result[1]
 			local encodedValue = result[2]
-
+			--]]--
+			
+			local datatype : string = (value :: string):sub(decodeSubLengthBase, decodeSubLengthBase)
+			local encodedValue : string = (value :: string):sub(decodeSubLength)
+			
 			--print(datatype, encodedValue)
 
 			local decodeResult, decodeSuccess = tryDecode(datatype, encodedValue)
