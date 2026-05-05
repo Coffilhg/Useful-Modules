@@ -1,8 +1,8 @@
 --[[--
     Quick Start and API can be found at
-    https://github.com/Coffilhg/Useful-Modules/tree/ModuleName
+    https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
 
-    ModuleName
+    CoffeeObjects
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
     
     
@@ -19,6 +19,6 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-    Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/ModuleName
-    Module Version: 1.0.0
+    Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
+    Module Version: 1.0.1
 --]]--
