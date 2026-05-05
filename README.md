@@ -1,9 +1,10 @@
 # CoffeeParser
 
 A module created specifically for the purpose of storing unsupported datatypes into datastores easier and more effective than just tables - string values!
+
 Encode tables full of Roblox Datatypes into primitive tables and Decode primitive tables back into those full of Roblox Datatypes.
 
-Created with the idea that we have only 4MiB per key in datastores and no native support for Roblox specific datatypes, such as Color3, UDim2, Vector3 and more ([see full SupportedTypesList](src/init.luau#L41)).
+Created with the idea that we have only 4MiB per key in datastores and no native support for Roblox specific datatypes, such as Color3, UDim2, Vector3 and more ([see full SupportedTypesList](src/init.luau#L88)).
 
 ---
 

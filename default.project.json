@@ -1,6 +1,21 @@
 {
   "name": "CoffeeParser",
   "tree": {
-    "$path": "src"
+    "$className": "DataModel",
+
+    "ReplicatedStorage": {
+      "CoffeeParser": {
+        "$path": "src/"
+      }
+    }
+    
   }
 }
+
+
+// {
+//   "name": "CoffeeParser",
+//   "tree": {
+//     "$path": "src"
+//   }
+// }
