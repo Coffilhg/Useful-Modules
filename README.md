@@ -14,7 +14,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 > **[Wally](<https://wally.run/package/coffilhg/coffeeobjects>)**
 > ```toml
   CoffeeObjects="coffilhg/coffeeobjects@1.0.1"
-```
+    ```
 - **[CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
 
 	> **[Useful-Modules/CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
@@ -22,7 +22,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 > **[Wally](<https://wally.run/package/coffilhg/coffeeparser>)**
 > ```toml
   CoffeeParser="coffilhg/coffeeparser@1.0.1"
-```
+    ```
 - **[CoffeeRemotes](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotes>)**
 - **[Counter](<https://github.com/Coffilhg/Useful-Modules/tree/Counter>)**
 - **[EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
@@ -32,7 +32,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 > **[Wally](<https://wally.run/package/coffilhg/easysmoothdamp>)**
 > ```toml
   EasySmoothDamp="coffilhg/easysmoothdamp@1.0.0"
-```
+    ```
 - **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)**
 - **[GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)**
 - **[ServerMessages](<https://github.com/Coffilhg/Useful-Modules/tree/ServerMessages>)**
@@ -48,8 +48,13 @@ PlaceholderDescription
 ---
 
 ## Available Here!
-- **[Wally](<https://wally.run>)** ~ ``coffilhg/{modulenamelowercase}@{VERSION}``
-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[{Module Name}](<https://create.roblox.com/store/asset/114136223178149/CoffeeBaseValue>)**
+- **[This repository](src/init.luau) ~ [src/init.luau](src/init.luau)**
+- **[Wally](<https://wally.run/package/coffilhg/modulenamelowercase>)**
+```toml
+ModuleName = "coffilhg/{modulenamelowercase}@{VERSION}"
+```
+<!-- - **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[{Module Name}](<https://create.roblox.com/store/asset/114136223178149/CoffeeBaseValue>)**-->
+<!--
 
 ---
 
@@ -165,7 +170,7 @@ for _, branch in ipairs(Branches) do
 > ```toml
   ]]..wallyLinking..[[
 
-```]])
+    ```]])
 end
 
 print(table.concat(result, "\n"))
