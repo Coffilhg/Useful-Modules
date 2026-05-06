@@ -13,7 +13,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
     >
     > **[Wally](<https://wally.run/package/coffilhg/coffeeobjects>)**
     > ```toml
-    CoffeeObjects="coffilhg/coffeeobjects@1.0.1"
+        CoffeeObjects="coffilhg/coffeeobjects@1.0.1"
     ```
 - **[CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
 
@@ -21,7 +21,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
     >
     > **[Wally](<https://wally.run/package/coffilhg/coffeeparser>)**
     > ```toml
-    CoffeeParser="coffilhg/coffeeparser@1.0.1"
+        CoffeeParser="coffilhg/coffeeparser@1.0.1"
     ```
 - **[CoffeeRemotes](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotes>)**
 - **[Counter](<https://github.com/Coffilhg/Useful-Modules/tree/Counter>)**
@@ -31,7 +31,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
     >
     > **[Wally](<https://wally.run/package/coffilhg/easysmoothdamp>)**
     > ```toml
-    EasySmoothDamp="coffilhg/easysmoothdamp@1.0.0"
+        EasySmoothDamp="coffilhg/easysmoothdamp@1.0.0"
     ```
 - **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)**
 - **[GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)**
@@ -165,10 +165,10 @@ for _, branch in ipairs(Branches) do
   table.insert(result, [[- **[]]..branch.ModuleName..[[](<https://github.com/Coffilhg/Useful-Modules/tree/]]..branch.BranchName..[[>)**
 
 	> **[Useful-Modules/]]..branch.BranchName..[[](<https://github.com/Coffilhg/Useful-Modules/tree/]]..branch.BranchName..[[>)**
->
-> **[Wally](<https://wally.run/package/]]..( wallyLinking:match(`".+%@`) and wallyLinking:match(`".+%@`):sub(2, -2) or "coffilhg/"..branch.BranchName:lower())..[[>)**
-> ```toml
-    ]]..wallyLinking..[[
+    >
+    > **[Wally](<https://wally.run/package/]]..( wallyLinking:match(`".+%@`) and wallyLinking:match(`".+%@`):sub(2, -2) or "coffilhg/"..branch.BranchName:lower())..[[>)**
+    > ```toml
+        ]]..wallyLinking..[[
 
     ```]])
 end
