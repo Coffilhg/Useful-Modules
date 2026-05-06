@@ -2,7 +2,7 @@
 name = "coffilhg/modulenamelowercase"
 author = "Coffilhg"
 content_root = "src"
-version = "1.0.0"
+version = "ModuleVersion"
 license = "Apache-2.0"
 
 [dependencies]

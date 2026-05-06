@@ -38,22 +38,29 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 - **[ServerMessages](<https://github.com/Coffilhg/Useful-Modules/tree/ServerMessages>)**
 ---
 
-**Main branch is a template branch!**
+# Main branch is a template branch!
 
 <!--
 --- README's Template ---
-# {Module Name}
-PlaceholderDescription
+# PascalCasedModuleName
+ModuleDescription
 
----
+
 
 ## Available Here!
 - **[This repository](src/init.luau) ~ [src/init.luau](src/init.luau)**
 - **[Wally](<https://wally.run/package/coffilhg/modulenamelowercase>)**
-```toml
-ModuleName = "coffilhg/{modulenamelowercase}@{VERSION}"
-```
-<!-- - **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[{Module Name}](<https://create.roblox.com/store/asset/114136223178149/CoffeeBaseValue>)**-->
+
+    ```toml
+    PascalCasedModuleName = "coffilhg/modulenamelowercase@ModuleVersion"
+    ```
+- **Rotriever**
+
+    ```toml
+    PascalCasedModuleName = "github.com/Coffilhg/Useful-Modules@PascalCasedModuleName/ModuleVersion"
+    ```
+
+<!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[PascalCasedModuleName](<https://create.roblox.com/store/asset/123456789/PascalCasedModuleName>)**-->
 <!--
 
 ---
@@ -72,7 +79,7 @@ ModuleName = "coffilhg/{modulenamelowercase}@{VERSION}"
 
 ## DEPENDENCIES (if any)
 
-- [{Dependency Module Name}](<{LinkToGitHubOrWallyOrSource}>)
+- [Dependency Module Name PascalCase](<LinkToGitHubOrWallyOrSource>)
 
 ---
 
@@ -87,92 +94,3 @@ See the [Apache License 2.0](LICENSE) for full terms.
 Attribution to all dependencies is included in [Notice](NOTICE)
 
 © 2026 Coffilhg-->
-
-
-<!--
---!strict
--- Auto Generator to be used at https://play.luau.org/
-
-local Branches = {
-    [1] = {
-       ["BranchName"] = "Arrangement",
-       ["License"] = "Apache-2.0",
-       ["ModuleName"] = "Arrangement"
-    },
-    [2] = {
-       ["BranchName"] = "CoffeeObjects",
-       ["License"] = "Apache-2.0",
-       ["ModuleName"] = "CoffeeObjects",
-       ["Wally"] = `CoffeeObjects="coffilhg/coffeeobjects@1.0.1"`
-    },
-    [3] = {
-       ["BranchName"] = "CoffeeParser",
-       ["License"] = "Apache-2.0",
-       ["ModuleName"] = "CoffeeParser",
-       ["Wally"] = `CoffeeParser="coffilhg/coffeeparser@1.0.1"`
-    },
-    [4] = {
-       ["BranchName"] = "CoffeeRemotes",
-       ["License"] = "Apache-2.0",
-       ["ModuleName"] = "CoffeeRemotes"
-    },
-    [5] = {
-       ["BranchName"] = "Counter",
-       ["License"] = "Apache-2.0",
-       ["ModuleName"] = "Counter"
-    },
-    [6] = {
-       ["BranchName"] = "EasySmoothDamp",
-       ["License"] = "Apache-2.0",
-       ["ModuleName"] = "EasySmoothDamp",
-       ["Wally"] = `EasySmoothDamp="coffilhg/easysmoothdamp@1.0.0"`
-    },
-    [7] = {
-       ["BranchName"] = "GUICompatibility",
-       ["License"] = "Apache-2.0",
-       ["ModuleName"] = "GUICompatibility"
-    },
-    [8] = {
-       ["BranchName"] = "GreatUIDrag",
-       ["License"] = "Apache-2.0",
-       ["ModuleName"] = "GreatUIDrag"
-    },
-    [9] = {
-       ["BranchName"] = "ServerMessages",
-       ["License"] = "Apache-2.0",
-       ["ModuleName"] = "ServerMessages"
-    }
-}
-
--- Sort Alphabetically
-table.sort(Branches, function(a, b)
-  return a.ModuleName < b.ModuleName
-end)
-
-local result = {}
-for _, branch in ipairs(Branches) do
-
-  if not branch["BranchName"] then
-    branch["BranchName"] = branch.ModuleName
-  end
-  
-  local wallyLinking = branch["Wally"]
-  if type(wallyLinking) ~= "string" or wallyLinking == "❌" then
-    table.insert(result, `- **[{branch.ModuleName}](<https://github.com/Coffilhg/Useful-Modules/tree/{branch.BranchName}>)**`)
-    continue
-  end
-
-  table.insert(result, [[- **[]]..branch.ModuleName..[[](<https://github.com/Coffilhg/Useful-Modules/tree/]]..branch.BranchName..[[>)**
-
-	> **[Useful-Modules/]]..branch.BranchName..[[](<https://github.com/Coffilhg/Useful-Modules/tree/]]..branch.BranchName..[[>)**
-    >
-    > **[Wally](<https://wally.run/package/]]..( wallyLinking:match(`".+%@`) and wallyLinking:match(`".+%@`):sub(2, -2) or "coffilhg/"..branch.BranchName:lower())..[[>)**
-    > ```toml
-    >    ]]..wallyLinking..[[
-
-    > ```]])
-end
-
-print(table.concat(result, "\n"))
-
--->
