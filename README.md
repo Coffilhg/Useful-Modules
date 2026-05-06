@@ -10,17 +10,17 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 - **[CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)**
 
 	> **[Useful-Modules/CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)**
->
-> **[Wally](<https://wally.run/package/coffilhg/coffeeobjects>)**
-> ```toml
+    >
+    > **[Wally](<https://wally.run/package/coffilhg/coffeeobjects>)**
+    > ```toml
     CoffeeObjects="coffilhg/coffeeobjects@1.0.1"
     ```
 - **[CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
 
 	> **[Useful-Modules/CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
->
-> **[Wally](<https://wally.run/package/coffilhg/coffeeparser>)**
-> ```toml
+    >
+    > **[Wally](<https://wally.run/package/coffilhg/coffeeparser>)**
+    > ```toml
     CoffeeParser="coffilhg/coffeeparser@1.0.1"
     ```
 - **[CoffeeRemotes](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotes>)**
@@ -28,9 +28,9 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 - **[EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
 
 	> **[Useful-Modules/EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
->
-> **[Wally](<https://wally.run/package/coffilhg/easysmoothdamp>)**
-> ```toml
+    >
+    > **[Wally](<https://wally.run/package/coffilhg/easysmoothdamp>)**
+    > ```toml
     EasySmoothDamp="coffilhg/easysmoothdamp@1.0.0"
     ```
 - **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)**
