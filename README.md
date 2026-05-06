@@ -13,16 +13,16 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
     >
     > **[Wally](<https://wally.run/package/coffilhg/coffeeobjects>)**
     > ```toml
-        CoffeeObjects="coffilhg/coffeeobjects@1.0.1"
-    ```
+    >   CoffeeObjects="coffilhg/coffeeobjects@1.0.1"
+    > ```
 - **[CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
 
 	> **[Useful-Modules/CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
     >
     > **[Wally](<https://wally.run/package/coffilhg/coffeeparser>)**
     > ```toml
-        CoffeeParser="coffilhg/coffeeparser@1.0.1"
-    ```
+    >   CoffeeParser="coffilhg/coffeeparser@1.0.1"
+    > ```
 - **[CoffeeRemotes](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotes>)**
 - **[Counter](<https://github.com/Coffilhg/Useful-Modules/tree/Counter>)**
 - **[EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
@@ -31,8 +31,8 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
     >
     > **[Wally](<https://wally.run/package/coffilhg/easysmoothdamp>)**
     > ```toml
-        EasySmoothDamp="coffilhg/easysmoothdamp@1.0.0"
-    ```
+    >   EasySmoothDamp="coffilhg/easysmoothdamp@1.0.0"
+    > ```
 - **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)**
 - **[GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)**
 - **[ServerMessages](<https://github.com/Coffilhg/Useful-Modules/tree/ServerMessages>)**
@@ -168,9 +168,9 @@ for _, branch in ipairs(Branches) do
     >
     > **[Wally](<https://wally.run/package/]]..( wallyLinking:match(`".+%@`) and wallyLinking:match(`".+%@`):sub(2, -2) or "coffilhg/"..branch.BranchName:lower())..[[>)**
     > ```toml
-        ]]..wallyLinking..[[
+    >    ]]..wallyLinking..[[
 
-    ```]])
+    > ```]])
 end
 
 print(table.concat(result, "\n"))
