@@ -20,27 +20,27 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser
-    Module Version: 1.0.1
+    Module Version: 1.0.2
 --]]--
 --!strict
 
 -- Standalone CoffeeParser for Roblox datatypes
 
 -- Customizable constants (FEEL FREE TO MODIFY)
-const debugEnabled : boolean = false
-const debugSeverity : number = 0
-const precision : number = 3
-const encodePrefix : string = "_C-"
+local debugEnabled : boolean = false
+local debugSeverity : number = 0
+local precision : number = 3
+local encodePrefix : string = "_C-"
 -- Precalculated constants (DO NOT MODIFY)
 
 -- encodePrefix:gsub("([^%w])", "%%%1") is needed to escape functions of the magical characters
 -- though this actually escapes EVERY non-alphanumeric character automatically
-const prefixMatchPattern : string = `^{encodePrefix:gsub("([^%w])", "%%%1")}.%(`
+local prefixMatchPattern : string = `^{encodePrefix:gsub("([^%w])", "%%%1")}.%(`
 -- Calculation: prefix length + 1 for the "."
 -- then + 1 for the "(" and + 1 to skip over "("
-const decodeSubLengthBase : number = #encodePrefix + 1
-const decodeSubLength : number = decodeSubLengthBase + 2
-const precisionFormatter : string = "%."..(type(precision) == "number" and precision or 3).."f"
+local decodeSubLengthBase : number = #encodePrefix + 1
+local decodeSubLength : number = decodeSubLengthBase + 2
+local precisionFormatter : string = "%."..(type(precision) == "number" and precision or 3).."f"
 
 --[=[--
 --	Minified Roblox Datatype prefix codes:

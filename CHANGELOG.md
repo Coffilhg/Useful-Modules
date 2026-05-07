@@ -1,3 +1,7 @@
+# v1.0.2
+- `wally-package-types` doesn't recognise **const** keyword
+- all **const** keyword usage cases replaced with **local**
+
 # v1.0.1
 - Hotfix precisionFormatter variable was missing
 - Better **[compare.luau](tests/compare.luau)**
