@@ -10,29 +10,33 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 - **[CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)**
 
 	> **[Useful-Modules/CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)**
-    >
-    > **[Wally](<https://wally.run/package/coffilhg/coffeeobjects>)**
-    > ```toml
-    >   CoffeeObjects="coffilhg/coffeeobjects@1.0.1"
-    > ```
+	> 
+	> **[Wally](<https://wally.run/package/coffilhg/coffeeobjects>)**        
+	> ```toml        
+	> CoffeeObjects = "coffilhg/coffeeobjects@1.0.1"        
+	> ```
 - **[CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
 
 	> **[Useful-Modules/CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
-    >
-    > **[Wally](<https://wally.run/package/coffilhg/coffeeparser>)**
-    > ```toml
-    >   CoffeeParser="coffilhg/coffeeparser@1.0.1"
-    > ```
+	> 
+	> **Rotriever**        
+	> ```toml        
+	> CoffeeParser = "github.com/Coffilhg/Useful-Modules@CoffeeParser/1.0.1"        
+	> ```
+	> **[Wally](<https://wally.run/package/coffilhg/coffeeparser>)**        
+	> ```toml        
+	> CoffeeParser = "coffilhg/coffeeparser@1.0.1"        
+	> ```
 - **[CoffeeRemotes](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotes>)**
 - **[Counter](<https://github.com/Coffilhg/Useful-Modules/tree/Counter>)**
 - **[EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
 
 	> **[Useful-Modules/EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
-    >
-    > **[Wally](<https://wally.run/package/coffilhg/easysmoothdamp>)**
-    > ```toml
-    >   EasySmoothDamp="coffilhg/easysmoothdamp@1.0.0"
-    > ```
+	> 
+	> **[Wally](<https://wally.run/package/coffilhg/easysmoothdamp>)**        
+	> ```toml        
+	> EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.0"        
+	> ```
 - **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)**
 - **[GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)**
 - **[ServerMessages](<https://github.com/Coffilhg/Useful-Modules/tree/ServerMessages>)**
@@ -94,3 +98,135 @@ See the [Apache License 2.0](LICENSE) for full terms.
 Attribution to all dependencies is included in [Notice](NOTICE)
 
 © 2026 Coffilhg-->
+
+<!--
+
+--!strict
+-- Auto Quick Module Lookup Generator to be used at https://play.luau.org/
+
+type BranchInfo = {
+  ["ModuleNamePascalCase"]: string,
+  ["BranchName"]: string?, -- defaults to self.ModuleNamePascalCase
+  ["License"]: string?, -- defaults to "Apache-2.0"
+  ["Links"]: {
+    [string]: { -- string is the ServiceName
+      ["ServiceLink"]: string?, -- link for the ServiceName; Defaults to `https://wally.run/package/coffilhg/{modulenamelowercase}` for Wally; None for everything else.
+      ["Format"]: string?, -- format for the codeblock: ```{Format}```; Defaults to toml
+      ["Content"]: string?, -- content for the codeblock; Defaults to nil; If no Format and no Content is given - codeblock won't be generated.
+      -- Link is invalidated if none of the available properties are specified.
+    },
+  }?,
+}
+
+local Branches: {[number]: BranchInfo} = {
+    {
+       ModuleNamePascalCase = "Arrangement"
+    },
+    {
+       ModuleNamePascalCase = "CoffeeObjects",
+       Links = {
+        Wally = {
+            Content = `CoffeeObjects = "coffilhg/coffeeobjects@1.0.1"`,
+        },
+       },
+    },
+    {
+       ModuleNamePascalCase = "CoffeeParser",
+       Links = {
+        Wally = {
+            Content = `CoffeeParser = "coffilhg/coffeeparser@1.0.1"`,
+        },
+        Rotriever = {
+          Content = `CoffeeParser = "github.com/Coffilhg/Useful-Modules@CoffeeParser/1.0.1"`
+        },
+       },
+    },
+    {
+       ModuleNamePascalCase = "CoffeeRemotes"
+    },
+    {
+       ModuleNamePascalCase = "Counter"
+    },
+    {
+       ModuleNamePascalCase = "EasySmoothDamp",
+       Links = {
+        Wally = {
+            Content = `EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.0"`,
+        },
+       },
+    },
+    {
+       ModuleNamePascalCase = "GUICompatibility"
+    },
+    {
+       ModuleNamePascalCase = "GreatUIDrag"
+    },
+    {
+       ModuleNamePascalCase = "ServerMessages"
+    },
+}
+
+-- Sort Alphabetically
+table.sort(Branches, function(a: BranchInfo, b: BranchInfo)
+  return a.ModuleNamePascalCase < b.ModuleNamePascalCase
+end)
+
+local result = {}
+local function Shorthand(moduleName: string, gitHubRepositoryLink: string)
+  table.insert(result, `- **[{moduleName}](<{gitHubRepositoryLink}>)**`)
+end
+
+for _, branch in ipairs(Branches) do
+  local moduleName: string = branch.ModuleNamePascalCase
+  local moduleNameLowercase: string = moduleName:lower()
+  local branchName: string = type(branch["BranchName"]) == "string" and branch["BranchName"] or moduleName
+  
+  local gitHubRepositoryLink = `https://github.com/Coffilhg/Useful-Modules/tree/{branchName}`
+
+  local links = branch["Links"]
+  if not links then
+    Shorthand(moduleName, gitHubRepositoryLink)
+    continue
+  end
+
+  local serviceLinks: {[number]: string} = {}
+  for serviceName: string, details in pairs(links) do
+
+    local serviceLink = details["ServiceLink"]
+    if not serviceLink then
+      if serviceName == "Wally" then
+        serviceLink = `[Wally](<https://wally.run/package/coffilhg/{moduleNameLowercase}>)`
+      end
+    end
+
+    local format = details["Format"] or "toml"
+    local content = details["Content"]
+
+    local serviceString = serviceLink and `	> **{serviceLink}**` or `	> **{serviceName}**`
+
+    if content then
+      serviceString = serviceString..[[
+        
+	> ```]]..`{format}`..[[
+        
+	> ]]..`{type(content) == "string" and content:gsub("\n", "\n	> ") or content}`..[[
+        
+	> ```]]
+    end
+
+    if not (serviceLink or content) then
+      continue
+    end
+    table.insert(serviceLinks, serviceString)
+  end
+
+  table.insert(result, `- **[{moduleName}](<{gitHubRepositoryLink}>)**\n`)
+  if #serviceLinks > 0 then
+    table.insert(result, `	> **[Useful-Modules/{branchName}](<https://github.com/Coffilhg/Useful-Modules/tree/{branchName}>)**\n	> `)
+  end
+  table.insert(result, table.concat(serviceLinks, "\n"))
+  
+end
+
+print(table.concat(result, "\n"))
+-->
