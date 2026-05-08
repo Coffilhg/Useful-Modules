@@ -11,9 +11,13 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 
 	> **[Useful-Modules/CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)**
 	> 
+	> **Rotriever**        
+	> ```toml        
+	> CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.3.0"        
+	> ```
 	> **[Wally](<https://wally.run/package/coffilhg/coffeeobjects>)**        
 	> ```toml        
-	> CoffeeObjects = "coffilhg/coffeeobjects@1.0.1"        
+	> CoffeeObjects = "coffilhg/coffeeobjects@2.3.2"        
 	> ```
 - **[CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
 
@@ -21,11 +25,11 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> 
 	> **Rotriever**        
 	> ```toml        
-	> CoffeeParser = "github.com/Coffilhg/Useful-Modules@CoffeeParser/1.0.1"        
+	> CoffeeParser = "github.com/Coffilhg/Useful-Modules@CoffeeParser/1.0.2"        
 	> ```
 	> **[Wally](<https://wally.run/package/coffilhg/coffeeparser>)**        
 	> ```toml        
-	> CoffeeParser = "coffilhg/coffeeparser@1.0.1"        
+	> CoffeeParser = "coffilhg/coffeeparser@1.0.2"        
 	> ```
 - **[CoffeeRemotes](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotes>)**
 - **[Counter](<https://github.com/Coffilhg/Useful-Modules/tree/Counter>)**
@@ -126,7 +130,10 @@ local Branches: {[number]: BranchInfo} = {
        ModuleNamePascalCase = "CoffeeObjects",
        Links = {
         Wally = {
-            Content = `CoffeeObjects = "coffilhg/coffeeobjects@1.0.1"`,
+            Content = `CoffeeObjects = "coffilhg/coffeeobjects@2.3.2"`,
+        },
+        Rotriever = {
+            Content = `CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.3.0"`
         },
        },
     },
@@ -134,10 +141,10 @@ local Branches: {[number]: BranchInfo} = {
        ModuleNamePascalCase = "CoffeeParser",
        Links = {
         Wally = {
-            Content = `CoffeeParser = "coffilhg/coffeeparser@1.0.1"`,
+            Content = `CoffeeParser = "coffilhg/coffeeparser@1.0.2"`,
         },
         Rotriever = {
-          Content = `CoffeeParser = "github.com/Coffilhg/Useful-Modules@CoffeeParser/1.0.1"`
+          Content = `CoffeeParser = "github.com/Coffilhg/Useful-Modules@CoffeeParser/1.0.2"`
         },
        },
     },
