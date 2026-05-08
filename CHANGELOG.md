@@ -1,3 +1,8 @@
+# v2.3.1
+
+## Wally Re-Publish
+- v2.3.0 wally.toml was misconfigured, the published version contains no init.luau
+
 # v2.3.0
 
 ## Wally Compatible Again
