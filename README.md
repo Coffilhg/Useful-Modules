@@ -14,8 +14,18 @@ This library intentionally favors **explicitness, performance, and Roblox semant
 ---
 
 ## Available Here!
-- **[Wally](<https://wally.run>)** ~ `CoffeeObjects = coffeeobjects = "coffilhg/coffeeobjects@1.0.1"`
-<!--- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[{Module Name}](<https://create.roblox.com/store/asset/114136223178149/CoffeeBaseValue>)**-->
+- **[This repository](src/init.luau) ~ [src/init.luau](src/init.luau)**
+- **[Wally](<https://wally.run/package/coffilhg/coffeeparser>)**
+
+    ```toml
+    CoffeeObjects = "coffilhg/coffeeparser@2.2.2"
+    ```
+- **Rotriever**
+
+    ```toml
+    CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeParser/2.2.2"
+    ```
+<!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[CoffeeObjects](<https://create.roblox.com/store/asset/1234567890/CoffeeObjects>)**-->
 
 ---
 

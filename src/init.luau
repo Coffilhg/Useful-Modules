@@ -20,7 +20,7 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
-    Module Version: 2.2.1
+    Module Version: 2.2.2
 --]]--
 
 
@@ -122,7 +122,8 @@ end
 -- @return boolean.
 local function IsArrayORTupleMethod(self : CoffeeFolder) : boolean
 	if #self == 0 then
-		for k, v in self do
+		for _ in self do
+			-- if a table is really empty, this won't return false, but true
 			return false -- default nil (falsy) ~ Not an array or a tuple
 		end
 	end
@@ -319,7 +320,7 @@ local Folder = {}
 -- Handles child removal (if nil), wrapping raw data into CoffeeObjects, and parent-linking.
 -- Fires ChildAdded or ChildRemoved signals accordingly.
 -- Overwriting an existing key/index ALWAYS fires ChildRemoved and then ChildAdded, this
--- is intended behavior in the V2.0.0, unlike the V1.0.0.
+-- is intended behavior in the V2+, unlike the V1.
 
 -- Handles the assignment of new children to the Folder.
 -- Automatically wraps raw tables in CoffeeFolders and supported primitives in CoffeeBaseValues.
@@ -397,26 +398,15 @@ function Folder:__iter()
 end
 
 -- Returns the count of children if the folder is an array/tuple.
--- Note: This will return 0 for dictionary-like folders.
--- Takes O(n) time for true arrays/tuples!
--- Avoids quirky roblox count, so that _IsArrayORTuple method works correctly.
--- > print(#{[1] = "x", [3] = "y"}) -- outputs: 1; 
--- Counting elements in a 30-element CoffeeFolder 1M times takes ~0.22s - efficient for Roblox use. https://github.com/Coffilhg/Useful-Modules/blob/CoffeeObjects/src/Tests/Benchmark__len.luau
+-- Works the same way as #, this metamethod is just a proxy.
+-- Expect same quirks in behavior as with #table
+-- Counting elements in a 30-element CoffeeFolder 1M times takes ~0.22s - efficient for Roblox use <- those are results with a "fixed" behavior of #; With current proxy approach the quirks are back, but the same benchmark shows it takes only ~0.045s. https://github.com/Coffilhg/Useful-Modules/blob/CoffeeObjects/src/Tests/Benchmark__len.luau
 function Folder:__len()
 	local data = rawget(self, "_data")
-	local length = #data
-	
-	if length == 0 then
+	if not data then
 		return 0
 	end
-	
-	for i = 1, length do
-		if data[i] == nil then
-			return 0
-		end
-	end
-	
-	return length
+	return #data
 end
 
 
