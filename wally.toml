@@ -8,7 +8,7 @@ repository = "https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
-exclude = ["src/**/*"]
+exclude = ["src/Tests/**/*", "src/Examples/**/*"]
 
 [dependencies]
 CoffeeParser = "coffilhg/coffeeparser@1.0.2"

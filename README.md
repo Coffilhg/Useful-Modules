@@ -18,7 +18,7 @@ This library intentionally favors **explicitness, performance, and Roblox semant
 - **[Wally](<https://wally.run/package/coffilhg/coffeeobjects>)**
 
     ```toml
-    CoffeeObjects = "coffilhg/coffeeobjects@2.3.1"
+    CoffeeObjects = "coffilhg/coffeeobjects@2.3.2"
     ```
 - **Rotriever**
 
