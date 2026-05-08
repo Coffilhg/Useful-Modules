@@ -1,3 +1,10 @@
+# v2.3.0
+
+## Wally Compatible Again
+- New Wally release
+- Supported types are now directly inherited from CoffeeParser
+- Using PerfectSignal - successor of previously used GoodSignal
+
 # v2.2.2
 
 ## `__len` Rollback to default Roblox Luau `#` proxy
