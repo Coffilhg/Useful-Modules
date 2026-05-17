@@ -1,8 +1,9 @@
 [package]
-name = "coffilhg/modulenamelowercase"
+name = "coffilhg/humanoidcameraoffsetcontroller"
 author = "Coffilhg"
 content_root = "src"
-version = "ModuleVersion"
+version = "1.0.0"
 license = "Apache-2.0"
 
 [dependencies]
+EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.0"        
