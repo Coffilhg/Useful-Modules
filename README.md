@@ -43,7 +43,20 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```
 - **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)**
 - **[GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)**
+- **[HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>)**
+
+	> **[Useful-Modules/HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>)**
+	> 
+	> **Rotriever**        
+	> ```toml        
+	> HumanoidCameraOffsetController = "github.com/Coffilhg/Useful-Modules@HumanoidCameraOffsetController/1.0.0"        
+	> ```
+	> **[Wally](<https://wally.run/package/coffilhg/humanoidcameraoffsetcontroller>)**        
+	> ```toml        
+	> HumanoidCameraOffsetController = "coffilhg/humanoidcameraoffsetcontroller@1.0.0"        
+	> ```
 - **[ServerMessages](<https://github.com/Coffilhg/Useful-Modules/tree/ServerMessages>)**
+
 ---
 
 # Main branch is a template branch!
@@ -171,6 +184,17 @@ local Branches: {[number]: BranchInfo} = {
     {
        ModuleNamePascalCase = "ServerMessages"
     },
+    {
+      ModuleNamePascalCase = "HumanoidCameraOffsetController",
+      Links = {
+        Wally = {
+            Content = `HumanoidCameraOffsetController = "coffilhg/humanoidcameraoffsetcontroller@1.0.0"`,
+        },
+        Rotriever = {
+          Content = `HumanoidCameraOffsetController = "github.com/Coffilhg/Useful-Modules@HumanoidCameraOffsetController/1.0.0"`
+        },
+       },
+    },
 }
 
 -- Sort Alphabetically
@@ -236,4 +260,6 @@ for _, branch in ipairs(Branches) do
 end
 
 print(table.concat(result, "\n"))
+
+print(table.concat(table.create(2, "\n"), "\n"))
 -->
