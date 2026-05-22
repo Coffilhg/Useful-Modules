@@ -41,6 +41,18 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml        
 	> EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.0"        
 	> ```
+- **[FirstPersonDetector](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonDetector>)**
+
+	> **[Useful-Modules/FirstPersonDetector](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonDetector>)**
+	> 
+	> **Rotriever**        
+	> ```toml        
+	> FirstPersonDetector = "github.com/Coffilhg/Useful-Modules@FirstPersonDetector/1.0.0"        
+	> ```
+	> **[Wally](<https://wally.run/package/coffilhg/firstpersondetector>)**        
+	> ```toml        
+	> FirstPersonDetector = "coffilhg/firstpersondetector@1.0.0"        
+	> ```
 - **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)**
 - **[GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)**
 - **[HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>)**
@@ -114,7 +126,8 @@ See the [Apache License 2.0](LICENSE) for full terms.
 
 Attribution to all dependencies is included in [Notice](NOTICE)
 
-© 2026 Coffilhg-->
+© 2026 Coffilhg
+-->
 
 <!--
 
@@ -192,6 +205,17 @@ local Branches: {[number]: BranchInfo} = {
         },
         Rotriever = {
           Content = `HumanoidCameraOffsetController = "github.com/Coffilhg/Useful-Modules@HumanoidCameraOffsetController/1.0.0"`
+        },
+       },
+    },
+    {
+      ModuleNamePascalCase = "FirstPersonDetector",
+      Links = {
+        Wally = {
+            Content = `FirstPersonDetector = "coffilhg/firstpersondetector@1.0.0"`,
+        },
+        Rotriever = {
+          Content = `FirstPersonDetector = "github.com/Coffilhg/Useful-Modules@FirstPersonDetector/1.0.0"`
         },
        },
     },

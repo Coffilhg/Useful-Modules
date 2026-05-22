@@ -1,6 +1,6 @@
 [package]
 name = "coffilhg/modulenamelowercase"
-description = "Description Placeholder"
+description = "ModuleDescription"
 version = "ModuleVersion"
 license = "Apache-2.0"
 authors = ["Coffilhg <coffilhg@gmail.com>"]
