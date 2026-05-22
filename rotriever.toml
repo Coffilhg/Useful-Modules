@@ -1,8 +1,10 @@
 [package]
-name = "coffilhg/modulenamelowercase"
+name = "coffilhg/firstpersondetector"
 author = "Coffilhg"
 content_root = "src"
-version = "ModuleVersion"
+version = "1.0.0"
 license = "Apache-2.0"
 
 [dependencies]
+HumanoidCameraOffsetController = "github.com/Coffilhg/Useful-Modules@HumanoidCameraOffsetController/1.0.0"
+PerfectSignal = "github.com/Coffilhg/PerfectSignal@1.0.1"

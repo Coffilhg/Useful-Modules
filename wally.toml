@@ -1,11 +1,13 @@
 [package]
-name = "coffilhg/modulenamelowercase"
-description = "Description Placeholder"
-version = "ModuleVersion"
+name = "coffilhg/firstpersondetector"
+description = "Detect whenever the Local Player enters/leaves First Person View: FirstPersonDetector.OnPersonViewChanged:Connect(function(isInFirstPersonView: boolean) --[[ your code ]] end) or read the state anytime FirstPersonDetector.IsInFirstPersonView :: boolean"
+version = "1.0.0"
 license = "Apache-2.0"
 authors = ["Coffilhg <coffilhg@gmail.com>"]
-repository = "https://github.com/Coffilhg/Useful-Modules/tree/PascalCasedModuleName"
+repository = "https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonDetector"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
+HumanoidCameraOffsetController = "coffilhg/humanoidcameraoffsetcontroller@1.0.0"
+PerfectSignal = "coffilhg/perfectsignal@1.0.1"

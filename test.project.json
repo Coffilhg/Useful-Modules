@@ -1,0 +1,16 @@
+{
+  "name": "Testing",
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedStorage": {
+      "FirstPersonDetector": {
+        "$path": "src/"
+      },
+      "Packages": {
+        "$path": "Packages"
+      }
+    }
+    
+  }
+}
