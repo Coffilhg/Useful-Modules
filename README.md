@@ -79,6 +79,20 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml        
 	> FirstPersonDetector = "coffilhg/firstpersondetector@1.0.0"        
 	> ```
+- **[FirstPersonView](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonView>)**
+
+	> MPL-2.0
+
+	> **[Useful-Modules/FirstPersonView](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonView>)**
+	> 
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vFirstPersonView/1.0.0>)**        
+	> ```toml        
+	> FirstPersonView = "github.com/Coffilhg/Useful-Modules@FirstPersonView/1.0.0"        
+	> ```
+	> **[Wally](<https://wally.run/package/coffilhg/firstpersonview>)**        
+	> ```toml        
+	> FirstPersonView = "coffilhg/firstpersonview@1.0.0"        
+	> ```
 - **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)** (Apache-2.0)
 - **[GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)** (Apache-2.0)
 - **[HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>)**
@@ -304,6 +318,18 @@ local Branches: {[number]: BranchInfo} = {
         },
        },
     },
+    {
+      ModuleNamePascalCase = "FirstPersonView",
+      License = "MPL-2.0",
+      Links = {
+        Wally = {
+            Content = `FirstPersonView = "coffilhg/firstpersonview@1.0.0"`,
+        },
+        Rotriever = {
+          Content = `FirstPersonView = "github.com/Coffilhg/Useful-Modules@FirstPersonView/1.0.0"`
+        },
+       },
+    }
 }
 
 -- Sort Alphabetically
