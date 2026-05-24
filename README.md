@@ -4,8 +4,17 @@ Easier way to use TweenService:SmoothDamp() - keeps the required variables in a 
 ---
 
 ## Available Here!
-- **[Wally](<https://wally.run>)** ~ ``EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.0"``
 - **[This repository](src/init.luau) ~ [src/init.luau](src/init.luau)**
+- **[Wally](<https://wally.run/package/coffilhg/easysmoothdamp>)**
+
+    ```toml
+    EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.1"
+    ```
+- **Rotriever**
+
+    ```toml
+    EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.1"
+    ```
 <!--- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[EasySmoothDamp](<https://create.roblox.com/store/asset/114136223178149/CoffeeBaseValue>)**-->
 
 ---
@@ -273,14 +282,14 @@ Everytime you use `SmoothDamper:Update()`, it also does `SmoothDamper:IsFinished
 
 ---
 
-## License / License & Attribution
+## License & Attribution
 
-Licensed under the Apache License, Version 2.0.
+This module is licensed under the **GNU Lesser General Public License version 3 or later**.
 
-You may use, modify, and redistribute this module freely, provided that the original copyright notice and license header at the top of the file are preserved.
+You may use, modify, and redistribute this module. If you modify this module, you must share those modifications under the same license. Your game code that *uses* this module (but does not modify it) does not need to be open-sourced. If your game *uses* this module, but has it modified, you only need to open-source the modified module, not all of your other scripts!
 
-See the [Apache License 2.0](LICENSE) for full terms.
+See the [LGPLv3 License](LICENSE) and [LGPLv3 Lesser License](LICENSE.LESSER) for full terms. [The combined LGPL and GPL](LICENSE.COMBINED)
 
-<!--Attribution to all dependencies is included in [Notice](NOTICE)-->
+Attribution to all dependencies is included in the [NOTICE](NOTICE) file.
 
-© 2026 Coffilhg
+Copyright © 2026 @Coffilhg (Roblox UserId 517222346)

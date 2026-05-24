@@ -1,7 +1,4 @@
-<!--
-# v0.0.0
+# v1.0.1
 
-## placeholder
-- feature
-- bugfix
-- compatibility notes
+## LICENSE Changes
+- Transfered from Apache-2.0 to LGPL 3.0+ (Lesser General Public License version 3 or later)
