@@ -3,6 +3,6 @@ name = "coffilhg/modulenamelowercase"
 author = "Coffilhg"
 content_root = "src"
 version = "ModuleVersion"
-license = "Apache-2.0"
+license = "MPL-2.0"
 
 [dependencies]

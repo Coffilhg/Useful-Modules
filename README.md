@@ -2,16 +2,32 @@
 All or most of the Modules here should also be available on **Wally** and/or **https://create.roblox.com/store/category/gameplay?creatorName=coffilhg**
 
 Feel free to suggest changes or make them yourself!
-Each branch is a separate module/collection, the LICENSE may vary (but is mostly Apache-2.0). Please make sure to look into README/NOTICE files before use. If the LICENSE requires attribution or whatsoever, don't miss out!
+Each branch is a separate module/collection, the LICENSE may vary (but is mostly Apache-2.0 or MPL-2.0). Please make sure to look into README/NOTICE files before use. If the LICENSE requires attribution or whatsoever, don't miss out!
 
 ## Quick Module Lookup
 
-- **[Arrangement](<https://github.com/Coffilhg/Useful-Modules/tree/Arrangement>)**
+- **[Arrangement](<https://github.com/Coffilhg/Useful-Modules/tree/Arrangement>)** (Apache-2.0)
+- **[CameraController](<https://github.com/Coffilhg/Useful-Modules/tree/CameraController>)**
+
+	> MPL-2.0
+
+	> **[Useful-Modules/CameraController](<https://github.com/Coffilhg/Useful-Modules/tree/CameraController>)**
+	> 
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCameraController/1.0.1>)**        
+	> ```toml        
+	> CameraController = "github.com/Coffilhg/Useful-Modules@CameraController/1.0.1"        
+	> ```
+	> **[Wally](<https://wally.run/package/coffilhg/cameracontroller>)**        
+	> ```toml        
+	> CameraController = "coffilhg/cameracontroller@1.0.1"        
+	> ```
 - **[CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)**
+
+	> Apache-2.0
 
 	> **[Useful-Modules/CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)**
 	> 
-	> **Rotriever**        
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCoffeeObjects/2.3.0>)**        
 	> ```toml        
 	> CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.3.0"        
 	> ```
@@ -21,9 +37,11 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```
 - **[CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
 
+	> Apache-2.0
+
 	> **[Useful-Modules/CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
 	> 
-	> **Rotriever**        
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCoffeeParser/1.0.2>)**        
 	> ```toml        
 	> CoffeeParser = "github.com/Coffilhg/Useful-Modules@CoffeeParser/1.0.2"        
 	> ```
@@ -31,21 +49,29 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml        
 	> CoffeeParser = "coffilhg/coffeeparser@1.0.2"        
 	> ```
-- **[CoffeeRemotes](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotes>)**
-- **[Counter](<https://github.com/Coffilhg/Useful-Modules/tree/Counter>)**
+- **[CoffeeRemotes](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotes>)** (Apache-2.0)
+- **[Counter](<https://github.com/Coffilhg/Useful-Modules/tree/Counter>)** (Apache-2.0)
 - **[EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
+
+	> MPL-2.0
 
 	> **[Useful-Modules/EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
 	> 
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vEasySmoothDamp/1.0.3>)**        
+	> ```toml        
+	> EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.3"        
+	> ```
 	> **[Wally](<https://wally.run/package/coffilhg/easysmoothdamp>)**        
 	> ```toml        
-	> EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.0"        
+	> EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.3"        
 	> ```
 - **[FirstPersonDetector](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonDetector>)**
 
+	> Apache-2.0
+
 	> **[Useful-Modules/FirstPersonDetector](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonDetector>)**
 	> 
-	> **Rotriever**        
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vFirstPersonDetector/1.0.0>)**        
 	> ```toml        
 	> FirstPersonDetector = "github.com/Coffilhg/Useful-Modules@FirstPersonDetector/1.0.0"        
 	> ```
@@ -53,13 +79,29 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml        
 	> FirstPersonDetector = "coffilhg/firstpersondetector@1.0.0"        
 	> ```
-- **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)**
-- **[GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)**
+- **[FirstPersonView](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonView>)**
+
+	> MPL-2.0
+
+	> **[Useful-Modules/FirstPersonView](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonView>)**
+	> 
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vFirstPersonView/1.0.0>)**        
+	> ```toml        
+	> FirstPersonView = "github.com/Coffilhg/Useful-Modules@FirstPersonView/1.0.0"        
+	> ```
+	> **[Wally](<https://wally.run/package/coffilhg/firstpersonview>)**        
+	> ```toml        
+	> FirstPersonView = "coffilhg/firstpersonview@1.0.0"        
+	> ```
+- **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)** (Apache-2.0)
+- **[GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)** (Apache-2.0)
 - **[HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>)**
+
+	> Apache-2.0
 
 	> **[Useful-Modules/HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>)**
 	> 
-	> **Rotriever**        
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vHumanoidCameraOffsetController/1.0.0>)**        
 	> ```toml        
 	> HumanoidCameraOffsetController = "github.com/Coffilhg/Useful-Modules@HumanoidCameraOffsetController/1.0.1"        
 	> ```
@@ -67,7 +109,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml        
 	> HumanoidCameraOffsetController = "coffilhg/humanoidcameraoffsetcontroller@1.0.1"        
 	> ```
-- **[ServerMessages](<https://github.com/Coffilhg/Useful-Modules/tree/ServerMessages>)**
+- **[ServerMessages](<https://github.com/Coffilhg/Useful-Modules/tree/ServerMessages>)** (Apache-2.0)
 
 ---
 
@@ -116,19 +158,60 @@ ModuleDescription
 
 ---
 
-## License / License & Attribution
+## License & Attribution
 
-Licensed under the Apache License, Version 2.0.
+This module is licensed under the **Mozilla Public License 2.0 (MPL-2.0)**.
 
-You may use, modify, and redistribute this module freely, provided that the original copyright notice and license header at the top of the file are preserved.
+#### What this means for Roblox Developers:
+* **Use & Modify:** You can freely use this module in any public, private, or commercial Roblox game.
+* **File-Level Copyleft:** If you modify the source code of this module itself, you must make your modified version of the module publicly available under the MPL 2.0.
+* **No Viral Code Leakage:** Including this module in your game does **not** force you to open-source your other game scripts, UI layouts, or proprietary codebase. 
 
-See the [Apache License 2.0](LICENSE) for full terms.
+See the full terms in the [LICENSE](LICENSE) file.
 
 Attribution to all dependencies is included in [Notice](NOTICE)
 
-© 2026 Coffilhg
--->
+Copyright © 2026 @Coffilhg (Roblox UserId 517222346)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
 <!--
 
 --!strict
@@ -137,7 +220,7 @@ Attribution to all dependencies is included in [Notice](NOTICE)
 type BranchInfo = {
   ["ModuleNamePascalCase"]: string,
   ["BranchName"]: string?, -- defaults to self.ModuleNamePascalCase
-  ["License"]: string?, -- defaults to "Apache-2.0"
+  ["License"]: ("LGPL-3.0+ (version 3 or later)" | "Apache-2.0" | "MPL-2.0" | string)?,
   ["Links"]: {
     [string]: { -- string is the ServiceName
       ["ServiceLink"]: string?, -- link for the ServiceName; Defaults to `https://wally.run/package/coffilhg/{modulenamelowercase}` for Wally; None for everything else.
@@ -182,9 +265,13 @@ local Branches: {[number]: BranchInfo} = {
     },
     {
        ModuleNamePascalCase = "EasySmoothDamp",
+       License = "MPL-2.0",
        Links = {
         Wally = {
-            Content = `EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.0"`,
+            Content = `EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.3"`,
+        },
+        Rotriever = {
+          Content = `EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.3"`
         },
        },
     },
@@ -219,6 +306,30 @@ local Branches: {[number]: BranchInfo} = {
         },
        },
     },
+    {
+       ModuleNamePascalCase = "CameraController",
+       License = "MPL-2.0",
+       Links = {
+        Wally = {
+            Content = `CameraController = "coffilhg/cameracontroller@1.0.1"`,
+        },
+        Rotriever = {
+          Content = `CameraController = "github.com/Coffilhg/Useful-Modules@CameraController/1.0.1"`
+        },
+       },
+    },
+    {
+      ModuleNamePascalCase = "FirstPersonView",
+      License = "MPL-2.0",
+      Links = {
+        Wally = {
+            Content = `FirstPersonView = "coffilhg/firstpersonview@1.0.0"`,
+        },
+        Rotriever = {
+          Content = `FirstPersonView = "github.com/Coffilhg/Useful-Modules@FirstPersonView/1.0.0"`
+        },
+       },
+    }
 }
 
 -- Sort Alphabetically
@@ -226,21 +337,39 @@ table.sort(Branches, function(a: BranchInfo, b: BranchInfo)
   return a.ModuleNamePascalCase < b.ModuleNamePascalCase
 end)
 
+-- Utils
+
+-- e.g.
+-- input = `"github.com/roblox/otter@0.1.1"`
+-- output = https://github.com/roblox/otter/releases/tag/v0.1.1
+-- github.com/roblox/otter/releases/tag/0.1.1
+local function ExpandRotrieverShorthandLink(link : string): string
+  if type(link) ~= "string" or link:len() < 2 then
+    error(`ExpandRotrieverShorthandLink - expected @param **link** to be a string at least 2 characters long, got: {link}`)
+  end
+  
+  return "https://" .. ( link:gsub(`%@(.+)"`, "/releases/tag/v%1"):sub(2) ) 
+end
+--print(ExpandRotrieverShorthandLink(`"github.com/roblox/otter@0.1.1"`))
+
+
+
 local result = {}
-local function Shorthand(moduleName: string, gitHubRepositoryLink: string)
-  table.insert(result, `- **[{moduleName}](<{gitHubRepositoryLink}>)**`)
+local function Shorthand(moduleName: string, gitHubRepositoryLink: string, license: string)
+  table.insert(result, `- **[{moduleName}](<{gitHubRepositoryLink}>)** ({license})`)
 end
 
 for _, branch in ipairs(Branches) do
   local moduleName: string = branch.ModuleNamePascalCase
   local moduleNameLowercase: string = moduleName:lower()
   local branchName: string = type(branch["BranchName"]) == "string" and branch["BranchName"] or moduleName
+  local license: string = type(branch["License"]) == "string" and branch["License"] or "Apache-2.0"
   
   local gitHubRepositoryLink = `https://github.com/Coffilhg/Useful-Modules/tree/{branchName}`
 
   local links = branch["Links"]
   if not links then
-    Shorthand(moduleName, gitHubRepositoryLink)
+    Shorthand(moduleName, gitHubRepositoryLink, license)
     continue
   end
 
@@ -251,6 +380,11 @@ for _, branch in ipairs(Branches) do
     if not serviceLink then
       if serviceName == "Wally" then
         serviceLink = `[Wally](<https://wally.run/package/coffilhg/{moduleNameLowercase}>)`
+      elseif serviceName == "Rotriever" and type(details["Content"]) == "string" then
+        local shorthandFormatMatch = details["Content"]:match(`%= (%".+%")`)
+        if shorthandFormatMatch then
+          serviceLink = `[Rotriever](<{ExpandRotrieverShorthandLink(shorthandFormatMatch)}>)`
+        end
       end
     end
 
@@ -259,7 +393,7 @@ for _, branch in ipairs(Branches) do
 
     local serviceString = serviceLink and `	> **{serviceLink}**` or `	> **{serviceName}**`
 
-    if content then
+    if type(content) == "string" then
       serviceString = serviceString..[[
         
 	> ```]]..`{format}`..[[
@@ -277,7 +411,10 @@ for _, branch in ipairs(Branches) do
 
   table.insert(result, `- **[{moduleName}](<{gitHubRepositoryLink}>)**\n`)
   if #serviceLinks > 0 then
-    table.insert(result, `	> **[Useful-Modules/{branchName}](<https://github.com/Coffilhg/Useful-Modules/tree/{branchName}>)**\n	> `)
+    table.insert(result, `	> {license}\n\n	> **[Useful-Modules/{branchName}](<https://github.com/Coffilhg/Useful-Modules/tree/{branchName}>)**\n	> `)
+  else
+    Shorthand(moduleName, gitHubRepositoryLink, license)
+    continue
   end
   table.insert(result, table.concat(serviceLinks, "\n"))
   
