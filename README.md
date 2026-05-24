@@ -8,12 +8,12 @@ Easier way to use TweenService:SmoothDamp() - keeps the required variables in a 
 - **[Wally](<https://wally.run/package/coffilhg/easysmoothdamp>)**
 
     ```toml
-    EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.2"
+    EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.3"
     ```
 - **Rotriever**
 
     ```toml
-    EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.2"
+    EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.3"
     ```
 <!--- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[EasySmoothDamp](<https://create.roblox.com/store/asset/114136223178149/CoffeeBaseValue>)**-->
 
@@ -284,12 +284,15 @@ Everytime you use `SmoothDamper:Update()`, it also does `SmoothDamper:IsFinished
 
 ## License & Attribution
 
-This module is licensed under the **GNU Lesser General Public License version 3 or later**.
+This module is licensed under the **Mozilla Public License 2.0 (MPL 2.0)**.
 
-You may use, modify, and redistribute this module. If you modify this module, you must share those modifications under the same license. Your game code that *uses* this module (but does not modify it) does not need to be open-sourced. If your game *uses* this module, but has it modified, you only need to open-source the modified module, not all of your other scripts!
+#### What this means for Roblox Developers:
+* **Use & Modify:** You can freely use this module in any public, private, or commercial Roblox game.
+* **File-Level Copyleft:** If you modify the source code of this module itself, you must make your modified version of the module publicly available under the MPL 2.0.
+* **No Viral Code Leakage:** Including this module in your game does **not** force you to open-source your other game scripts, UI layouts, or proprietary codebase. 
 
-See the [LGPLv3 License](LICENSE) and [LGPLv3 Lesser License](LICENSE.LESSER) for full terms. [The combined LGPL and GPL](LICENSE.COMBINED)
+See the full terms in the [LICENSE](LICENSE) file.
 
-Attribution to all dependencies is included in the [NOTICE](NOTICE) file.
+Attribution to all dependencies is included in [Notice](NOTICE)
 
 Copyright © 2026 @Coffilhg (Roblox UserId 517222346)
