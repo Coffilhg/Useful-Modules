@@ -61,11 +61,11 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> 
 	> **Rotriever**        
 	> ```toml        
-	> HumanoidCameraOffsetController = "github.com/Coffilhg/Useful-Modules@HumanoidCameraOffsetController/1.0.0"        
+	> HumanoidCameraOffsetController = "github.com/Coffilhg/Useful-Modules@HumanoidCameraOffsetController/1.0.1"        
 	> ```
 	> **[Wally](<https://wally.run/package/coffilhg/humanoidcameraoffsetcontroller>)**        
 	> ```toml        
-	> HumanoidCameraOffsetController = "coffilhg/humanoidcameraoffsetcontroller@1.0.0"        
+	> HumanoidCameraOffsetController = "coffilhg/humanoidcameraoffsetcontroller@1.0.1"        
 	> ```
 - **[ServerMessages](<https://github.com/Coffilhg/Useful-Modules/tree/ServerMessages>)**
 
@@ -201,10 +201,10 @@ local Branches: {[number]: BranchInfo} = {
       ModuleNamePascalCase = "HumanoidCameraOffsetController",
       Links = {
         Wally = {
-            Content = `HumanoidCameraOffsetController = "coffilhg/humanoidcameraoffsetcontroller@1.0.0"`,
+            Content = `HumanoidCameraOffsetController = "coffilhg/humanoidcameraoffsetcontroller@1.0.1"`,
         },
         Rotriever = {
-          Content = `HumanoidCameraOffsetController = "github.com/Coffilhg/Useful-Modules@HumanoidCameraOffsetController/1.0.0"`
+          Content = `HumanoidCameraOffsetController = "github.com/Coffilhg/Useful-Modules@HumanoidCameraOffsetController/1.0.1"`
         },
        },
     },
