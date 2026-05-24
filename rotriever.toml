@@ -1,8 +1,9 @@
 [package]
-name = "coffilhg/modulenamelowercase"
+name = "coffilhg/cameracontroller"
 author = "Coffilhg"
 content_root = "src"
-version = "ModuleVersion"
-license = "Apache-2.0"
+version = "1.0.0"
+license = "LGPL-3.0/?version=3.0+"
 
 [dependencies]
+EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.2"  

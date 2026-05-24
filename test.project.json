@@ -4,7 +4,7 @@
     "$className": "DataModel",
 
     "ReplicatedStorage": {
-      "PascalCasedModuleName": {
+      "CameraController": {
         "$path": "src/"
       },
       "Packages": {
