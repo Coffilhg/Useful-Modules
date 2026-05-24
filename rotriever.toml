@@ -1,8 +1,10 @@
 [package]
-name = "coffilhg/modulenamelowercase"
+name = "coffilhg/firstpersonview"
 author = "Coffilhg"
 content_root = "src"
-version = "ModuleVersion"
+version = "1.0.0"
 license = "MPL-2.0"
 
 [dependencies]
+FirstPersonDetector = "github.com/Coffilhg/Useful-Modules@FirstPersonDetector/1.*"
+HumanoidCameraOffsetController = "github.com/Coffilhg/Useful-Modules@HumanoidCameraOffsetController/1.*"

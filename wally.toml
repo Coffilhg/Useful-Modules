@@ -1,11 +1,13 @@
 [package]
-name = "coffilhg/modulenamelowercase"
-description = "ModuleDescription"
-version = "ModuleVersion"
+name = "coffilhg/firstpersonview"
+description = "Primitive Generic Viewmodel of the characters BodyParts; Designed for R6 by default, example for R15 can be found in the GitHub Repository README"
+version = "1.0.0"
 license = "MPL-2.0"
 authors = ["Coffilhg <coffilhg@gmail.com>"]
-repository = "https://github.com/Coffilhg/Useful-Modules/tree/PascalCasedModuleName"
+repository = "https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonView"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
+FirstPersonDetector = "coffilhg/firstpersondetector@1.*"
+HumanoidCameraOffsetController = "coffilhg/humanoidcameraoffsetcontroller@1.*"
