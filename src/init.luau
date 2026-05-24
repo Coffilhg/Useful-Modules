@@ -1,26 +1,15 @@
---[[
-    CameraController
+--[[--
+    CameraController V1.0.1
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version. "Version 3 or later".
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-
-
-    Quick Start and API / Full License & Notices:
-	https://github.com/Coffilhg/Useful-Modules/tree/CameraController
-    Module Version: 1.0.0
---]]
+    GitHub Repository/Branch with latest version, documentation, etc:
+    https://github.com/Coffilhg/Useful-Modules/tree/CameraController
+    Stars are appreciated!
+--]]--
 --!strict
 
 --- Services

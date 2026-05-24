@@ -8,12 +8,12 @@ Simple Camera Controls made easy - BindToPart (with mouse follow) and SetFOV; Cu
 - **[Wally](<https://wally.run/package/coffilhg/cameracontroller>)**
 
     ```toml
-    CameraController = "coffilhg/cameracontroller@1.0.0"
+    CameraController = "coffilhg/cameracontroller@1.0.1"
     ```
 - **Rotriever**
 
     ```toml
-    CameraController = "github.com/Coffilhg/Useful-Modules@CameraController/1.0.0"
+    CameraController = "github.com/Coffilhg/Useful-Modules@CameraController/1.0.1"
     ```
 <!--
  **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[CameraController](<https://create.roblox.com/store/asset/123456789/CameraController>)**-->
@@ -34,12 +34,15 @@ Simple Camera Controls made easy - BindToPart (with mouse follow) and SetFOV; Cu
 
 ## License & Attribution
 
-This module is licensed under the **GNU Lesser General Public License version 3 or later**.
+This module is licensed under the **Mozilla Public License 2.0 (MPL 2.0)**.
 
-You may use, modify, and redistribute this module. If you modify this module, you must share those modifications under the same license. Your game code that *uses* this module (but does not modify it) does not need to be open-sourced. If your game *uses* this module, but has it modified, you only need to open-source the modified module, not all of your other scripts!
+#### What this means for Roblox Developers:
+* **Use & Modify:** You can freely use this module in any public, private, or commercial Roblox game.
+* **File-Level Copyleft:** If you modify the source code of this module itself, you must make your modified version of the module publicly available under the MPL 2.0.
+* **No Viral Code Leakage:** Including this module in your game does **not** force you to open-source your other game scripts, UI layouts, or proprietary codebase. 
 
-See the [LGPLv3 License](LICENSE) and [LGPLv3 Lesser License](LICENSE.LESSER) for full terms. [The combined LGPL and GPL](LICENSE.COMBINED)
+See the full terms in the [LICENSE](LICENSE) file.
 
-Attribution to all dependencies is included in the [NOTICE](NOTICE) file.
+Attribution to all dependencies is included in [Notice](NOTICE)
 
 Copyright © 2026 @Coffilhg (Roblox UserId 517222346)
