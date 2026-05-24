@@ -1,6 +1,4 @@
-# v0.0.0
+# v1.0.1
 
-## placeholder
-- feature
-- bugfix
-- compatibility notes
+## Dependencies Dynamic
+- Dependencies are now more flexibly required.

@@ -8,12 +8,12 @@ This module lets you set the LocalPlayer' **[Humanoid.CameraOffset](<https://cre
 - **[Wally](<https://wally.run/package/coffilhg/humanoidcameraoffsetcontroller>)**
 
     ```toml
-    HumanoidCameraOffsetController = "coffilhg/humanoidcameraoffsetcontroller@1.0.0"
+    HumanoidCameraOffsetController = "coffilhg/humanoidcameraoffsetcontroller@1.0.1"
     ```
 - **Rotriever**
 
     ```toml
-    HumanoidCameraOffsetController = "github.com/Coffilhg/Useful-Modules@HumanoidCameraOffsetController/1.0.0"
+    HumanoidCameraOffsetController = "github.com/Coffilhg/Useful-Modules@HumanoidCameraOffsetController/1.0.1"
     ```
 
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[HumanoidCameraOffsetController](<https://create.roblox.com/store/asset/123456789/HumanoidCameraOffsetController>)**-->

@@ -1,7 +1,7 @@
 [package]
 name = "coffilhg/humanoidcameraoffsetcontroller"
 description = "Description Placeholder"
-version = "1.0.0"
+version = "1.0.1"
 license = "Apache-2.0"
 authors = ["Coffilhg <coffilhg@gmail.com>"]
 repository = "https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController"
@@ -9,4 +9,4 @@ registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
-EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.0"
+EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.*"

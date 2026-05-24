@@ -2,8 +2,8 @@
 name = "coffilhg/humanoidcameraoffsetcontroller"
 author = "Coffilhg"
 content_root = "src"
-version = "1.0.0"
+version = "1.0.1"
 license = "Apache-2.0"
 
 [dependencies]
-EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.0"        
+EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.*"
