@@ -10,6 +10,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 - **[CameraController](<https://github.com/Coffilhg/Useful-Modules/tree/CameraController>)**
 
 	> MPL-2.0
+
 	> **[Useful-Modules/CameraController](<https://github.com/Coffilhg/Useful-Modules/tree/CameraController>)**
 	> 
 	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCameraController/1.0.1>)**        
@@ -23,6 +24,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 - **[CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)**
 
 	> Apache-2.0
+
 	> **[Useful-Modules/CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)**
 	> 
 	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCoffeeObjects/2.3.0>)**        
@@ -36,6 +38,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 - **[CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
 
 	> Apache-2.0
+
 	> **[Useful-Modules/CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
 	> 
 	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCoffeeParser/1.0.2>)**        
@@ -51,6 +54,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 - **[EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
 
 	> MPL-2.0
+
 	> **[Useful-Modules/EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
 	> 
 	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vEasySmoothDamp/1.0.3>)**        
@@ -64,6 +68,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 - **[FirstPersonDetector](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonDetector>)**
 
 	> Apache-2.0
+
 	> **[Useful-Modules/FirstPersonDetector](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonDetector>)**
 	> 
 	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vFirstPersonDetector/1.0.0>)**        
@@ -79,6 +84,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 - **[HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>)**
 
 	> Apache-2.0
+
 	> **[Useful-Modules/HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>)**
 	> 
 	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vHumanoidCameraOffsetController/1.0.0>)**        
@@ -152,12 +158,6 @@ See the full terms in the [LICENSE](LICENSE) file.
 Attribution to all dependencies is included in [Notice](NOTICE)
 
 Copyright © 2026 @Coffilhg (Roblox UserId 517222346)
-
-
-
-
-
-
 
 
 
@@ -385,7 +385,7 @@ for _, branch in ipairs(Branches) do
 
   table.insert(result, `- **[{moduleName}](<{gitHubRepositoryLink}>)**\n`)
   if #serviceLinks > 0 then
-    table.insert(result, `	> {license}\n	> **[Useful-Modules/{branchName}](<https://github.com/Coffilhg/Useful-Modules/tree/{branchName}>)**\n	> `)
+    table.insert(result, `	> {license}\n\n	> **[Useful-Modules/{branchName}](<https://github.com/Coffilhg/Useful-Modules/tree/{branchName}>)**\n	> `)
   else
     Shorthand(moduleName, gitHubRepositoryLink, license)
     continue
