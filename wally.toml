@@ -1,8 +1,8 @@
 [package]
 name = "coffilhg/easysmoothdamp"
 description = "Easier way to use TweenService:SmoothDamp() - keeps the required variables in a metatable!"
-version = "1.0.1"
-license = "LGPL 3.0+"
+version = "1.0.2"
+license = "LGPL-3.0/?version=3.0+"
 authors = ["Coffilhg <coffilhg@gmail.com>"]
 repository = "https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp"
 registry = "https://github.com/UpliftGames/wally-index"

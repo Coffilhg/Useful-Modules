@@ -19,7 +19,7 @@
 
     Quick Start and API / Full License & Notices:
 	https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp
-    Module Version: 1.0.1
+    Module Version: 1.0.2
 --]]
 --!strict
 

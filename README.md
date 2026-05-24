@@ -8,12 +8,12 @@ Easier way to use TweenService:SmoothDamp() - keeps the required variables in a 
 - **[Wally](<https://wally.run/package/coffilhg/easysmoothdamp>)**
 
     ```toml
-    EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.1"
+    EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.2"
     ```
 - **Rotriever**
 
     ```toml
-    EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.1"
+    EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.2"
     ```
 <!--- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[EasySmoothDamp](<https://create.roblox.com/store/asset/114136223178149/CoffeeBaseValue>)**-->
 
