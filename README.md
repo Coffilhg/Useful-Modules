@@ -9,8 +9,8 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 - **[Arrangement](<https://github.com/Coffilhg/Useful-Modules/tree/Arrangement>)** (Apache-2.0)
 - **[CameraController](<https://github.com/Coffilhg/Useful-Modules/tree/CameraController>)**
 
-	> MPL-2.0
-
+	> **MPL-2.0**
+	>
 	> **[Useful-Modules/CameraController](<https://github.com/Coffilhg/Useful-Modules/tree/CameraController>)**
 	> 
 	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCameraController/1.0.1>)**        
@@ -23,22 +23,22 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```
 - **[CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)**
 
-	> Apache-2.0
-
+	> **Apache-2.0**
+	>
 	> **[Useful-Modules/CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCoffeeObjects/2.3.0>)**        
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCoffeeObjects/2.3.3>)**        
 	> ```toml        
-	> CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.3.0"        
+	> CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.3.3"        
 	> ```
 	> **[Wally](<https://wally.run/package/coffilhg/coffeeobjects>)**        
 	> ```toml        
-	> CoffeeObjects = "coffilhg/coffeeobjects@2.3.2"        
+	> CoffeeObjects = "coffilhg/coffeeobjects@2.3.3"        
 	> ```
 - **[CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
 
-	> Apache-2.0
-
+	> **Apache-2.0**
+	>
 	> **[Useful-Modules/CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
 	> 
 	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCoffeeParser/1.0.3>)**        
@@ -53,8 +53,8 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 - **[Counter](<https://github.com/Coffilhg/Useful-Modules/tree/Counter>)** (Apache-2.0)
 - **[EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
 
-	> MPL-2.0
-
+	> **MPL-2.0**
+	>
 	> **[Useful-Modules/EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
 	> 
 	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vEasySmoothDamp/1.0.3>)**        
@@ -67,8 +67,8 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```
 - **[FirstPersonDetector](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonDetector>)**
 
-	> Apache-2.0
-
+	> **Apache-2.0**
+	>
 	> **[Useful-Modules/FirstPersonDetector](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonDetector>)**
 	> 
 	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vFirstPersonDetector/1.0.0>)**        
@@ -81,8 +81,8 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```
 - **[FirstPersonView](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonView>)**
 
-	> MPL-2.0
-
+	> **MPL-2.0**
+	>
 	> **[Useful-Modules/FirstPersonView](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonView>)**
 	> 
 	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vFirstPersonView/1.0.0>)**        
@@ -97,8 +97,8 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 - **[GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)** (Apache-2.0)
 - **[HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>)**
 
-	> Apache-2.0
-
+	> **Apache-2.0**
+	>
 	> **[Useful-Modules/HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>)**
 	> 
 	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vHumanoidCameraOffsetController/1.0.1>)**        
@@ -239,10 +239,10 @@ local Branches: {[number]: BranchInfo} = {
        ModuleNamePascalCase = "CoffeeObjects",
        Links = {
         Wally = {
-            Content = `CoffeeObjects = "coffilhg/coffeeobjects@2.3.2"`,
+            Content = `CoffeeObjects = "coffilhg/coffeeobjects@2.3.3"`,
         },
         Rotriever = {
-            Content = `CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.3.0"`
+            Content = `CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.3.3"`
         },
        },
     },
@@ -250,10 +250,10 @@ local Branches: {[number]: BranchInfo} = {
        ModuleNamePascalCase = "CoffeeParser",
        Links = {
         Wally = {
-            Content = `CoffeeParser = "coffilhg/coffeeparser@1.0.2"`,
+            Content = `CoffeeParser = "coffilhg/coffeeparser@1.0.3"`,
         },
         Rotriever = {
-          Content = `CoffeeParser = "github.com/Coffilhg/Useful-Modules@CoffeeParser/1.0.2"`
+          Content = `CoffeeParser = "github.com/Coffilhg/Useful-Modules@CoffeeParser/1.0.3"`
         },
        },
     },
@@ -411,7 +411,7 @@ for _, branch in ipairs(Branches) do
 
   table.insert(result, `- **[{moduleName}](<{gitHubRepositoryLink}>)**\n`)
   if #serviceLinks > 0 then
-    table.insert(result, `	> {license}\n\n	> **[Useful-Modules/{branchName}](<https://github.com/Coffilhg/Useful-Modules/tree/{branchName}>)**\n	> `)
+    table.insert(result, `	> **{license}**\n	>\n	> **[Useful-Modules/{branchName}](<https://github.com/Coffilhg/Useful-Modules/tree/{branchName}>)**\n	> `)
   else
     Shorthand(moduleName, gitHubRepositoryLink, license)
     continue
