@@ -41,13 +41,13 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 
 	> **[Useful-Modules/CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCoffeeParser/1.0.2>)**        
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCoffeeParser/1.0.3>)**        
 	> ```toml        
-	> CoffeeParser = "github.com/Coffilhg/Useful-Modules@CoffeeParser/1.0.2"        
+	> CoffeeParser = "github.com/Coffilhg/Useful-Modules@CoffeeParser/1.0.3"        
 	> ```
 	> **[Wally](<https://wally.run/package/coffilhg/coffeeparser>)**        
 	> ```toml        
-	> CoffeeParser = "coffilhg/coffeeparser@1.0.2"        
+	> CoffeeParser = "coffilhg/coffeeparser@1.0.3"        
 	> ```
 - **[CoffeeRemotes](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotes>)** (Apache-2.0)
 - **[Counter](<https://github.com/Coffilhg/Useful-Modules/tree/Counter>)** (Apache-2.0)
@@ -101,7 +101,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 
 	> **[Useful-Modules/HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vHumanoidCameraOffsetController/1.0.0>)**        
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vHumanoidCameraOffsetController/1.0.1>)**        
 	> ```toml        
 	> HumanoidCameraOffsetController = "github.com/Coffilhg/Useful-Modules@HumanoidCameraOffsetController/1.0.1"        
 	> ```
