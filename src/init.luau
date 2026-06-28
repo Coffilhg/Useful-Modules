@@ -20,7 +20,7 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser
-    Module Version: 1.0.2
+    Module Version: 1.0.3
 --]]--
 --!strict
 
@@ -89,6 +89,32 @@ local precisionFormatter : string = "%."..(type(precision) == "number" and preci
 --	"
 --]=]--
 
+local SupportedTypes : {[SupportedTypesStringList]: true} = {
+	string = true, number = true, boolean = true, buffer = true,
+	BrickColor = true, CFrame = true, Color3 = true,
+	ColorSequence = true, Content = true, EnumItem = true,
+	Font = true, NumberRange = true, NumberSequence = true,
+	Ray = true, Rect = true, UDim = true, UDim2 = true, Vector2 = true, Vector3 = true,
+	ColorSequenceKeypoint = true, NumberSequenceKeypoint = true,
+}
+local SupportedTypesArray : {string}? = {} -- temporary variables to create the debug message
+local SupportedTypesTemp : {string}? = {} -- temporary variables to create the debug message
+for key in pairs(SupportedTypes) do
+	table.insert(SupportedTypesTemp :: {string}, key)
+	local tempConcat = table.concat(SupportedTypesTemp :: {string}, ", ")
+	if #tempConcat >= 36 then
+		table.insert(SupportedTypesArray :: {string}, tempConcat)
+		SupportedTypesTemp = {}
+	end
+end
+-- any leftovers < 36 long
+if #(SupportedTypesTemp :: {string}) > 0 then
+    table.insert(SupportedTypesArray :: {string}, table.concat(SupportedTypesTemp :: {string}, ", "))
+end
+local SupportedTypesDebugMessage : string = "\n>\t" .. table.concat(SupportedTypesArray :: {string}, ",\n>\t")
+SupportedTypesArray = nil
+SupportedTypesTemp = nil
+
 
 
 -- Types for internal use and exports
@@ -121,6 +147,8 @@ export type TypeofTypeResult = "number" | "string" | "boolean" | "buffer" | "use
 export type CoffeeParser = {
 	Encode: (data : RuntimeBasicTable, recursion : boolean?) -> PrimitiveBasicTable,
 	Decode: (data : PrimitiveBasicTable, recursion : boolean?) -> RuntimeBasicTable,
+	SupportedTypes: {[SupportedTypesList]: true},
+	SupportedTypesDebugMessage: string,
 }
 
 
@@ -1107,6 +1135,8 @@ end
 local CoffeeParser : CoffeeParser = {
 	Encode = encodeData,
 	Decode = decodeData,
+	SupportedTypes = SupportedTypes,
+	SupportedTypesDebugMessage = SupportedTypesDebugMessage,
 }
 
 return CoffeeParser

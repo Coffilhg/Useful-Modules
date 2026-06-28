@@ -1,3 +1,9 @@
+# v1.0.3
+- Added `SupportedTypes` lookup table for runtime type validation.
+- Added `SupportedTypesDebugMessage` for convenient debug output.
+- For use example of the two above, see CoffeeObjects@2.3.3 or later.
+> (The two were actually just a result of moving some logic from CoffeeObjects after it already became dependent on the CoffeeParser)
+
 # v1.0.2
 - `wally-package-types` doesn't recognise **const** keyword
 - all **const** keyword usage cases replaced with **local**
