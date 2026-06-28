@@ -1,3 +1,8 @@
+# v2.3.3
+- `SupportedTypes` lookup table and `SupportedTypesDebugMessage` are now provided by CoffeeParser, just like the SupportedTypesList type previously
+- Added internal `_Destroying` Signal, this now allows you to use `Destroying` however you want to - you can now `:DisconnectAll` and there'll be no dead reference to this object in a CoffeeFolder once it's destroyed, bcause it's now handled by `_Destroying` instead!
+- Split type definitions into Public (default) and Private (internal) to remove internal fields from the autocomplete.
+
 # v2.3.1 and v2.3.2
 
 ## Wally Re-Publish

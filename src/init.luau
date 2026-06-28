@@ -20,7 +20,7 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
-    Module Version: 2.3.0
+    Module Version: 2.3.3
 --]]--
 
 --- Dependencies ---
@@ -47,14 +47,15 @@ export type CoffeeFolder = {
 	ChildAdded: PerfectSignal.Signal<TableIndex, CoffeeBaseValue | CoffeeFolder>, -- fires with the key and item that were added
 	ChildRemoved: PerfectSignal.Signal<TableIndex>, -- fires with the key that was destroyed
 	Destroying: PerfectSignal.Signal<>, -- Fired before destruction
+	-- _Destroying: PerfectSignal.Signal<>, -- Fired before destruction, right before Destroying fires.
 	Insert: (self: CoffeeFolder, newValue: TableValue) -> (),
 	GetPath: (self: CoffeeFolder) -> {string},
 	GetChildren: (self: CoffeeFolder) -> {[TableIndex]: CoffeeFolder | CoffeeBaseValue},
 	Destroy: (self: CoffeeFolder) -> (),
-	_IsArrayORTuple: (self: CoffeeFolder) -> boolean,
-	_data: {[TableIndex]: CoffeeFolder | CoffeeBaseValue},
-	_parent: CoffeeFolder?,
-	_key: string?,
+	-- _IsArrayORTuple: (self: CoffeeFolder) -> boolean,
+	-- _data: {[TableIndex]: CoffeeFolder | CoffeeBaseValue},
+	-- _parent: CoffeeFolder?,
+	-- _key: string?,
 	[TableIndex]: any,
 }
 
@@ -62,36 +63,54 @@ export type CoffeeFolderStrict<T> = { -- T must be {[TableIndex]: CoffeeFolder |
 	ChildAdded: PerfectSignal.Signal<TableIndex, CoffeeBaseValue | CoffeeFolder>, -- fires with the key and item that were added
 	ChildRemoved: PerfectSignal.Signal<TableIndex>, -- fires with the key that was destroyed
 	Destroying: PerfectSignal.Signal<>, -- Fired before destruction
+	-- _Destroying: PerfectSignal.Signal<>, -- Fired before destruction, right before Destroying fires.
 	Insert: (self: CoffeeFolderStrict<T>, newValue: TableValue) -> (),
 	GetPath: (self: CoffeeFolderStrict<T>) -> {string},
 	GetChildren: (self: CoffeeFolderStrict<T>) -> T,
 	Destroy: (self: CoffeeFolderStrict<T>) -> (),
-	_IsArrayORTuple: (self: CoffeeFolderStrict<T>) -> boolean,
+	-- _IsArrayORTuple: (self: CoffeeFolderStrict<T>) -> boolean,
+	-- _data: T,
+	-- _parent: CoffeeFolder?,
+	-- _key: string?,
+} & T -- Perfect for autocomplete because index leads to internal _data, which is T
+
+export type CoffeeFolderInternals<T> = {
+	_Destroying: PerfectSignal.Signal<>, -- Fired before destruction, right before Destroying fires.
+	_IsArrayORTuple: (self: any) -> boolean, -- any here is actually the CoffeeFolder
 	_data: T,
 	_parent: CoffeeFolder?,
-	_key: string?,
-} & T -- Perfect for autocomplete because index leads to internal _data, which is T
+	_key: TableIndex?,
+}
 
 export type CoffeeBaseValue = {
 	Value: SupportedTypesList,
 	Changed: PerfectSignal.Signal<SupportedTypesList, SupportedTypesList>, -- fires with previousValue and newValue
 	Destroying: PerfectSignal.Signal<>, -- Fired before destruction
+	-- _Destroying: PerfectSignal.Signal<>, -- Fired before destruction, right before Destroying fires.
 	Destroy: (self: CoffeeBaseValue) -> (),
-	GetPath: (self: CoffeeBaseValue) -> {string},
-	_Value: SupportedTypesList,
-	_parent: CoffeeFolder?,
-	_key: string?,
+	GetPath: (self: CoffeeBaseValue) -> {TableIndex},
+	-- _Value: SupportedTypesList,
+	-- _parent: CoffeeFolder?,
+	-- _key: string?,
 }
 
 export type CoffeeBaseValueStrict<T> = { -- T is ONE of the types from SupportedTypesList
 	Value: T,
 	Changed: PerfectSignal.Signal<T, T>, -- fires with previousValue and newValue
 	Destroying: PerfectSignal.Signal<>, -- Fired before destruction
+	-- _Destroying: PerfectSignal.Signal<>, -- Fired before destruction, right before Destroying fires.
 	Destroy: (self: CoffeeBaseValueStrict<T>) -> (),
-	GetPath: (self: CoffeeBaseValueStrict<T>) -> {string},
+	GetPath: (self: CoffeeBaseValueStrict<T>) -> {TableIndex},
+	-- _Value: T,
+	-- _parent: CoffeeFolder?,
+	-- _key: string?,
+}
+
+export type CoffeeBaseValueInternals<T> = {
+	_Destroying: PerfectSignal.Signal<>,
 	_Value: T,
 	_parent: CoffeeFolder?,
-	_key: string?,
+	_key: TableIndex?,
 }
 
 --- GetPathMethod REQUIRED by CoffeeBaseValue AND CoffeeFolder ---
@@ -99,12 +118,14 @@ export type CoffeeBaseValueStrict<T> = { -- T is ONE of the types from Supported
 -- Traverses up the hierarchy via _parent references to reconstruct the object's location.
 -- @return An array of keys (strings or numbers) representing the path from the root.
 local function GetPathMethod(self: CoffeeBaseValue | CoffeeFolder) : {[number]: TableIndex}
-	local path = {}
+	local path : {TableIndex} = {}
 	local current = self
 	local parent = rawget(current, "_parent")
 
 	while parent do
-		table.insert(path, 1, rawget(current, "_key")) -- I thought using reverse in the end, but reverse doesnt exist, so doing this is ok
+		-- the _key will only be nil if it's the root, but since the root does
+		-- not have a _parent, the loop stops and root' _key (nil) is not read
+		table.insert(path, 1, rawget(current, "_key") :: TableIndex) -- I thought using reverse in the end, but reverse doesnt exist, so doing this is ok
 		current = parent
 		parent = rawget(current, "_parent")
 	end
@@ -149,7 +170,10 @@ end
 -- Destroys the Folder and all of its children recursively.
 -- Disconnects all internal signals.
 local function DestroyMethod(self : CoffeeFolder)
+	self._Destroying:Fire()
 	self.Destroying:Fire()
+
+	self._Destroying:DisconnectAll()
 	self.Destroying:DisconnectAll()
 
 	self.ChildAdded:DisconnectAll()
@@ -183,28 +207,7 @@ module.CoffeeBaseValue = CoffeeBaseValue
 
 --- Replicate The Way BaseValue Instances Work (Somewhat Accurate) ---
 
-local supportedTypes = {
-	BrickColor = true, CFrame = true, Color3 = true,
-	ColorSequence = true, ColorSequenceKeypoint = true, Content = true,
-	EnumItem = true, Font = true, NumberRange = true,
-	NumberSequence = true, NumberSequenceKeypoint = true, Ray = true,
-	Rect = true, UDim = true, UDim2 = true,
-	Vector2 = true, Vector3 = true, boolean = true,
-	buffer = true, number = true, string = true
-}
-local supportedTypesArray = {}
-local supportedTypesTemp = {}
-for key, _ in pairs(supportedTypes) do
-	table.insert(supportedTypesTemp, key)
-	local tempConcat = table.concat(supportedTypesTemp, ", ")
-	if #tempConcat >= 36 then
-		table.insert(supportedTypesArray, tempConcat)
-		supportedTypesTemp = {}
-	end
-end
-local supportedTypesDebugMessage = table.concat(supportedTypesArray, ",\n>\t")
-supportedTypesArray = nil
-supportedTypesTemp = nil
+local SupportedTypes = CoffeeParser.SupportedTypes
 
 
 
@@ -216,7 +219,7 @@ local Value = {}
 -- @param newValue The new value to assign. For "Value", must be one of SupportedTypesList.
 function Value:__newindex(key, newValue)
 	if key == "Value" then
-		assert(supportedTypes[typeof(newValue)], `\n>\tCoffeeBaseValue Does Not Support typeof: "{typeof(newValue)}";\n>\tAll supported Types:\n>\t{supportedTypesDebugMessage};`)
+		assert(SupportedTypes[typeof(newValue)], `\n>\tCoffeeBaseValue Does Not Support typeof: "{typeof(newValue)}";\n>\tAll supported Types:{CoffeeParser.SupportedTypesDebugMessage};`)
 
 		local previousValue = self._Value
 		self._Value = newValue
@@ -247,7 +250,10 @@ end
 
 -- Destroys the Value instance, disconnecting all Changed signal callbacks and clearing the metatable.
 function Value:Destroy()
+	self._Destroying:Fire()
 	self.Destroying:Fire()
+
+	self._Destroying:DisconnectAll()
 	self.Destroying:DisconnectAll()
 	self.Changed:DisconnectAll()
 
@@ -261,12 +267,13 @@ end
 -- @param defaultValue The initial value for the Value instance. Must be one of SupportedTypesList.
 -- @return A Value instance with properties Value, Changed, and Destroy.
 function CoffeeBaseValue.new(defaultValue : SupportedTypesList) : CoffeeBaseValue
-	assert(supportedTypes[typeof(defaultValue)], `\n>\tCoffeeBaseValue Does Not Support typeof: "{typeof(defaultValue)}";\n>\tAll supported Types:\n>\t{supportedTypesDebugMessage};`)
+	assert(SupportedTypes[typeof(defaultValue)], `\n>\tCoffeeBaseValue Does Not Support typeof: "{typeof(defaultValue)}";\n>\tAll supported Types:{CoffeeParser.SupportedTypesDebugMessage};`)
 
 	local self = setmetatable({}, Value)
 	rawset(self, "_Value", defaultValue)
 	rawset(self, "Changed", PerfectSignal.new())
 	rawset(self, "Destroying", PerfectSignal.new())
+	rawset(self, "_Destroying", PerfectSignal.new())
 	rawset(self, "GetPath", GetPathMethod)
 
 	return self
@@ -368,8 +375,8 @@ function Folder:__newindex(key : TableIndex, newValue : TableValue)
 	rawset(itemToStore, "_key", key)
 
 	-- Listen for child self-destruction
-	if itemToStore["Destroying"] then
-		itemToStore["Destroying"]:Connect(function()
+	if itemToStore["_Destroying"] then
+		itemToStore["_Destroying"]:Connect(function()
 			local destroyedItem = rawget(data, key)
 
 			if data and destroyedItem == itemToStore then
@@ -417,6 +424,7 @@ function CoffeeFolder.new(data : ({} & PrimitiveTable)?) : CoffeeFolder
 	rawset(self, "ChildAdded", PerfectSignal.new())
 	rawset(self, "ChildRemoved", PerfectSignal.new())
 	rawset(self, "Destroying", PerfectSignal.new())
+	rawset(self, "_Destroying", PerfectSignal.new())
 	rawset(self, "_IsArrayORTuple", IsArrayORTupleMethod)
 	rawset(self, "Insert", InsertMethod)
 	rawset(self, "GetPath", GetPathMethod)

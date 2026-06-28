@@ -1,0 +1,16 @@
+{
+  "name": "Testing",
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedStorage": {
+      "CoffeeObjects": {
+        "$path": "src/"
+      },
+      "Packages": {
+        "$path": "Packages"
+      }
+    }
+    
+  }
+}

@@ -18,12 +18,12 @@ This library intentionally favors **explicitness, performance, and Roblox semant
 - **[Wally](<https://wally.run/package/coffilhg/coffeeobjects>)**
 
     ```toml
-    CoffeeObjects = "coffilhg/coffeeobjects@2.3.2"
+    CoffeeObjects = "coffilhg/coffeeobjects@2.3.3"
     ```
 - **Rotriever**
 
     ```toml
-    CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.3.0"
+    CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.3.3"
     ```
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[CoffeeObjects](<https://create.roblox.com/store/asset/1234567890/CoffeeObjects>)**-->
 
@@ -96,6 +96,16 @@ data.Stats.Honey.Changed:Connect(function(old, new)
 	print(old, "→", new)
 end)
 ```
+
+---
+
+## Internal Fields (`_` prefixed)
+
+> **The underscore (`_`) prefix is a convention, that such fields are private to the object itself and shall not be used by any other means.**
+
+Fields prefixed with `_` are internal runtime state and are not part of the public API. Although you can use them, it is NOT recommended to - only use if you really know what you're doing!
+
+The internal fields have an export type definition if you ever truly need those. Can be used via type intersections, e.g.: `CoffeeBaseValue & CoffeeBaseValueInternals<SupportedTypesList>`
 
 ---
 
@@ -203,12 +213,23 @@ rawset(self, "__coffee", "Folder")
 
 This is left to the consumer on purpose to avoid opinionated constraints.
 
+### Internal `_Destroying` signal
+
+CoffeeObjects now uses (Folders now listen to) an internal `_Destroying` signal to ensure safe unlinking
+from parent structures before the public `Destroying` signal fires.
+
+This guarantees:
+- no stale references in `CoffeeFolder` if `:DisconnectAll()` was called on `Destroying`
+- safe `:DisconnectAll()` behavior
+- consistent destruction ordering
+
 ---
 
 ## Destruction
 
 Destroying a folder:
 
+* `_Destroying` fires before `Destroying` (internal use for safe unlinking)
 * disconnects all signals
 * destroys all children recursively
 * clears parent links
