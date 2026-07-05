@@ -41,12 +41,12 @@ if not (RemoteEvent and RemoteFunction and UnreliableRemoteEvent) then
 	end
 end
 
---- Dependencies (Not By @Coffilhg) ---
+--- Dependencies ---
 
--- Signal's Source Repository: https://github.com/stravant/goodsignal/blob/master/README.md --
-local Signal = require(script.GoodSignal_By_Stravant) -- or wherever it's located and whatever it's named
+-- Signal's Source Repository: https://github.com/Coffilhg/PerfectSignal --
+local PerfectSignal = require(game:GetService(`ReplicatedStorage`).Packages.PerfectSignal) -- or wherever it's located and whatever it's named
 
---- /E Dependencies (Not By @Coffilhg) ---
+--- /E Dependencies ---
 
 
 
@@ -55,11 +55,11 @@ local module = {}
 function module:FireServer(eventName : string, ...)
 	RemoteEvent:FireServer(eventName, ...)
 end
-local EventSignals = {} :: {[string]: Signal.Signal}
-function module:ConnectEvent(eventName : string, callback : ((any)) -> ()) : Signal.Connection
+local EventSignals = {} :: {[string]: PerfectSignal.Signal<>}
+function module:ConnectEvent(eventName : string, callback : ((any)) -> ()) : PerfectSignal.Connection
 	local EventSignal = EventSignals[eventName]
 	if not EventSignal then
-		EventSignal = Signal.new()
+		EventSignal = PerfectSignal.new()
 		EventSignals[eventName] = EventSignal
 	end
 	return EventSignal:Connect(callback)
@@ -130,11 +130,11 @@ end
 function module:FireUnreliableServer(eventName : string, ...)
 	UnreliableRemoteEvent:FireServer(eventName, ...)
 end
-local UnreliableEventSignals = {} :: {[string]: Signal.Signal}
-function module:ConnectUnreliableEvent(eventName : string, callback : (...any) -> ()) : Signal.Connection
+local UnreliableEventSignals = {} :: {[string]: PerfectSignal.Signal<>}
+function module:ConnectUnreliableEvent(eventName : string, callback : (...any) -> ()) : PerfectSignal.Connection
 	local EventSignal = UnreliableEventSignals[eventName]
 	if not EventSignal then
-		EventSignal = Signal.new()
+		EventSignal = PerfectSignal.new()
 		UnreliableEventSignals[eventName] = EventSignal
 	end
 	return EventSignal:Connect(callback)
@@ -173,7 +173,7 @@ end)
 
 export type RemoteEventType = {
 	FireServer: (self: RemoteEventType, ...any) -> RemoteEventType,
-	Connect: (self: RemoteEventType, callback: (...any) -> ()) -> Signal.Connection,
+	Connect: (self: RemoteEventType, callback: (...any) -> ()) -> PerfectSignal.Connection,
 	Disconnect: (self: RemoteEventType) -> RemoteEventType,
 	Destroy: (self: RemoteEventType) -> (),
 	OnClientEvent: RemoteEventType, --{__index: RemoteEventType},
@@ -192,7 +192,7 @@ export type RemoteFunctionType = {
 
 export type UnreliableRemoteEventType = {
 	FireServer: (self: UnreliableRemoteEventType, ...any) -> UnreliableRemoteEventType,
-	Connect: (self: UnreliableRemoteEventType, callback: (...any) -> ()) -> Signal.Connection,
+	Connect: (self: UnreliableRemoteEventType, callback: (...any) -> ()) -> PerfectSignal.Connection,
 	Disconnect: (self: UnreliableRemoteEventType) -> UnreliableRemoteEventType,
 	Destroy: (self: UnreliableRemoteEventType) -> (),
 	OnClientEvent: UnreliableRemoteEventType, --{__index: UnreliableRemoteEventType},

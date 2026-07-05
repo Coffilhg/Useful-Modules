@@ -1,0 +1,13 @@
+[package]
+name = "coffilhg/coffeeremotes-server"
+description = "CoffeeRemotes multiplexes events through one Remote Instance per keyed `eventName`. It is a wrapper around Instances per event."
+version = "0.0.0"
+license = "Apache-2.0"
+authors = ["Coffilhg <coffilhg@gmail.com>"]
+repository = "https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotesRefined"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "server"
+exclude = ["sourcemap.json", "wally.lock", "Packages"]
+
+[dependencies]
+PerfectSignal = "coffilhg/perfectsignal@1.0.1"

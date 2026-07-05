@@ -1,0 +1,6 @@
+{
+  "name": "coffeeremotes-server",
+  "tree": {
+    "$path": "src"
+  }
+}

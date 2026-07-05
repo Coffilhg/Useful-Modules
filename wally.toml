@@ -1,0 +1,8 @@
+[package]
+name = "coffilhg/coffeeremotestest"
+version = "0.0.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "dev"
+
+[dependencies]
+PerfectSignal = "coffilhg/perfectsignal@1.0.1"

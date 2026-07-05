@@ -1,0 +1,8 @@
+sourcemap.json
+src/*/sourcemap.json
+wally.lock
+src/*/wally.lock
+Packages/
+src/*/Packages/
+\.vscode
+tds.md

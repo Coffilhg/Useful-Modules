@@ -1,6 +1,39 @@
-# ☕ CoffeeRemotes
+# ☕ CoffeeRemotes (Refined)
 
-CoffeeRemotes multiplexes events through **one shared Remote per type**, keyed by `eventName`. It is **not** a wrapper around Instances per event.
+CoffeeRemotes multiplexes events through **one Remote Instance per keyed `eventName`**. It **is** a wrapper around Instances per event.
+
+---
+
+## Some history
+
+> (The original Description)
+~~CoffeeRemotes multiplexes events through **one shared Remote per type**, keyed by `eventName`. It is **not** a wrapper around Instances per event.~~
+
+**This is derived/forked from CoffeeRemotes;**
+
+**Legacy CoffeeRemotes will not be published on wally or anywhere else, it will simply remain public [here](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotes>)**
+
+Reason for the change: unnecessary additional per-call bandwidth data cost. Previously there were just three Instances: `CoffeeRemotes_Event`, `CoffeeRemotes_Function` and `CoffeeRemotes_Unreliable`; Everything was fired through them, and the first argument passed would always be the `eventName`;
+
+Since it is a *string*, it's usual cost, with words around 10 Characters long would be `10 bytes + type header` **additional cost per-call**, it simply scales like `#string * byte`, so with words around 20 characters, we'd get `20 bytes + type header` **additional cost per-call** and so on.
+
+**No Rotriever support is planned for CoffeeRemotes (Refined)** - though feel free to suggest on how to implement it.
+
+Even if we used *numbers* instead, that'd usually land around `8 bytes + type header`
+
+---
+
+Now with a new approach we will create a new Instance per `eventName`.
+
+Limitations apply: if `eventName` is taken by any remote Instance type, it can not be used again for a different remote Instance type.
+
+Client will yield WaitForChild like as long as the remote is not there, if it yields for too long, a dedicated warning will be output. This will protect you from typos silently failing!
+
+---
+
+But I mean, you could still use Legacy CoffeeRemotes - they make it harder for exploiters to figure out what's out there at all - they can see no actual Remote Names, except those they've fired and were able to intercept with a dedicated Remote Spy script.
+
+> **As of this commit, only the architecture was overhauled (files moved + renamed), the source of the scripts was left unchanged. This commit ensures better track of changes to the original CoffeeRemotes.**
 
 ---
 

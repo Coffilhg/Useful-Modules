@@ -1,0 +1,24 @@
+{
+  "name": "Testing",
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedStorage": {
+      "CoffeeRemotesClient": {
+        "$path": "src/Client/src"
+      },
+      "Packages": {
+        "$path": "Packages"
+      },
+      "$path": "src/Test/ReplicatedStorage"
+    },
+    
+    "ServerScriptService": {
+      "CoffeeRemotesServer": {
+        "$path": "src/Server/src"
+      },
+      "$path": "src/Test/ServerScriptService"
+    }
+    
+  }
+}
