@@ -45,8 +45,6 @@ Client will yield WaitForChild like as long as the remote is not there, if it yi
 
 But I mean, you could still use Legacy CoffeeRemotes - they make it harder for exploiters to figure out what's out there at all - they can see no actual Remote Names, except those they've fired and were able to intercept with a dedicated Remote Spy script.
 
-> **As of this commit, only the architecture was overhauled (files moved + renamed), the source of the scripts was left unchanged. This commit ensures better track of changes to the original CoffeeRemotes.**
-
 ---
 
 ## Features
