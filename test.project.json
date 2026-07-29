@@ -10,7 +10,12 @@
       "Packages": {
         "$path": "Packages"
       },
-      "$path": "src/Test/ReplicatedStorage"
+      "ClientMain": {
+        "$path": "src/Test/ClientMain",
+        "$properties": {
+          "RunContext": "Client"
+        }
+      }
     },
     
     "ServerScriptService": {

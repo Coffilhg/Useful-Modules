@@ -16,20 +16,25 @@
 --]]--
 --!strict
 --!optimize 2
--- no native here, this script does NO heavy math!
+--!native
 
 local Players = game:GetService(`Players`)
 local RunS = game:GetService(`RunService`)
 local RS = game:GetService(`ReplicatedStorage`)
-local Debris = game:GetService(`Debris`)
-
--- The following Three must match on Both Server and Client Side versions of the Module
-local ModuleVersion: string = `V1_0_0` -- must be compatible with query descendants in a way that...
-local MainFolderName: string = `CoffeeRemotesRefined`
-local ModuleFoldersTag: string = `CoffeeRemotesRefined_{ModuleVersion}` -- ...this is evaluated as a SINGLE Tag
 
 local IsStudio: boolean = RunS:IsStudio()
-local Prefix: string = `[CoffeeRemotes-Server {ModuleVersion}] ` -- This is only for Output
+local Prefix: string = `[CoffeeRemotes-Server V1.0.0] `
+local MainFolderName: string = `{Prefix}RemotesFolder`
+
+-- Optimize the VM
+local OSClock = os.clock
+local type = type
+local typeof = typeof
+local rawget = rawget
+local rawset = rawset
+local setmetatable = setmetatable
+local error = error
+local warn = warn
 
 -- Remote Function Exit Reasons (RFER)
 -- Be an oracle only if IsStudio testing, not in-game!
@@ -61,33 +66,28 @@ end
 --- Dependencies ---
 
 -- Signal's Source Repository: https://github.com/Data-Oriented-House/LemonSignal --
-local LemonSignal = require(script.Parent.LemonSignal) -- or wherever it's located and whatever it's named
+local LemonSignal = require(RS.Packages.LemonSignal) -- or wherever it's located and whatever it's named
 
 --- /E Dependencies ---
 
 
 
-export type RemoteInstance = BaseRemoteEventSubtypes | RemoteFunction -- RemoteEvent | RemoteFunction | UnreliableRemoteEvent
+export type RemoteInstance = RemoteEvent | RemoteFunction | UnreliableRemoteEvent
 export type CoffeeRemotesObject = RemoteEventType | RemoteFunctionType | UnreliableRemoteEventType
-export type KindOf = "RemoteEvent" | "RemoteFunction" | "UnreliableRemoteEvent"
-export type KindOfs = "RemoteEvents" | "RemoteFunctions" | "UnreliableRemoteEvents"
-export type OnInvokeCallback = (player: Player, ...any) -> (boolean, {})
+type KindOf = "RemoteEvent" | "RemoteFunction" | "UnreliableRemoteEvent"
+type KindOfs = "RemoteEvents" | "RemoteFunctions" | "UnreliableRemoteEvents"
+type OnInvokeCallback = (player: Player, ...any) -> (boolean, {})
 
 type UserId = number
 type RemoteInstanceName = string
-type RemoteInstanceNameTimestampPairs = {
-	[RemoteInstanceName]: number?,
-}
 type CooldownRoot = {
-	[UserId]: RemoteInstanceNameTimestampPairs,
+	[UserId]: {
+		[RemoteInstanceName]: number?,
+	},
 }
 export type PlayerCooldowns = {
 	[KindOfs]: CooldownRoot,
 }
-export type PlayerCooldownsBackup = {
-	[KindOfs]: RemoteInstanceNameTimestampPairs,
-}
-
 
 type ClassInstancesTable<T = RemoteInstance, U = CoffeeRemotesObject> = {
 	[T]: U
@@ -103,159 +103,71 @@ local PlayerCooldowns: PlayerCooldowns = {
 	RemoteFunctions = {},
 	UnreliableRemoteEvents = {},
 }
-local BackUpPlayerCooldowns: LemonSignal.Signal<Player, PlayerCooldownsBackup> = LemonSignal.new()
 
--- Please make sure the name given is compatible with use in :QueryDescendants via the very unsafe #{name} part of the selector
--- There is no safe escape implemented to make the name compatible automatically; And this shall remain such by design, there's no need to overengineer a function just to create four folders with hardcoded names (no user input).
 local function mkdir(name: string, where: Instance?): Folder
 	if typeof(where) ~= `Instance` then
 		where = RS
 	end
-
-	local folder_s = (where :: Instance):QueryDescendants(
-		`>Folder#{name}.{ModuleFoldersTag}[$CRRV = "{ModuleVersion}"]`
-	) :: {[number]: Folder}
-	local matches = #folder_s
-	-- both a tag of {ModuleFoldersTag}
-	-- and an attribute CRRV = {ModuleVersion}
-	-- (CRRV ~ CoffeeRemotesRefinedVersion)
-	-- all this on top of the Instance being
-	-- a Folder and named {name}
-
-	-- if there's multiple matches, every
-	-- single of them except one will be
-	-- :Destroy()'ed with a warning
-
-	-- most expected and the best case scenario
-	if matches < 1 then
-		local folder = Instance.new(`Folder`)
-
-		folder.Name = name
-		folder:SetAttribute(`CRRV`, ModuleVersion)
-		folder:AddTag(ModuleFoldersTag)
-
-		folder.Parent = where -- Parent after naming for compliance with Client's WaitForChild
-
-		return folder
+	
+	local existing = (where :: Instance):FindFirstChild(name) :: Folder
+	if not (existing and existing:IsA(`Folder`)) then
+		existing = Instance.new(`Folder`)
+		existing.Name = name
+		existing.Parent = where -- Parent after naming for compliance with Client's WaitForChild
 	end
-
-	if matches > 1 then
-		local destroyedReferences = {}
-		for i = 2, matches do
-			local folder = folder_s[i]
-			table.insert(destroyedReferences, folder)
-			folder.Parent = nil
-			Debris:AddItem(folder, 180)
-		end
-		warn(`{Prefix}Multiple matches found for selector: Folder named "{name}" with Tag {ModuleFoldersTag} and an Attribute "CRRV" equal to "{ModuleVersion}"; You have up to 180 seconds to troubleshoot them via clickable references:`, destroyedReferences)
-	end
-
-	return folder_s[1]
+	
+	return existing
 end
 
 local MainFolder = mkdir(MainFolderName)
--- The following Three (Folder names) must match on Both Server and Client Side versions of the Module
 local RemoteEventsFolder = mkdir(`Events`, MainFolder)
 local RemoteFunctionsFolder = mkdir(`Functions`, MainFolder)
 local UnreliableRemoteEventsFolder = mkdir(`UnreliableEvents`, MainFolder)
 
-
-
-local CoffeeRemotesRefinedServer = {}
-export type RemoteEventClass = {
-	read instances: RemoteEventClassInstancesTable,
-	new: (name: string) -> (RemoteEventType),
-}
-export type RemoteFunctionClass = {
-	read instances: RemoteFunctionClassInstancesTable,
-	new: (name: string) -> (RemoteFunctionType),
-}
-export type UnreliableRemoteEventClass = {
-	read instances: UnreliableRemoteEventClassInstancesTable,
-	new: (name: string) -> (UnreliableRemoteEventType),
-}
-
-
+local module = {}
 
 local RemoteEventClassInstances: RemoteEventClassInstancesTable = {}
-local RemoteEvent = {
+module.RemoteEvent = {
 	instances = RemoteEventClassInstances,
-} :: RemoteEventClass
-CoffeeRemotesRefinedServer.RemoteEvent = RemoteEvent
-
-
+}
 
 local RemoteFunctionClassInstances: RemoteFunctionClassInstancesTable = {}
-local RemoteFunction = {
+module.RemoteFunction = {
 	instances = RemoteFunctionClassInstances
-} :: RemoteFunctionClass
-CoffeeRemotesRefinedServer.RemoteFunction = RemoteFunction
-
-
+}
 
 local UnreliableRemoteEventClassInstances: UnreliableRemoteEventClassInstancesTable = {}
-local UnreliableRemoteEvent = {
+module.UnreliableRemoteEvent = {
 	instances = UnreliableRemoteEventClassInstances
-} :: UnreliableRemoteEventClass
-CoffeeRemotesRefinedServer.UnreliableRemoteEvent = UnreliableRemoteEvent
-
-
+}
 
 local function mkremote(name: string, where: Folder): (RemoteInstance | CoffeeRemotesObject, boolean)
+	local existing = where:FindFirstChild(name)
 	local kindOf: KindOf = where == RemoteEventsFolder and `RemoteEvent`
 		or where == RemoteFunctionsFolder and `RemoteFunction`
 		or `UnreliableRemoteEvent`
-	-- safely escaping names just to use QueryDescendants might be a waste of resources
-	--local remote_s = where:QueryDescendants(`>{kindOf}#{name}`)
 	
-	local firstMatch: RemoteInstance?
-	local furtherMatches: {[number]: RemoteInstance} = {}
-	local matches = 0
-	-- while `remote: RemoteInstance` is false, we sort for such; (suppress linter)
-	for _, remote: RemoteInstance in where:GetChildren() do
-		if remote.Name ~= name or remote.ClassName ~= kindOf then
-			continue
+	if existing then
+		if not existing:IsA(kindOf) then
+			error(`{Prefix}Found a non-{kindOf} Instance ("{existing.ClassName}") already occupying the name "{name}" in {where:GetFullName()}; This will lead to challenges on the client-side!`)
 		end
 		
-		matches += 1
-		if matches > 1 then
-			table.insert(furtherMatches, remote)
-			continue
+		local object = module[kindOf][`instances`][existing] :: CoffeeRemotesObject?
+		if object then
+			warn(`{Prefix}{kindOf}Object with the name "{name}" already exists! Return the existing object.`)
+			return object, true
 		end
-		firstMatch = remote
+		warn(`{Prefix}{kindOf} with the name "{name}" already exists! Return the existing Instance.`)
+		return existing :: RemoteInstance | any, false
 	end
 	
+	existing = Instance.new(kindOf) :: RemoteInstance
+	existing.Name = name
+	existing.Parent = where -- Parent after naming for compliance with Client's WaitForChild
 	
-	
-	if matches < 1 then
-		local remote = Instance.new(kindOf) :: RemoteInstance
-		
-		remote.Name = name
-		remote.Parent = where -- Parent after naming for compliance with Client's WaitForChild
-		
-		return remote, false
-	end
-	
-	if matches > 1 then
-		for _, remote in furtherMatches do
-			-- client sided scripts shall use CoffeeRemotesObject.Remote
-			-- .AncestryChanged event to detect such stuff safely, although
-			-- this is very unlikely to happen
-			remote.Parent = nil
-			Debris:AddItem(remote, 180)
-		end
-		warn(`{Prefix}Multiple matches found for selector: {kindOf} named "{name}"; You have up to 180 seconds to troubleshoot them via clickable references:`, furtherMatches)
-	end
-	
-	local object = CoffeeRemotesRefinedServer[kindOf][`instances`][firstMatch] :: CoffeeRemotesObject?
-	if object then
-		warn(`{Prefix}{kindOf}Object with the name "{name}" already exists! Return the existing object.`)
-		return object, true
-	end
-	
-	warn(`{Prefix}{kindOf} with the name "{name}" already exists! Return the existing Instance.`)
-	return firstMatch :: RemoteInstance | any, false
+	return existing, false
 end
+
 
 
 
@@ -268,11 +180,11 @@ end
 -- OnServerEvent only exists to ease the replacement of Legacy Roblox Remotes;
 -- OnServerEvent shouldn't be used when writing newer code - or get ready for confusing autocomplete.
 
-export type BaseRemoteEventSubtypes = RemoteEvent | UnreliableRemoteEvent
+export type RemoteEventBase = RemoteEvent | UnreliableRemoteEvent
 
 type RemoteEventBaseClassInstancesTable = RemoteEventClassInstancesTable | UnreliableRemoteEventClassInstancesTable
 
-export type RemoteEventBaseType<T=BaseRemoteEventSubtypes> = {
+export type RemoteEventBaseType<T=RemoteEventBase> = {
 	FireClient: (self: RemoteEventBaseType<T>, Player, ...any) -> RemoteEventBaseType<T>,
 	FireAllClients: (self: RemoteEventBaseType<T>, ...any) -> RemoteEventBaseType<T>,
 	Connect: (self: RemoteEventBaseType<T>, callback: (Player, ...any) -> ()) -> LemonSignal.Connection,
@@ -282,15 +194,11 @@ export type RemoteEventBaseType<T=BaseRemoteEventSubtypes> = {
 	SetCooldown: (self: RemoteEventBaseType<T>, newCooldownTime: number?) -> RemoteEventBaseType<T>,
 	Destroy: (self: RemoteEventBaseType<T>) -> (),
 	OnServerEvent: RemoteEventBaseType<T>,
-	
-	-- Use this to detect .Destroying and .AncestryChanged
-	read Remote: T, -- Expose a read-only Remote field
-	
-	-- When the :Destroy of the wrapper happens
-	read Destroying: LemonSignal.Signal<>,
+	Remote: T, -- Expose a read-only Remote field
+	Destroying: LemonSignal.Signal<>, -- When the :Destroy of the wrapper happens
 }
 
-export type RemoteEventBaseTypeWInternals<T=BaseRemoteEventSubtypes> = {
+export type RemoteEventBaseTypeWInternals<T=RemoteEventBase> = {
 	_Name: string,
 	_RI: T, -- RI = Remote Instance
 	_Cooldown: number?,
@@ -299,7 +207,7 @@ export type RemoteEventBaseTypeWInternals<T=BaseRemoteEventSubtypes> = {
 	_CR: CooldownRoot,
 } & RemoteEventBaseType<T>
 
-type RemoteEventBaseDescriptor = {
+export type RemoteEventBaseDescriptor = {
 	Folder: Folder,
 	DefaultCooldown: number,
 	CooldownsRoot: CooldownRoot,
@@ -313,18 +221,12 @@ export type RemoteFunctionType = {
 	InvokeClient: (self: RemoteFunctionType, Player, ...any) -> (boolean, {}),
 	SetCooldown: (self: RemoteFunctionType, newCooldownTime: number?) -> RemoteFunctionType,
 	Destroy: (self: RemoteFunctionType) -> (),
-	
-	-- For faster typing. <strong>read&write only; Shouldn't be called!</strong>
-	OnInvoke: OnInvokeCallback?,
-	
-	-- Exists to ease the replacement of legacy Remote Functions. <strong>read&write only; Shouldn't be called</strong>
-	OnServerInvoke: OnInvokeCallback?,
-	
-	-- Use this to detect .Destroying and .AncestryChanged
-	read Remote: RemoteFunction, -- Expose a read-only Remote field
-	
-	-- When the :Destroy of the wrapper happens
-	read Destroying: LemonSignal.Signal<>,
+	-- For faster typing.
+	OnInvoke: OnInvokeCallback?, -- read&write only; Shouldn't be called
+	-- Exists to ease the replacement of legacy Remote Functions.
+	OnServerInvoke: OnInvokeCallback?, -- read&write only; Shouldn't be called
+	Remote: RemoteFunction, -- Expose a read-only Remote field
+	Destroying: LemonSignal.Signal<>, -- When the :Destroy of the wrapper happens
 }
 
 export type RemoteFunctionTypeWInternals = {
@@ -377,14 +279,14 @@ function RemoteEventBaseClass.FireClient(
 	...
 ): RemoteEventBaseTypeWInternals
 	-- any is here to quiet down the linter, the type is by definition and must remain RemoteEventBase
-	(self._RI :: BaseRemoteEventSubtypes | any):FireClient(player, ...)
+	(self._RI :: RemoteEventBase | any):FireClient(player, ...)
 
 	return self
 end
 
 function RemoteEventBaseClass.FireAllClients(self: RemoteEventBaseTypeWInternals, ...)
 	-- any is here to quiet down the linter, the type is by definition and must remain RemoteEventBase
-	(self._RI :: BaseRemoteEventSubtypes | any):FireAllClients(...)
+	(self._RI :: RemoteEventBase | any):FireAllClients(...)
 
 	return self
 end
@@ -542,7 +444,7 @@ function RemoteEventBaseClass.new<T>(
 
 
 		local lastCallTime = playerEntry[name] or 0
-		local now = os.clock()
+		local now = OSClock()
 		if now - lastCallTime < cooldownTime then
 			return
 		end
@@ -573,7 +475,7 @@ local RemoteEventDescriptor: RemoteEventBaseDescriptor = {
 	InstancesTable = RemoteEventClassInstances,
 }
 
-function RemoteEvent.new(name: string): RemoteEventType
+function module.RemoteEvent.new(name: string): RemoteEventType
 	-- any is here to mute type linter; Otherwise we'd have to create an Instance just to mock the type!
 	return (RemoteEventBaseClass :: any).new(name, RemoteEventDescriptor) -- :: RemoteEventType
 end
@@ -590,7 +492,7 @@ local UnreliableRemoteEventDescriptor: RemoteEventBaseDescriptor = {
 	InstancesTable = UnreliableRemoteEventClassInstances,
 }
 
-function UnreliableRemoteEvent.new(name: string): UnreliableRemoteEventType
+function module.UnreliableRemoteEvent.new(name: string): UnreliableRemoteEventType
 	-- any is here to mute type linter; Otherwise we'd have to create an Instance just to mock the type!
 	return (RemoteEventBaseClass :: any).new(name, UnreliableRemoteEventDescriptor) -- :: UnreliableRemoteEventType
 end
@@ -669,7 +571,7 @@ function RemoteFunctionClass.__index(self: RemoteFunctionTypeWInternals, key)
 	return rawget(RemoteFunctionClass, key)
 end
 
-function RemoteFunction.new(name: string): RemoteFunctionType
+function module.RemoteFunction.new(name: string): RemoteFunctionType
 	if type(name) ~= `string` then
 		error(`{Prefix}Can't create an unnamed RemoteFunction! Given name: {name}`)
 	end
@@ -681,7 +583,7 @@ function RemoteFunction.new(name: string): RemoteFunctionType
 
 	local self = setmetatable({}, RemoteFunctionClass)
 	rawset(self :: any, `_Name`, name :: string)
-	rawset(self :: any, `_RI`, remoteOrObject :: RemoteFunction | any)
+	rawset(self :: any, `_RI`, remoteOrObject :: RemoteFunction)
 	rawset(self :: any, `_Cooldown`, RemoteFunctionCooldown :: number)
 	rawset(self :: any, `_Destroying`, LemonSignal.new())
 	
@@ -720,7 +622,7 @@ function RemoteFunction.new(name: string): RemoteFunctionType
 
 
 		local lastCallTime = playerEntry[name] or 0
-		local now = os.clock()
+		local now = OSClock()
 		if now - lastCallTime < cooldownTime then
 			return false, RFER_TooQuick
 		end
@@ -732,9 +634,9 @@ function RemoteFunction.new(name: string): RemoteFunctionType
 		return callback(player, ...)
 	end
 	
-	(remoteOrObject :: RemoteFunction | any).OnServerInvoke = OnInvoke
+	(remoteOrObject :: RemoteFunction).OnServerInvoke = OnInvoke
 	
-	RemoteFunctionClassInstances[remoteOrObject :: RemoteFunction | any] = self :: RemoteFunctionType
+	RemoteFunctionClassInstances[remoteOrObject :: RemoteFunction] = self :: RemoteFunctionType
 	return self :: RemoteFunctionType
 end
 
@@ -765,73 +667,13 @@ end
 
 local function OnPlayerRemoving(player: Player)
 	local UID = player.UserId
-	local backup: PlayerCooldownsBackup = {}
-	
-	for kindOf: KindOfs, v: CooldownRoot in PlayerCooldowns do
-		
-		-- note for contributors: if a yield is ever introduced between reading playerEntry
-		-- and writing to it in OnEvent/OnInvoke, this handoff-without-copy becomes unsafe
-		-- and a shallow copy of v[UID] shall be written into backup instead of the reference
-		
-		backup[kindOf] = v[UID] -- store the reference as backup
-		-- no need to make a copy, because this reference is no longer used by this module
-		v[UID] = nil -- wipe the reference internally
+	for kindOf, v in PlayerCooldowns do
+		v[UID] = nil
 	end
-	
-	BackUpPlayerCooldowns:Fire(player, backup)
 end
 
 Players.PlayerRemoving:Connect(OnPlayerRemoving)
 
-CoffeeRemotesRefinedServer.PlayerCooldowns = PlayerCooldowns
-CoffeeRemotesRefinedServer.BackUpPlayerCooldowns = BackUpPlayerCooldowns
+module._PlayerCooldowns = PlayerCooldowns
 
-
-
-local DefaultCooldownSetters: {[KindOf]: (number?) -> ()} = {
-	RemoteEvent = function(newDefault: number?)
-		--RemoteEventCooldown = newDefault or 0.03 -- unused after module completes initializing
-		RemoteEventDescriptor.DefaultCooldown = newDefault or 0.03
-	end,
-	RemoteFunction = function(newDefault: number?)
-		RemoteFunctionCooldown = newDefault or 0.03
-	end,
-	UnreliableRemoteEvent = function(newDefault: number?)
-		--UnreliableRemoteEventCooldown = newDefault or 0.01  -- unused after module completes initializing
-		UnreliableRemoteEventDescriptor.DefaultCooldown = newDefault or 0.01
-	end,
-}
-
--- if kindOf is not a valid KindOf, there'll be a warning.
--- (export type KindOf = "RemoteEvent" | "RemoteFunction" | "UnreliableRemoteEvent")
--- type(newDefault) ~= `number` -> defaults to hardcoded defaults (0.03 or 0.01 for UnreliableRemoteEvents)
-function CoffeeRemotesRefinedServer.SetDefaultCooldown(
-	self: CoffeeRemotesRefinedServer,
-	kindOf: KindOf,
-	newDefault: number?
-): CoffeeRemotesRefinedServer
-	if type(newDefault) ~= `number` then
-		newDefault = nil
-	end
-	
-	local setter = DefaultCooldownSetters[kindOf]
-	if not setter then
-		warn(`{Prefix} kindOf "{kindOf}" is not a valid input; Default Cooldown for specified kindOf not updated.`)
-		return self
-	end
-	
-	setter(newDefault)
-	
-	return self
-end
-
-function CoffeeRemotesRefinedServer.Unpack(
-	self: CoffeeRemotesRefinedServer
-): (RemoteEventClass, RemoteFunctionClass, UnreliableRemoteEventClass)
-	return RemoteEvent, RemoteFunction, UnreliableRemoteEvent
-end
-
-table.freeze(CoffeeRemotesRefinedServer)
-export type CoffeeRemotesRefinedServer = typeof(CoffeeRemotesRefinedServer)
-
-return CoffeeRemotesRefinedServer :: CoffeeRemotesRefinedServer
+return module

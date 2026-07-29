@@ -1,377 +1,588 @@
 --[[--
-    Quick Start and API can be found at
-    https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotes
-
-    CoffeeRemotes (CoffeeRemotesClient)
+    CoffeeRemotesRefined (Client-Side) V1.0.0
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
+
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    GitHub Repository/Branch with latest version, documentation, etc:
+    https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotesRefined
+    Stars are appreciated!
     
-    
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
-    Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotes
-    Module Version: 1.0.0
+    Please make sure you're also using the Server-Side part of CoffeeRemotes (Refined)!
+    List this as part of your wally [server-dependencies] (and make sure their versions match):
+    CoffeeRemotesServer = "coffilhg/coffeeremotes-server@1.0.0"
 --]]--
+--!strict
+--!optimize 2
+-- no native here, it's a CLIENT SIDE script!
 
-local RS = game:GetService("ReplicatedStorage")
-local RemoteEvent = RS:WaitForChild("CoffeeRemotes_Event", 30) :: RemoteEvent
-local RemoteFunction = RS:WaitForChild("CoffeeRemotes_Function", 30) :: RemoteFunction
-local UnreliableRemoteEvent = RS:WaitForChild("CoffeeRemotes_Unreliable", 30) :: UnreliableRemoteEvent
-	
-if not (RemoteEvent and RemoteFunction and UnreliableRemoteEvent) then
-	warn(`One or multiple of the following (RemoteEvent / RemoteFunction / UnreliableRemoteEvent) were not found.\n"Did you forget to require(CoffeeRemotesServer)?\nDid you accidently modify the RemoteEvent/RemoteFunction/UnreliableRemoteEvent names on Client-side/Server-side versions?\nMake sure RemoteEvent AND RemoteFunction AND UnreliableRemoteEvent names are mathching on both versions (Client-side AND Server-side)"}\nRemoteEvent Status: {RemoteEvent and "Found" or "nil (Not Found)"}\nRemoteFunction Status: {RemoteFunction and "Found" or "nil (Not Found)"}\nUnreliableRemoteEvent Status: {UnreliableRemoteEvent and "Found" or "nil (Not Found)"}\nSomething Might Not Work Correctly`)
-	if not RemoteEvent then
-		RemoteEvent = RS:WaitForChild("CoffeeRemotes_Event")
-	end
-	if not RemoteFunction then
-		RemoteFunction = RS:WaitForChild("CoffeeRemotes_Function")
-	end
-	if not UnreliableRemoteEvent then
-		UnreliableRemoteEvent = RS:WaitForChild("CoffeeRemotes_Unreliable")
-	end
+local RunS = game:GetService(`RunService`)
+local RS = game:GetService(`ReplicatedStorage`)
+
+-- The following Three must match on Both Server and Client Side versions of the Module
+local ModuleVersion: string = `V1_0_0`
+local MainFolderName: string = `CoffeeRemotesRefined`
+local ModuleFoldersTag: string = `CoffeeRemotesRefined_{ModuleVersion}`
+
+local YieldWarningTime: number = 15
+local Prefix: string = `[CoffeeRemotes-Client {ModuleVersion}] ` -- This is only for Output
+
+if not RunS:IsClient() then
+	error(`{Prefix} can only be required by Client-Side scripts!`)
 end
+
+
 
 --- Dependencies ---
 
--- Signal's Source Repository: https://github.com/Coffilhg/PerfectSignal --
-local PerfectSignal = require(game:GetService(`ReplicatedStorage`).Packages.PerfectSignal) -- or wherever it's located and whatever it's named
+-- Signal's Source Repository: https://github.com/Data-Oriented-House/LemonSignal --
+local LemonSignal = require(script.Parent.LemonSignal) -- or wherever it's located and whatever it's named
 
 --- /E Dependencies ---
 
 
 
-local module = {}
+export type RemoteInstance = BaseRemoteEventSubtypes | RemoteFunction -- RemoteEvent | RemoteFunction | UnreliableRemoteEvent
+export type CoffeeRemotesObject = RemoteEventType | RemoteFunctionType | UnreliableRemoteEventType
+type KindOf = "RemoteEvent" | "RemoteFunction" | "UnreliableRemoteEvent"
+type OnInvokeCallback = (...any) -> (boolean, {})
 
-function module:FireServer(eventName : string, ...)
-	RemoteEvent:FireServer(eventName, ...)
+type ClassInstancesTable<T = RemoteInstance, U = CoffeeRemotesObject> = {
+	[T]: U
+}
+type RemoteEventClassInstancesTable = ClassInstancesTable<RemoteEvent, RemoteEventType>
+type RemoteFunctionClassInstancesTable = ClassInstancesTable<RemoteFunction, RemoteFunctionType>
+type UnreliableRemoteEventClassInstancesTable = ClassInstancesTable<UnreliableRemoteEvent, UnreliableRemoteEventType>
+
+local function VerifyFolderMetadata(folder: Folder): boolean
+	return folder:HasTag(ModuleFoldersTag) and folder:GetAttribute(`CRRV`) == ModuleVersion
 end
-local EventSignals = {} :: {[string]: PerfectSignal.Signal<>}
-function module:ConnectEvent(eventName : string, callback : ((any)) -> ()) : PerfectSignal.Connection
-	local EventSignal = EventSignals[eventName]
-	if not EventSignal then
-		EventSignal = PerfectSignal.new()
-		EventSignals[eventName] = EventSignal
+local function WaitForFolder(name: string, parent: Instance): Folder
+	local folder = parent:FindFirstChild(name)
+	
+	if typeof(folder) == `Instance` and (folder :: Instance).ClassName == `Folder` and VerifyFolderMetadata(folder :: Folder) then
+		return folder :: Folder
 	end
-	return EventSignal:Connect(callback)
-end
-function module:DisconnectEvent(eventName : string)
-	local EventSignal = EventSignals[eventName]
-	if not EventSignal then
-		return
-	end
-	EventSignal:DisconnectAll()
-end
-function module:DestroyEvent(eventName : string)
-	module:DisconnectEvent(eventName)
-	EventSignals[eventName] = nil
-end
-RemoteEvent.OnClientEvent:Connect(function(eventName : string, ...)
-	local EventSignal = EventSignals[eventName]
-	if not EventSignal then
+	
+	local query = LemonSignal.new() :: LemonSignal.Signal<>
+	local searchResult: Folder
+	local connection: RBXScriptConnection
+	
+	local function evaluateChild(child: Instance): boolean | any
+		if (child :: Instance).ClassName == `Folder` and child.Name == name and VerifyFolderMetadata(child :: Folder) then
+			searchResult = child :: Folder
+			query:Fire()
+			return true
+		end
+		
 		return
 	end
 	
-	EventSignal:Fire(...)
-end)
-
-
-
-
-
-
-
-
-
-function module:InvokeServer(eventName : string, ...)
-	return RemoteFunction:InvokeServer(eventName, ...)
-end
-local OnInvokeCallbacks = {} :: {[string]: (...any) -> (boolean, {})}
--- callback shall return a (success, result); Where success is a boolean (true / false) and result a table (recommended)
-function module.OnInvoke(eventName : string, callback : (...any) -> (boolean, {}))
-	if OnInvokeCallbacks[eventName] then
-		warn(`OnInvoke Callback for eventName="{eventName}" already exists; Overwriting.`)
+	connection = parent.ChildAdded:Connect(evaluateChild)
+	for _, child in parent:GetChildren() do
+		if evaluateChild(child) then
+			break
+		end
 	end
-	OnInvokeCallbacks[eventName] = callback
-end
--- Sets the callback for the given eventName; If a callback was given before, it basically gets discarded.
-function module.DiscardOnInvoke(eventName : string)
-	OnInvokeCallbacks[eventName] = nil
-end
-function module:DestroyFunction(eventName : string) -- exists solely to fit typing as if we were using server-side of CoffeeRemotes
-	module.DiscardOnInvoke(eventName)
-end
-RemoteFunction.OnClientInvoke = function(eventName : string, ...)
-	local OnInvokeCallback = OnInvokeCallbacks[eventName]
-	if not OnInvokeCallback then
-		return false, {`OnClientInvoke Callback for eventName="{eventName}" doesn't exist`}
+	
+	if not searchResult then
+		local yieldWarningThread = task.delay(
+			YieldWarningTime,
+			warn,
+			`{Prefix}Waiting for Folder {parent:GetFullName()}["{name}"]. Did you add and require the Server-Side part of CoffeeRemotes (Refined)? Do their versions match?`
+		)
+		
+		query:Wait()
+		
+		task.cancel(yieldWarningThread)
+		query:Destroy() -- the variable will then be gc'ed
 	end
-
-	return OnInvokeCallback(...)
+	
+	connection:Disconnect()
+	
+	return searchResult :: Folder
 end
 
+local MainFolder = WaitForFolder(MainFolderName, RS)
+-- The following Three (Folder names) must match on Both Server and Client Side versions of the Module
+local RemoteEventsFolder = WaitForFolder(`Events`, MainFolder)
+local RemoteFunctionsFolder = WaitForFolder(`Functions`, MainFolder)
+local UnreliableRemoteEventsFolder = WaitForFolder(`UnreliableEvents`, MainFolder)
 
 
 
-
-
-
-
-
-function module:FireUnreliableServer(eventName : string, ...)
-	UnreliableRemoteEvent:FireServer(eventName, ...)
-end
-local UnreliableEventSignals = {} :: {[string]: PerfectSignal.Signal<>}
-function module:ConnectUnreliableEvent(eventName : string, callback : (...any) -> ()) : PerfectSignal.Connection
-	local EventSignal = UnreliableEventSignals[eventName]
-	if not EventSignal then
-		EventSignal = PerfectSignal.new()
-		UnreliableEventSignals[eventName] = EventSignal
-	end
-	return EventSignal:Connect(callback)
-end
-function module:DisconnectUnreliableEvent(eventName : string)
-	local EventSignal = UnreliableEventSignals[eventName]
-	if not EventSignal then
-		return
-	end
-	EventSignal:DisconnectAll()
-end
-function module:DestroyUnreliableEvent(eventName : string)
-	module:DisconnectUnreliableEvent(eventName)
-	UnreliableEventSignals[eventName] = nil
-end
-UnreliableRemoteEvent.OnClientEvent:Connect(function(eventName : string, ...)
-	local EventSignal = UnreliableEventSignals[eventName]
-	if not EventSignal then
-		return
-	end
-
-	EventSignal:Fire(...)
-end)
-
-
-
-
-
-
-
-
-
--- Autocomplete will display all entries for OnClientEvent, all of them can be used as well.
--- OnClientEvent only exists to ease the replacement of Legacy Roblox Remotes;
--- OnClientEvent shouldn't be used when writing newer code - or get ready for confusing autocomplete.
-
-export type RemoteEventType = {
-	FireServer: (self: RemoteEventType, ...any) -> RemoteEventType,
-	Connect: (self: RemoteEventType, callback: (...any) -> ()) -> PerfectSignal.Connection,
-	Disconnect: (self: RemoteEventType) -> RemoteEventType,
-	Destroy: (self: RemoteEventType) -> (),
-	OnClientEvent: RemoteEventType, --{__index: RemoteEventType},
-	--_EventName: string
+local CoffeeRemotesRefinedClient = {}
+export type RemoteEventClass = {
+	read instances: RemoteEventClassInstancesTable,
+	new: (name: string) -> (RemoteEventType),
 }
+export type RemoteFunctionClass = {
+	read instances: RemoteFunctionClassInstancesTable,
+	new: (name: string) -> (RemoteFunctionType),
+}
+export type UnreliableRemoteEventClass = {
+	read instances: UnreliableRemoteEventClassInstancesTable,
+	new: (name: string) -> (UnreliableRemoteEventType),
+}
+
+
+
+local RemoteEventClassInstances: RemoteEventClassInstancesTable = {}
+local RemoteEvent = {
+	instances = RemoteEventClassInstances,
+} :: RemoteEventClass
+CoffeeRemotesRefinedClient.RemoteEvent = RemoteEvent
+
+
+
+local RemoteFunctionClassInstances: RemoteFunctionClassInstancesTable = {}
+local RemoteFunction = {
+	instances = RemoteFunctionClassInstances
+} :: RemoteFunctionClass
+CoffeeRemotesRefinedClient.RemoteFunction = RemoteFunction
+
+
+
+local UnreliableRemoteEventClassInstances: UnreliableRemoteEventClassInstancesTable = {}
+local UnreliableRemoteEvent = {
+	instances = UnreliableRemoteEventClassInstances
+} :: UnreliableRemoteEventClass
+CoffeeRemotesRefinedClient.UnreliableRemoteEvent = UnreliableRemoteEvent
+
+
+
+local function CheckForRemoteUsage(kindOf: KindOf, remote: RemoteInstance, name: string): (RemoteInstance | CoffeeRemotesObject, boolean)
+	local object = CoffeeRemotesRefinedClient[kindOf][`instances`][remote] :: CoffeeRemotesObject?
+	if object then
+		warn(`{Prefix}{kindOf}Object with the name "{name}" already exists! Return the existing object.`)
+		return object, true
+	end
+
+	return remote, false
+end
+local function GetRemote(name: string, where: Folder): (RemoteInstance | CoffeeRemotesObject, boolean)
+	local kindOf: KindOf = where == RemoteEventsFolder and `RemoteEvent`
+		or where == RemoteFunctionsFolder and `RemoteFunction`
+		or `UnreliableRemoteEvent`
+	local remote = where:FindFirstChild(name)
+	
+	if typeof(remote) == `Instance` and (remote :: Instance).ClassName == kindOf then
+		return CheckForRemoteUsage(kindOf, remote :: RemoteInstance | any, name) -- any to suppress linter
+	end
+	
+	local query = LemonSignal.new() :: LemonSignal.Signal<>
+	local searchResult: RemoteInstance
+	local connection: RBXScriptConnection
+	
+	-- while `child: RemoteInstance` is false, we sort for such; (suppress linter)
+	local function evaluateChild(child: RemoteInstance): boolean | any
+		if child.Name == name and (child :: Instance).ClassName == kindOf then
+			searchResult = child
+			query:Fire()
+			return true
+		end
+
+		return
+	end
+
+	connection = where.ChildAdded:Connect(evaluateChild :: any)
+	for _, child in where:GetChildren() do
+		if (evaluateChild :: any)(child) then
+			break
+		end
+	end
+
+	if not searchResult then
+		local yieldWarningThread = task.delay(
+			YieldWarningTime,
+			warn,
+			`{Prefix}Waiting for {kindOf} named "{name}". Did you create it on the Server-Side, or is this a typo?`
+		)
+
+		query:Wait()
+
+		task.cancel(yieldWarningThread)
+		query:Destroy() -- the variable will then be gc'ed
+	end
+
+	connection:Disconnect()
+	
+	-- First thoughts: no check for
+	-- `local object = module[kindOf][`instances`][remote] :: CoffeeRemotesObject?`
+	-- is needed, the instance was JUST REPLICATED TO THE CLIENT SIDE THIS EXACT MOMENT
+	-- So the code would surely be just:
+	--return searchResult, false
+	-- Pooling Considerations:
+	-- If you reparent .Remote of the CoffeeRemotesObject anywhere else, then
+	-- call a .new for that same kind and name, once you reparent that one .Remote
+	-- back, it lands right here, so we'll still check.
+	-- So the final code shall be:
+	return CheckForRemoteUsage(kindOf, searchResult, name)
+end
+
+export type BaseRemoteEventSubtypes = RemoteEvent | UnreliableRemoteEvent
+
+type RemoteEventBaseClassInstancesTable = RemoteEventClassInstancesTable | UnreliableRemoteEventClassInstancesTable
+
+export type RemoteEventBaseType<T=BaseRemoteEventSubtypes> = {
+	FireServer: (self: RemoteEventBaseType<T>, ...any) -> RemoteEventBaseType<T>,
+	Connect: (self: RemoteEventBaseType<T>, callback: (...any) -> ()) -> LemonSignal.Connection,
+	Wait: (self: RemoteEventBaseType<T>) -> (...any),
+	Once: (self: RemoteEventBaseType<T>, callback: (...any) -> ()) -> LemonSignal.Connection,
+	Disconnect: (self: RemoteEventBaseType<T>) -> RemoteEventBaseType<T>,
+	Destroy: (self: RemoteEventBaseType<T>) -> (),
+	OnClientEvent: RemoteEventBaseType<T>,
+	
+	-- Use this to detect .Destroying and .AncestryChanged
+	read Remote: T, -- Expose a read-only Remote field
+	
+	-- When the :Destroy of the wrapper happens
+	read Destroying: LemonSignal.Signal<>,
+}
+
+export type RemoteEventBaseTypeWInternals<T=BaseRemoteEventSubtypes> = {
+	--_Name: string,
+	_RI: T, -- RI = Remote Instance
+	_Signal: (LemonSignal.Signal<any>)?,
+	_IT: RemoteEventBaseClassInstancesTable,
+} & RemoteEventBaseType<T>
+
+type RemoteEventBaseDescriptor = {
+	Folder: Folder,
+	InstancesTable: RemoteEventBaseClassInstancesTable,
+}
+
+export type RemoteEventType = RemoteEventBaseType<RemoteEvent>
+export type UnreliableRemoteEventType = RemoteEventBaseType<UnreliableRemoteEvent>
 
 export type RemoteFunctionType = {
 	InvokeServer: (self: RemoteFunctionType, ...any) -> (boolean, {}),
 	Destroy: (self: RemoteFunctionType) -> (),
-	-- For faster typing.
-	OnInvoke: ((...any) -> (boolean, {}))?, -- read&write only; Shouldn't be called
-	-- Exists to ease the replacement of legacy Remote Functions.
-	OnClientInvoke: ((...any) -> (boolean, {}))?, -- read&write only; Shouldn't be called
-	--_EventName: string
+	
+	-- For faster typing. <strong>read&write only; Shouldn't be called!</strong>
+	OnInvoke: OnInvokeCallback?,
+	
+	-- Exists to ease the replacement of legacy Remote Functions. <strong>read&write only; Shouldn't be called</strong>
+	OnClientInvoke: OnInvokeCallback?,
+	
+	-- Use this to detect .Destroying and .AncestryChanged
+	read Remote: RemoteFunction, -- Expose a read-only Remote field
+	
+	-- When the :Destroy of the wrapper happens
+	read Destroying: LemonSignal.Signal<>,
 }
 
-export type UnreliableRemoteEventType = {
-	FireServer: (self: UnreliableRemoteEventType, ...any) -> UnreliableRemoteEventType,
-	Connect: (self: UnreliableRemoteEventType, callback: (...any) -> ()) -> PerfectSignal.Connection,
-	Disconnect: (self: UnreliableRemoteEventType) -> UnreliableRemoteEventType,
-	Destroy: (self: UnreliableRemoteEventType) -> (),
-	OnClientEvent: UnreliableRemoteEventType, --{__index: UnreliableRemoteEventType},
-	--_EventName: string
-}
+export type RemoteFunctionTypeWInternals = {
+	--_Name: string,
+	_RI: RemoteFunction, -- RI = Remote Instance
+	_OnInvoke: OnInvokeCallback?,
+} & RemoteFunctionType
 
+local function DestroyedMTIndex()
+	error(`Attempt to use destroyed CoffeeRemotesObject`)
+end
+local function DestroyedMTNewIndex()
+	error(`Attempt to modify destroyed CoffeeRemotesObject`)
+end
 local DestroyedMetatable = {
-	__index = function(_, key)
-		error(`Attempt to use destroyed CoffeeRemoteObject (method "{key}")`, 2)
-	end,
-	__newindex = function()
-		error("Attempt to modify destroyed CoffeeRemoteObject", 2)
-	end,
+	__index = DestroyedMTIndex,
+	__newindex = DestroyedMTNewIndex,
 }
 
+-- Unified for RemoteEvent/UnreliableRemoteEvent Instances
+local RemoteEventBaseClass = {}
 
+function RemoteEventBaseClass.__index(
+	self: RemoteEventBaseTypeWInternals,
+	k: any
+)
+	if k == `Remote` then
+		return rawget(self :: any, `_RI`)
+	end
+	if k == `Destroying` then
+		return rawget(self :: any, `_Destroying`)
+	end
 
-module.RemoteEvent = {
-	instances = {},
-}
-local RemoteEventClass = {}
-RemoteEventClass.__index = RemoteEventClass
+	return rawget(RemoteEventBaseClass, k)
+end
 
-function RemoteEventClass:FireServer(...)
-	module:FireServer(self._EventName, ...) --RemoteEvent:FireServer(self._EventName, ...)
-	return self
+function RemoteEventBaseClass.__newindex(
+	self: RemoteEventBaseTypeWInternals,
+	k: any,
+	v: any
+)
+	warn(`Nothing should be stored inside a RemoteEventBase (RemoteEvent | UnreliableRemoteEvent) object. The ["Remote" | "Destroying"] fields shall not be overwritten. Attempted writing [{k}] = {v}`)
+	return
 end
-function RemoteEventClass:Connect(callback : ((any)) -> ())
-	return module:ConnectEvent(self._EventName, callback)
-end
-function RemoteEventClass:Disconnect()
-	module:DisconnectEvent(self._EventName)
-	return self
-end
-function RemoteEventClass:Destroy()
-	module:DestroyEvent(self._EventName)
-	module.RemoteEvent.instances[self._EventName] = nil
+
+function RemoteEventBaseClass.FireServer(
+	self: RemoteEventBaseTypeWInternals,
+	...
+): RemoteEventBaseTypeWInternals
+	-- any is here to quiet down the linter, the type is by definition and must remain RemoteEventBase
+	(self._RI :: BaseRemoteEventSubtypes | any):FireServer(...)
 	
+	return self
+end
+
+function RemoteEventBaseClass.Connect(self: RemoteEventBaseTypeWInternals, callback : (...any) -> ())
+	local signal = self._Signal :: LemonSignal.Signal<any>
+
+	if not signal then
+		signal = LemonSignal.new()
+		rawset(self :: any, `_Signal`, signal)
+	end
+
+	return signal:Connect(callback)
+end
+
+function RemoteEventBaseClass.Wait(self: RemoteEventBaseTypeWInternals)
+	local signal = self._Signal :: LemonSignal.Signal<any>
+
+	if not signal then
+		signal = LemonSignal.new()
+		rawset(self :: any, `_Signal`, signal)
+	end
+
+	return signal:Wait()
+end
+
+function RemoteEventBaseClass.Once(self: RemoteEventBaseTypeWInternals, callback : (any) -> ())
+	local signal = self._Signal :: LemonSignal.Signal<any>
+
+	if not signal then
+		signal = LemonSignal.new()
+		rawset(self :: any, `_Signal`, signal)
+	end
+
+	return signal:Once(callback)
+end
+
+function RemoteEventBaseClass.Disconnect(self: RemoteEventBaseTypeWInternals)
+	local signal = self._Signal :: LemonSignal.Signal<any>
+
+	if signal then
+		signal:DisconnectAll()
+		rawset(self :: any, `_Signal`, nil)
+	end
+	return self
+end
+
+function RemoteEventBaseClass.Destroy(self: RemoteEventBaseTypeWInternals): ()
+	self:Disconnect()
+	
+	local destroying = rawget(self :: any, `_Destroying`) :: LemonSignal.Signal<>
+	local remote = rawget(self :: any, `_RI`) :: RemoteEvent | UnreliableRemoteEvent
+	local instancesTable = rawget(self :: any, `_IT`) :: {[RemoteEvent | UnreliableRemoteEvent]: RemoteEventBaseType<RemoteEvent | UnreliableRemoteEvent>}
+	
+	if destroying then
+		destroying:Fire()
+		destroying:DisconnectAll()
+	end
+	
+	instancesTable[remote] = nil
+
 	setmetatable(self, DestroyedMetatable)
-	rawset(self, "_EventName", nil)
+	--rawset(self :: any, `_Name`, nil)
+	rawset(self :: any, `_RI`, nil)
+	rawset(self :: any, `_IT`, nil)
+	rawset(self :: any, `_Destroying`, nil)
+	rawset(self :: any, `OnClientEvent`, nil)
 end
--- Exists to ease the replacement of legacy Remote Events.
-RemoteEventClass.OnClientEvent = {__index = RemoteEventClass}
+-- T must be RemoteEventBase
+function RemoteEventBaseClass.new<T>(
+	name: string,
+	descriptor: RemoteEventBaseDescriptor
+): RemoteEventBaseType<T>
+	if type(name) ~= `string` then
+		error(`{Prefix}Can't create an unnamed RemoteEvent! Given name: {name}`)
+	end
 
-function module.RemoteEvent.new(eventName : string) : RemoteEventType
-	if not eventName or type(eventName) ~= "string" then
-		warn(`Can't create an unnamed RemoteEvent! Given eventName: {eventName}`)
-		return
+	local remoteOrObject, isUsedByObject = GetRemote(name, descriptor.Folder)
+	if isUsedByObject then
+		return remoteOrObject :: RemoteEventBaseType<T>
 	end
 	
-	local self = module.RemoteEvent.instances[eventName]
-	if self then
-		warn(`RemoteEvent with the name "{eventName}" already exists! Return the existing object.`)
-		return self
+	local instancesTable = descriptor.InstancesTable
+	
+	
+	
+	local self = setmetatable({}, RemoteEventBaseClass)
+	--rawset(self :: any, `_Name`, name :: string)
+	rawset(self :: any, `_RI`, remoteOrObject :: T)
+	rawset(self :: any, `_IT`, instancesTable)
+	rawset(self :: any, `_Destroying`, LemonSignal.new())
+	-- Exists to ease the replacement of legacy Remote Events and Unreliable Remote Events.
+	rawset(self :: any, `OnClientEvent`, self :: RemoteEventBaseType<T>)
+	
+	local function OnEvent(...)
+		local signal = (self :: any)[`_Signal`] :: LemonSignal.Signal<any>
+		if signal then
+			signal:Fire(...)
+		end
 	end
 	
-	self = setmetatable({
-		_EventName = eventName,	
-	}, RemoteEventClass)
+	-- any is here to quiet down the linter, the type must be T
+	(remoteOrObject :: T | any).OnClientEvent:Connect(OnEvent)
 	
-	module.RemoteEvent.instances[eventName] = self
-	return self
+	instancesTable[remoteOrObject :: T] = self :: RemoteEventBaseType<T>
+	return self :: RemoteEventBaseType<T>
 end
 
 
 
-module.RemoteFunction = {
-	instances = {},
+
+
+
+local RemoteEventDescriptor: RemoteEventBaseDescriptor = {
+	Folder = RemoteEventsFolder,
+	InstancesTable = RemoteEventClassInstances,
 }
+
+function RemoteEvent.new(name: string): RemoteEventType
+	return (RemoteEventBaseClass :: any).new(name, RemoteEventDescriptor) -- :: RemoteEventType
+end
+
+
+
+
+
+
+local UnreliableRemoteEventDescriptor: RemoteEventBaseDescriptor = {
+	Folder = UnreliableRemoteEventsFolder,
+	InstancesTable = UnreliableRemoteEventClassInstances,
+}
+
+function UnreliableRemoteEvent.new(name: string): UnreliableRemoteEventType
+	return (RemoteEventBaseClass :: any).new(name, UnreliableRemoteEventDescriptor) -- :: UnreliableRemoteEventType
+end
+
+
+
+
+
+
 local RemoteFunctionClass = {}
-function RemoteFunctionClass:__newindex(key, value)
-	if key == "OnClientInvoke" or key == "OnInvoke" then
-		if type(value) ~= "function" then
-			warn(`OnClientInvoke must be a function (callback)`)
+
+function RemoteFunctionClass.InvokeServer(self: RemoteFunctionTypeWInternals, ...)
+	return self._RI:InvokeServer(...)
+end
+
+function RemoteFunctionClass.Destroy(self: RemoteFunctionTypeWInternals)
+	local destroying = rawget(self :: any, `_Destroying`) :: LemonSignal.Signal<>
+	local remote = self._RI
+	
+	if destroying then
+		destroying:Fire()
+		destroying:DisconnectAll()
+	end
+	
+	RemoteFunctionClassInstances[remote] = nil
+
+	setmetatable(self, DestroyedMetatable)
+	--rawset(self :: any, `_Name`, nil)
+	rawset(self :: any, `_RI`, nil)
+	rawset(self :: any, `_OnInvoke`, nil)
+	rawset(self :: any, `_Destroying`, nil)
+end
+
+function RemoteFunctionClass.__newindex(self: RemoteFunctionTypeWInternals, key, value)
+	if key == `OnClientInvoke` or key == `OnInvoke` then
+		local valueType = type(value)
+
+		if valueType == `function` or valueType == `nil` then
+			rawset(self :: any, `_OnInvoke`, value)
 			return
 		end
-		
-		module.DiscardOnInvoke(self._EventName)
-		if value == nil then
-			return
-		end
-		
-		module.OnInvoke(self._EventName, value)
+
+		warn(`{key} must be a function (callback) or nil (to "disconnect"), got {valueType}:`, value)
 		return
 	end
-	warn("Nothing should be stored inside a RemoteFunction object.")
+
+	warn(`Nothing should be stored inside a RemoteFunction object. The ["Remote" | "Destroying"] fields shall not be overwritten. Attempted writing [{key}] = {value}`)
 	return
 end
-function RemoteFunctionClass:__index(key)
-	if key == "OnClientInvoke" or key == "OnInvoke" then
-		return OnInvokeCallbacks[self._EventName]
+
+function RemoteFunctionClass.__index(self: RemoteFunctionTypeWInternals, key)
+	if key == `OnClientInvoke` or key == `OnInvoke` then
+		return rawget(self :: any, `_OnInvoke`)
 	end
-	return
+	if key == `Remote` then
+		return rawget(self :: any, `_RI`)
+	end
+	if key == `Destroying` then
+		return rawget(self :: any, `_Destroying`)
+	end
+	return rawget(RemoteFunctionClass, key)
 end
-function InvokeServerMethod(self : RemoteFunctionType, ...)
-	return module:InvokeServer(self._EventName, ...)
-end
-function DestroyFunctionMethod(self : RemoteFunctionType)
-	module:DestroyFunction(self._EventName)
-	module.RemoteFunction.instances[self._EventName] = nil
-	
-	setmetatable(self, DestroyedMetatable)
-	for k, v in pairs(self) do
-		if type(v) == "function" then
-			rawset(self, k, nil)
+
+function RemoteFunction.new(name: string): RemoteFunctionType
+	if type(name) ~= `string` then
+		error(`{Prefix}Can't create an unnamed RemoteFunction! Given name: {name}`)
+	end
+
+	local remoteOrObject, isUsedByObject = GetRemote(name, RemoteFunctionsFolder)
+	if isUsedByObject then
+		return remoteOrObject :: RemoteFunctionType
+	end
+
+	local self = setmetatable({}, RemoteFunctionClass)
+	--rawset(self :: any, `_Name`, name :: string)
+	rawset(self :: any, `_RI`, remoteOrObject :: RemoteFunction | any)
+	rawset(self :: any, `_Destroying`, LemonSignal.new())
+
+	local function OnInvoke(...): (boolean, {})
+		local callback = (self :: any)._OnInvoke :: OnInvokeCallback
+		if type(callback) ~= `function` then
+			return false, {`OnClientInvoke Callback for name="{name}" wasn't registered, but the object exists!`}
 		end
+		
+		return callback(...)
 	end
-	rawset(self, "_EventName", nil)
-end
-
-function module.RemoteFunction.new(eventName : string) : RemoteFunctionType
-	if not eventName or type(eventName) ~= "string" then
-		warn(`Can't create an unnamed RemoteFunction! Given eventName: {eventName}`)
-		return
-	end
-
-	local self = module.RemoteFunction.instances[eventName]
-	if self then
-		warn(`RemoteFunction with the name "{eventName}" already exists! Return the existing object.`)
-		return self
-	end
-
-	self = setmetatable({
-		_EventName = eventName,	
-		InvokeServer = InvokeServerMethod,
-		Destroy = DestroyFunctionMethod,
-	}, RemoteFunctionClass)
-
-	module.RemoteFunction.instances[eventName] = self
-	return self
-end
-
-
-
-module.UnreliableRemoteEvent = {
-	instances = {},
-}
-local UnreliableRemoteEventClass = {}
-UnreliableRemoteEventClass.__index = UnreliableRemoteEventClass
-
-function UnreliableRemoteEventClass:FireServer(...)
-	module:FireUnreliableServer(self._EventName, ...) --UnreliableRemoteEvent:FireServer(self._EventName, ...)
-	return self
-end
-function UnreliableRemoteEventClass:Connect(callback : ((any)) -> ())
-	return module:ConnectUnreliableEvent(self._EventName, callback)
-end
-function UnreliableRemoteEventClass:Disconnect()
-	module:DisconnectUnreliableEvent(self._EventName)
-	return self
-end
-function UnreliableRemoteEventClass:Destroy()
-	module:DestroyUnreliableEvent(self._EventName)
-	module.UnreliableRemoteEvent.instances[self._EventName] = nil
 	
-	setmetatable(self, DestroyedMetatable)
-	rawset(self, "_EventName", nil)
+	(remoteOrObject :: RemoteFunction | any).OnClientInvoke = OnInvoke
+
+	RemoteFunctionClassInstances[remoteOrObject :: RemoteFunction | any] = self :: RemoteFunctionType
+	return self :: RemoteFunctionType
 end
--- Exists to ease the replacement of legacy Unreliable Remote Events.
-UnreliableRemoteEventClass.OnClientEvent = {__index = UnreliableRemoteEventClass}
 
-function module.UnreliableRemoteEvent.new(eventName : string) : UnreliableRemoteEventType
-	if not eventName or type(eventName) ~= "string" then
-		warn(`Can't create an unnamed UnreliableRemoteEvent! Given eventName: {eventName}`)
-		return
-	end
 
-	local self = module.UnreliableRemoteEvent.instances[eventName]
-	if self then
-		warn(`UnreliableRemoteEvent with the name "{eventName}" already exists! Return the existing object.`)
+
+
+
+
+-- Defaults to 15 whenever newYieldWarningTime is NaN, math.huge (inf) or it's type() ~= `number`
+function CoffeeRemotesRefinedClient.SetYieldWarningTime(
+	self: CoffeeRemotesRefinedClient,
+	newYieldWarningTime: number?
+): CoffeeRemotesRefinedClient
+	if type(newYieldWarningTime) ~= `number` then
+		YieldWarningTime = 15
 		return self
 	end
+	
+	-- the only limits built-in here are to prevent the following warning
+	-- "Calling task.delay(t, f) where t is either NaN or infinite will cause t to default to 0."
+	
+	if newYieldWarningTime ~= newYieldWarningTime or newYieldWarningTime == math.huge then
+		YieldWarningTime = 15
+		return self
+	end
+	
+	YieldWarningTime = newYieldWarningTime
 
-	self = setmetatable({
-		_EventName = eventName,	
-	}, UnreliableRemoteEventClass)
-
-	module.UnreliableRemoteEvent.instances[eventName] = self
 	return self
 end
 
-return module
+function CoffeeRemotesRefinedClient.Unpack(
+	self: CoffeeRemotesRefinedClient
+): (RemoteEventClass, RemoteFunctionClass, UnreliableRemoteEventClass)
+	return RemoteEvent, RemoteFunction, UnreliableRemoteEvent
+end
+
+table.freeze(CoffeeRemotesRefinedClient)
+export type CoffeeRemotesRefinedClient = typeof(CoffeeRemotesRefinedClient)
+
+return CoffeeRemotesRefinedClient :: CoffeeRemotesRefinedClient
