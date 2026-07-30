@@ -20,27 +20,28 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser
-    Module Version: 1.0.3
+    Module Version: 1.0.4
 --]]--
 --!strict
+--!optimize 2
 
 -- Standalone CoffeeParser for Roblox datatypes
 
 -- Customizable constants (FEEL FREE TO MODIFY)
-local debugEnabled : boolean = false
-local debugSeverity : number = 0
-local precision : number = 3
-local encodePrefix : string = "_C-"
+local DebugEnabled : boolean = false
+local DebugSeverity : number = 0
+local Precision : number = 3
+local EncodePrefix : string = "_C-"
 -- Precalculated constants (DO NOT MODIFY)
 
 -- encodePrefix:gsub("([^%w])", "%%%1") is needed to escape functions of the magical characters
 -- though this actually escapes EVERY non-alphanumeric character automatically
-local prefixMatchPattern : string = `^{encodePrefix:gsub("([^%w])", "%%%1")}.%(`
+local PrefixMatchPattern : string = `^{EncodePrefix:gsub("([^%w])", "%%%1")}.%(`
 -- Calculation: prefix length + 1 for the "."
 -- then + 1 for the "(" and + 1 to skip over "("
-local decodeSubLengthBase : number = #encodePrefix + 1
-local decodeSubLength : number = decodeSubLengthBase + 2
-local precisionFormatter : string = "%."..(type(precision) == "number" and precision or 3).."f"
+local DecodeSubLengthBase : number = #EncodePrefix + 1
+local DecodeSubLength : number = DecodeSubLengthBase + 2
+local PrecisionMultiplier = 10 ^ (type(Precision) == "number" and Precision or 3)
 
 --[=[--
 --	Minified Roblox Datatype prefix codes:
@@ -99,7 +100,7 @@ local SupportedTypes : {[SupportedTypesStringList]: true} = {
 }
 local SupportedTypesArray : {string}? = {} -- temporary variables to create the debug message
 local SupportedTypesTemp : {string}? = {} -- temporary variables to create the debug message
-for key in pairs(SupportedTypes) do
+for key in SupportedTypes do
 	table.insert(SupportedTypesTemp :: {string}, key)
 	local tempConcat = table.concat(SupportedTypesTemp :: {string}, ", ")
 	if #tempConcat >= 36 then
@@ -109,7 +110,7 @@ for key in pairs(SupportedTypes) do
 end
 -- any leftovers < 36 long
 if #(SupportedTypesTemp :: {string}) > 0 then
-    table.insert(SupportedTypesArray :: {string}, table.concat(SupportedTypesTemp :: {string}, ", "))
+	table.insert(SupportedTypesArray :: {string}, table.concat(SupportedTypesTemp :: {string}, ", "))
 end
 local SupportedTypesDebugMessage : string = "\n>\t" .. table.concat(SupportedTypesArray :: {string}, ",\n>\t")
 SupportedTypesArray = nil
@@ -147,18 +148,18 @@ export type TypeofTypeResult = "number" | "string" | "boolean" | "buffer" | "use
 export type CoffeeParser = {
 	Encode: (data : RuntimeBasicTable, recursion : boolean?) -> PrimitiveBasicTable,
 	Decode: (data : PrimitiveBasicTable, recursion : boolean?) -> RuntimeBasicTable,
-	SupportedTypes: {[SupportedTypesList]: true},
+	SupportedTypes: {[SupportedTypesStringList]: true},
 	SupportedTypesDebugMessage: string,
 }
 
 
 -- Warns with the given message if debugging is enabled and the severity meets the threshold.
 -- Severity levels: 0 = info (e.g., out-of-range warnings), 1 = warning (e.g., invalid input), 2+ = error (e.g., critical failures).
-local function doWarn(warningSeverity : number, ...)
-	if not debugEnabled then
+local function DoWarn(warningSeverity : number, ...)
+	if not DebugEnabled then
 		return
 	end
-	if warningSeverity < debugSeverity then
+	if warningSeverity < DebugSeverity then
 		return
 	end
 	warn(...)
@@ -167,11 +168,11 @@ end
 -- Required for non-pcall, error proof, Enum[EnumItemName] lookup
 local EnumItemLookup = {} :: {[string]: Enum}
 
-for _, enum : Enum in ipairs(Enum:GetEnums()) do
+for _, enum : Enum in Enum:GetEnums() do
 	local enumItems = enum:GetEnumItems()
 	-- uncomment to see what Enums are empty
 	--local used = false
-	for _, enumItem : EnumItem in ipairs(enumItems) do
+	for _, enumItem : EnumItem in enumItems do
 		--used = true
 		EnumItemLookup[`{enumItem.EnumType}`] = enum
 		break
@@ -184,96 +185,87 @@ end
 
 
 --- Parser Main ---
-local function round(v : number) : string
-	local stringR = string.format(precisionFormatter, v)
-	for i = 0, precision-1 do
-		local number = math.round(v*10^i)/10^i
-		if number == tonumber(stringR) then
-			return tostring(number)
-		end
-	end
-
-	return stringR
-	--return tonumber(string.format("%."..precision.."f", v))
+local function Round(v : number) : string
+	return tostring(math.round(v * PrecisionMultiplier) / PrecisionMultiplier)
 end
 
 
 
 --- tostring (encode) reusables ---
 
-function tostringVector3(v : Vector3, hideWrap : boolean?) : string
-	local x = round(v.X)
-	local y = round(v.Y)
-	local z = round(v.Z)
+local function TostringVector3(v : Vector3, hideWrap : boolean?) : string
+	local x = Round(v.X)
+	local y = Round(v.Y)
+	local z = Round(v.Z)
 
 	local base = `{x}|{y}|{z}`
 	return hideWrap and base or `V({base}`
 end
 
-function tostringVector2(v : Vector2, hideWrap : boolean?) : string
-	local x = round(v.X)
-	local y = round(v.Y)
-	
+local function TostringVector2(v : Vector2, hideWrap : boolean?) : string
+	local x = Round(v.X)
+	local y = Round(v.Y)
+
 	local base = `{x}|{y}`
 	return hideWrap and base or `2({base}`
 end
 
-function tostringEnumItem(v : EnumItem) : string
+local function TostringEnumItem(v : EnumItem) : string
 	-- decode via Enum.EasingDirection:FromValue(v.Value)
 	return `H({v.EnumType}|{v.Value}`
 end
 
-function tostringColor3(v : Color3, hideWrap : boolean?) : string
+local function TostringColor3(v : Color3, hideWrap : boolean?) : string
 	local base = v:ToHex()
 	return hideWrap and base or `c({base}`
 end
-function fromstringColor3(v : string) : (Color3?, boolean)
+local function FromstringColor3(v : string) : (Color3?, boolean)
 	if not v:match("^%x%x%x%x%x%x$") then
-		doWarn(1, `Invalid Color3 hex value, expected 6-digit hexadecimal: {v}`)
+		DoWarn(1, `Invalid Color3 hex value, expected 6-digit hexadecimal: {v}`)
 		return nil, false
 	end
 
 	local success, color = pcall(Color3.fromHex, v)
 	if not (success and color) then
-		doWarn(1, `Failed to decode Color3 from hex: {v}`)
+		DoWarn(1, `Failed to decode Color3 from hex: {v}`)
 		return nil, false
 	end
 
 	return color, true
 end
 
-function tostringColorSequenceKeypoint(v : ColorSequenceKeypoint, hideWrap : boolean?) : string
-	local base = `{round(v.Time)}|{tostringColor3(v.Value, true)}`
+local function TostringColorSequenceKeypoint(v : ColorSequenceKeypoint, hideWrap : boolean?) : string
+	local base = `{Round(v.Time)}|{TostringColor3(v.Value, true)}`
 	return hideWrap and base or `E({base}`
 end
-function fromstringColorSequenceKeypoint(keypointTime : string, hexColor : string) : (ColorSequenceKeypoint?, boolean)
+local function FromstringColorSequenceKeypoint(keypointTime : string, hexColor : string) : (ColorSequenceKeypoint?, boolean)
 	local keypointTime : number? = tonumber(keypointTime)
 	if not keypointTime then
-		doWarn(1, `Invalid time value in ColorSequenceKeypoint, expected a valid number: {keypointTime}`)
+		DoWarn(1, `Invalid time value in ColorSequenceKeypoint, expected a valid number: {keypointTime}`)
 		return nil, false
 	end
-	
-	local color, success = fromstringColor3(hexColor)
+
+	local color, success = FromstringColor3(hexColor)
 	if not success then
-		doWarn(1, `Failed to decode Color3 from hex in ColorSequenceKeypoint: {hexColor}`)
+		DoWarn(1, `Failed to decode Color3 from hex in ColorSequenceKeypoint: {hexColor}`)
 		return nil, false
 	end
-	
+
 	return ColorSequenceKeypoint.new(
 		keypointTime,
 		color :: Color3
 	), true
 end
 
-function tostringNumberSequenceKeypoint(v : NumberSequenceKeypoint, hideWrap : boolean?) : string
-	local tim = round(v.Time)
-	local val = round(v.Value)
-	local env = round(v.Envelope)
-	
+local function TostringNumberSequenceKeypoint(v : NumberSequenceKeypoint, hideWrap : boolean?) : string
+	local tim = Round(v.Time)
+	local val = Round(v.Value)
+	local env = Round(v.Envelope)
+
 	local base = `{tim}|{val}|{env}`
 	return hideWrap and base or `S({base}`
 end
-function fromstringNumberSequenceKeypoint(keypointTime : string, keypointValue : string, keypointEnvelope : string) : (NumberSequenceKeypoint?, boolean)
+local function FromstringNumberSequenceKeypoint(keypointTime : string, keypointValue : string, keypointEnvelope : string) : (NumberSequenceKeypoint?, boolean)
 	local keypointTime = tonumber(keypointTime)
 	local keypointValue = tonumber(keypointValue)
 	local keypointEnvelope = tonumber(keypointEnvelope)
@@ -281,10 +273,10 @@ function fromstringNumberSequenceKeypoint(keypointTime : string, keypointValue :
 	if 
 		not (
 			keypointTime and
-			keypointValue and
-			keypointEnvelope
+				keypointValue and
+				keypointEnvelope
 		) then
-		doWarn(1, `Invalid NumberSequenceKeypoint values, expected numbers, got: time={keypointTime}, value={keypointValue}, envelope={keypointEnvelope}`)
+		DoWarn(1, `Invalid NumberSequenceKeypoint values, expected numbers, got: time={keypointTime}, value={keypointValue}, envelope={keypointEnvelope}`)
 		return nil, false
 	end
 
@@ -302,43 +294,43 @@ local RobloxDatatypeCallbacksEncode = {
 	--Axes = function(v : Axes) -- hard to compress, rarely used for player data / game data / admin settings
 	--	return `Axes({v})`
 	--end,
-	EnumItem = tostringEnumItem,
+	EnumItem = TostringEnumItem,
 	BrickColor = function(v : BrickColor) : string
 		return `B({v.Number}` --- do BrickColor.new(v.Number) to decode
 	end,
 	CFrame = function(v : CFrame) : string
-		local pos = tostringVector3(v.Position, true)
-		local right = tostringVector3(v.RightVector, true)
-		local up = tostringVector3(v.UpVector, true)
+		local pos = TostringVector3(v.Position, true)
+		local right = TostringVector3(v.RightVector, true)
+		local up = TostringVector3(v.UpVector, true)
 		--local look = v.LookVector -- unnecessary/not required for replication
 		--- CFrame.fromMatrix
 		return `C({pos}|{right}|{up}`
 	end,
-	Color3 = tostringColor3,
-	ColorSequenceKeypoint = tostringColorSequenceKeypoint,
+	Color3 = TostringColor3,
+	ColorSequenceKeypoint = TostringColorSequenceKeypoint,
 	ColorSequence = function(v : ColorSequence) : string
 		local splits = v.Keypoints :: {ColorSequenceKeypoint}
-		
+
 		-- single color
 		if #splits == 2 then
 			local split1 = splits[1] :: ColorSequenceKeypoint
 			local splitColor1 = split1.Value:ToHex()
-			
+
 			local split2 = splits[2] :: ColorSequenceKeypoint
 			local splitColor2 = split2.Value:ToHex()
-			
+
 			if splitColor1 == splitColor2 then
 				return "ColorSequence(" .. splitColor1
 			end
 		end
-		
+
 		-- more complex
 		local keypoints = table.create(#splits)
-		for i, split : ColorSequenceKeypoint in ipairs(splits) do
+		for i, split : ColorSequenceKeypoint in splits do
 			-- ColorSequenceKeypoint.new
-			keypoints[i] = tostringColorSequenceKeypoint(split, true)
+			keypoints[i] = TostringColorSequenceKeypoint(split, true)
 		end
-		
+
 		return "e(" .. table.concat(keypoints, "|")
 	end,
 	Content = function(v : Content) : string
@@ -363,51 +355,51 @@ local RobloxDatatypeCallbacksEncode = {
 		return `g({v.Family}|{v.Weight.Value}|{v.Style.Value}`
 	end,
 	NumberRange = function(v : NumberRange) : string
-		local min, max = round(v.Min), round(v.Max)
+		local min, max = Round(v.Min), Round(v.Max)
 		if min == max then
 			return `n({max}`
 		else
 			return `n({min}|{max}`
 		end
 	end,
-	NumberSequenceKeypoint = tostringNumberSequenceKeypoint,
+	NumberSequenceKeypoint = TostringNumberSequenceKeypoint,
 	NumberSequence = function(v : NumberSequence) : string
 		local splits = v.Keypoints :: {NumberSequenceKeypoint}
-		
+
 		-- single number
 		if #splits == 2 then
 			local split1 = splits[1].Value
 			local split2 = splits[2].Value
 			if split1 == split2 then
-				return `s({round(split1)}`
+				return `s({Round(split1)}`
 			end
 		end
-		
+
 		-- more complex
 		local keypoints = table.create(#splits)
-		for i, split : NumberSequenceKeypoint in ipairs(splits) do
+		for i, split : NumberSequenceKeypoint in splits do
 			-- NumberSequenceKeypoint.new
-			keypoints[i] = tostringNumberSequenceKeypoint(split, true)
+			keypoints[i] = TostringNumberSequenceKeypoint(split, true)
 		end
-		
+
 		return "s(" .. table.concat(keypoints, "|")
 	end,
 	Ray = function(v : Ray) : string
-		local origin, direction = tostringVector3(v.Origin, true), tostringVector3(v.Direction, true)
+		local origin, direction = TostringVector3(v.Origin, true), TostringVector3(v.Direction, true)
 		return `y({origin}|{direction}`
 	end,
 	Rect = function(v : Rect) : string
-		local min, max = tostringVector2(v.Min, true), tostringVector2(v.Max, true)
+		local min, max = TostringVector2(v.Min, true), TostringVector2(v.Max, true)
 		return `m({min}|{max}`
 	end,
 	UDim = function(v : UDim) : string
-		return `u({round(v.Scale)}|{math.round(v.Offset)}`
+		return `u({Round(v.Scale)}|{math.round(v.Offset)}`
 	end,
 	UDim2 = function(v : UDim2) : string
-		return `U({round(v.X.Scale)}|{math.round(v.X.Offset)}|{round(v.Y.Scale)}|{math.round(v.Y.Offset)}`
+		return `U({Round(v.X.Scale)}|{math.round(v.X.Offset)}|{Round(v.Y.Scale)}|{math.round(v.Y.Offset)}`
 	end,
-	Vector2 = tostringVector2,
-	Vector3 = tostringVector3,
+	Vector2 = TostringVector2,
+	Vector3 = TostringVector3,
 }
 
 
@@ -419,55 +411,55 @@ local RobloxDatatypeCallbacksDecode = {
 	--Axes = function(v : Axes) -- hard to compress, rarely used for player data / game data / admin settings
 	--	return `Axes({v})`
 	--end,
-	
+
 	-- Expects v to be the string after "Enum(" (e.g., "EasingDirection|1" for "_C-Enum(EasingDirection|1" ).
 	-- Splits v on "|" to extract enum type and value, then uses Enum[enumTypeName]:FromValue(enumValue) to create an EnumItem.
 	-- Returns (EnumItem, true) on success or (nil, false) with a warning on failure.
 	["H"] = function(v: string): (EnumItem?, boolean)
 		local parts = v:split("|")
 		if not parts or #parts < 2 or #parts[1] < 1 or #parts[2] < 1 then
-			doWarn(1, `Malformed EnumItem value, expected EnumType|Value: {v}`)
+			DoWarn(1, `Malformed EnumItem value, expected EnumType|Value: {v}`)
 			return nil, false
 		end
 
 		local enumTypeName, enumValueStr = parts[1], parts[2]
 		local enumValue = tonumber(enumValueStr)
 		if not enumValue then
-			doWarn(2, `Failed to convert EnumItem value to number: {enumValueStr}`)
+			DoWarn(2, `Failed to convert EnumItem value to number: {enumValueStr}`)
 			return nil, false -- Shouldn't happen due to digit check, but included for robustness
 		end
 
 		local enumType = EnumItemLookup[enumTypeName] :: Enum & {FromValue: (number) -> EnumItem}
 		if not enumType then
-			doWarn(1, `Invalid Enum type: {enumTypeName}`)
+			DoWarn(1, `Invalid Enum type: {enumTypeName}`)
 			return nil, false
 		end
 
 		local enumItem = enumType:FromValue(enumValue)
 		if not enumItem then
-			doWarn(1, `Invalid Enum value for {enumTypeName}: {enumValue}`)
+			DoWarn(1, `Invalid Enum value for {enumTypeName}: {enumValue}`)
 			return nil, false
 		end
 
 		return enumItem, true
 	end,
-	
+
 	-- Expects v to be the numeric string after "BrickColor(" (e.g., "194" for "_C-BrickColor(194" ).
 	-- Returns BrickColor.new(number) or (nil, false) for invalid inputs.
 	["B"] = function(v : string): (BrickColor?, boolean)
 		local brickColorValue = tonumber(v)
 		if not brickColorValue then
-			doWarn(1, `Invalid BrickColor value, expected a number: {v}`)
+			DoWarn(1, `Invalid BrickColor value, expected a number: {v}`)
 			return nil, false -- Brick Color Value is not a number
 		end
 
 		if brickColorValue < 0 or brickColorValue > 1032 then
-			doWarn(0, `BrickColor value out of range (0-1032): {brickColorValue}, may default to Medium stone grey`)
+			DoWarn(0, `BrickColor value out of range (0-1032): {brickColorValue}, may default to Medium stone grey`)
 		end
 
 		return BrickColor.new(brickColorValue), true
 	end,
-	
+
 	-- Expects v to be the string after "CFrame(" (e.g., "0|0|0|1|0|0|0|1|0" for "_C-CFrame(0|0|0|1|0|0|0|1|0" ).
 	-- Splits v on "|" to extract 9 numbers (x,y,z for Position, x,y,z for RightVector, x,y,z for UpVector).
 	-- Uses CFrame.fromMatrix(Position, RightVector, UpVector) to reconstruct the CFrame.
@@ -476,7 +468,7 @@ local RobloxDatatypeCallbacksDecode = {
 	["C"] = function(v: string): (CFrame?, boolean)
 		local parts = v:split("|")
 		if not parts or #parts ~= 9 then
-			doWarn(1, `Malformed CFrame value, expected 9 numbers (x|y|z|x|y|z|x|y|z): {v}`)
+			DoWarn(1, `Malformed CFrame value, expected 9 numbers (x|y|z|x|y|z|x|y|z): {v}`)
 			return nil, false
 		end
 
@@ -484,7 +476,7 @@ local RobloxDatatypeCallbacksDecode = {
 		local rightX, rightY, rightZ = tonumber(parts[4]), tonumber(parts[5]), tonumber(parts[6])
 		local upX, upY, upZ = tonumber(parts[7]), tonumber(parts[8]), tonumber(parts[9])
 		if not (posX and posY and posZ and rightX and rightY and rightZ and upX and upY and upZ) then
-			doWarn(1, `Invalid CFrame component values, expected numbers: {v}`)
+			DoWarn(1, `Invalid CFrame component values, expected numbers: {v}`)
 			return nil, false
 		end
 
@@ -494,21 +486,21 @@ local RobloxDatatypeCallbacksDecode = {
 
 		-- Optional: Warn if right and up are not orthogonal unit vectors
 		if math.abs(right.Magnitude - 1) > 0.001 or math.abs(up.Magnitude - 1) > 0.001 or math.abs(right:Dot(up)) > 0.001 then
-			doWarn(0, `CFrame vectors may not be orthogonal unit vectors: right={tostring(right)}, up={tostring(up)}`)
+			DoWarn(0, `CFrame vectors may not be orthogonal unit vectors: right={tostring(right)}, up={tostring(up)}`)
 		end
 
 		return CFrame.fromMatrix(pos, right, up), true
 	end,
-	
+
 	-- Expects v to be the string after "Color3(" (e.g., "FF0000" for _C-Color3(FF0000)).
 	-- Uses Color3.fromHex to reconstruct the Color3 from the hex string.
 	-- Returns (Color3, true) on success or (nil, false) with a warning on failure.
-	["c"] = fromstringColor3,
-	
+	["c"] = FromstringColor3,
+
 	-- Expects v to be the string after "ColorSequenceKeypoint(" (e.g., "0|FF0000")
 	["E"] = function(v: string): (ColorSequenceKeypoint?, boolean)
 		if not v:find("|") then
-			doWarn(1, `Invalid ColorSequenceKeypoint value, expected a "number|hex", got: {v}`)
+			DoWarn(1, `Invalid ColorSequenceKeypoint value, expected a "number|hex", got: {v}`)
 			return nil, false
 		end
 		--[[
@@ -518,9 +510,9 @@ local RobloxDatatypeCallbacksDecode = {
 			return nil, false
 		end
 		--]]
-		return fromstringColorSequenceKeypoint(table.unpack(v:split("|")))
+		return FromstringColorSequenceKeypoint(table.unpack(v:split("|")))
 	end,
-	
+
 	-- Expects v to be the string after "ColorSequence(" (e.g., "FF0000" for "_C-ColorSequence(FF0000" or "0|FF0000|1|00FF00" for "_C-ColorSequence(0|FF0000|1|00FF00").
 	-- For simple cases (single hex color), creates a ColorSequence using ColorSequence.new(Color3.fromHex(hex)).
 	-- For complex cases, splits v on "|" to extract time|color pairs, validates each time as a number and each color as a 6-digit hex string, and creates ColorSequenceKeypoint objects.
@@ -529,13 +521,13 @@ local RobloxDatatypeCallbacksDecode = {
 	["e"] = function(v: string): (ColorSequence?, boolean)
 		if not v:find("|") then
 			if not v:match("^%x%x%x%x%x%x$") then
-				doWarn(1, `Invalid ColorSequence hex value, expected 6-digit hexadecimal: {v}`)
+				DoWarn(1, `Invalid ColorSequence hex value, expected 6-digit hexadecimal: {v}`)
 				return nil, false
 			end
 
 			local success, color = pcall(Color3.fromHex, v)
 			if not success or not color then
-				doWarn(1, `Failed to decode Color3 from hex for ColorSequence: {v}`)
+				DoWarn(1, `Failed to decode Color3 from hex for ColorSequence: {v}`)
 				return nil, false
 			end
 
@@ -546,53 +538,53 @@ local RobloxDatatypeCallbacksDecode = {
 		-- Complex case: split by "|" for time|color pairs
 		local parts = v:split("|")
 		local partsLength = #parts
-		
+
 		local length = partsLength / 2
 		if length > 20 then
-			doWarn(2, `ColorSequence is limited to 20 Keypoints; Tried Setting {length} Keypoints`)
+			DoWarn(2, `ColorSequence is limited to 20 Keypoints; Tried Setting {length} Keypoints`)
 			return nil, false
 		end
-		
+
 		if partsLength % 2 ~= 0 then
-			doWarn(1, `Malformed ColorSequence value, expected even number of parts (time|color pairs): {v}`)
+			DoWarn(1, `Malformed ColorSequence value, expected even number of parts (time|color pairs): {v}`)
 			return nil, false
 		end
-		
-		
-		
+
+
+
 		local keypoints = {} :: {ColorSequenceKeypoint}
 		local lastKeypoint : ColorSequenceKeypoint?
 		for i = 1, partsLength, 2 do
 			local keypointTime = parts[i] --tonumber(parts[i])
 			local hexColor = parts[i + 1]
-			
-			local colorSequenceKeypoint, success = fromstringColorSequenceKeypoint(keypointTime, hexColor)
-			
+
+			local colorSequenceKeypoint, success = FromstringColorSequenceKeypoint(keypointTime, hexColor)
+
 			if not success then
-				doWarn(1, `Invalid ColorSequenceKeypoint in ColorSequence (See all warnings)`)
+				DoWarn(1, `Invalid ColorSequenceKeypoint in ColorSequence (See all warnings)`)
 				return nil, false
 			end
-			
-			
-			
+
+
+
 			if
 				(colorSequenceKeypoint :: ColorSequenceKeypoint).Time < 0 or
 				(colorSequenceKeypoint :: ColorSequenceKeypoint).Time > 1
 			then
-				doWarn(2, `ColorSequence keypoint time out of range [0,1]: {(colorSequenceKeypoint :: ColorSequenceKeypoint).Time}`)
+				DoWarn(2, `ColorSequence keypoint time out of range [0,1]: {(colorSequenceKeypoint :: ColorSequenceKeypoint).Time}`)
 				return nil, false
 			end
 			if
 				lastKeypoint and
 				(colorSequenceKeypoint :: ColorSequenceKeypoint).Time < lastKeypoint.Time
 			then
-				doWarn(2, `ColorSequence keypoints not sorted by time: {v}`)
+				DoWarn(2, `ColorSequence keypoints not sorted by time: {v}`)
 				return nil, false
 			end
-			
-			
-			
-			
+
+
+
+
 			lastKeypoint = colorSequenceKeypoint
 			table.insert(keypoints, colorSequenceKeypoint :: ColorSequenceKeypoint)
 			--[[
@@ -615,25 +607,25 @@ local RobloxDatatypeCallbacksDecode = {
 			table.insert(keypoints, ColorSequenceKeypoint.new(keypointTime, color))
 			--]]
 		end
-		
+
 		--local length = #keypoints
 		-- Validate Keypoint Limits
 		--if length > 20 then
 		--	doWarn(2, `ColorSequence is limited to 20 Keypoints; Tried Setting {#keypoints} Keypoints`)
 		--	return nil, false
 		--end
-		
+
 		if keypoints[1].Time ~= 0 then
-			doWarn(2, `ColorSequence must start at time = 0.0: {keypoints[1].Time}`)
+			DoWarn(2, `ColorSequence must start at time = 0.0: {keypoints[1].Time}`)
 			return nil, false
 		end
 		if keypoints[length].Time ~= 1 then
-			doWarn(2, `ColorSequence must end at time = 1.0: {keypoints[1].Time}`)
+			DoWarn(2, `ColorSequence must end at time = 1.0: {keypoints[1].Time}`)
 			return nil, false
 		end
 
 		---- Validate keypoints (e.g., times in [0,1], sorted)
-		--for i, kp in ipairs(keypoints) do
+		--for i, kp in keypoints do
 		--	if kp.Time < 0 or kp.Time > 1 then
 		--		doWarn(2, `ColorSequence keypoint time out of range [0,1]: {kp.Time}`)
 		--		return nil, false
@@ -646,7 +638,7 @@ local RobloxDatatypeCallbacksDecode = {
 
 		return ColorSequence.new(keypoints), true
 	end,
-	
+
 	-- Expects v to be the string after "Content(" (e.g., "rbxassetid://6372755229" for "_C-Content(rbxassetid://6372755229").  
 	-- Returns Content.fromUri(v) for non-empty input, assuming a URI string.  
 	-- Empty input is handled by tryDecode, which returns Content.none for datatype "Content".
@@ -654,19 +646,19 @@ local RobloxDatatypeCallbacksDecode = {
 	["F"] = function(v: string): (Content?, boolean)
 		local success, content = pcall(Content.fromUri, v)
 		if not success or not content then
-			doWarn(1, `Failed to decode Content from URI: {v}`)
+			DoWarn(1, `Failed to decode Content from URI: {v}`)
 			return nil, false
 		end
 		return content, true
 	end,
-	
+
 	--ContentId = function(v) -- wouldn't that classify as a string anyways?
 	--	return `{v}`
 	--end,
 	--Faces = function(v)
 	--	return `Faces({v}`
 	--end,
-	
+
 	-- Expects v to be the string after "Font(" (e.g., "rbxasset://fonts/Arial.ttf|400|Normal" for "_C-Font(rbxasset://fonts/Arial.ttf|400|Normal").
 	-- Splits v on "|" to extract Family (string), Weight (number or Enum.FontWeight name), and Style (Enum.FontStyle name).
 	-- Uses Font.new(Family, Weight, Style) to reconstruct the Font.
@@ -674,7 +666,7 @@ local RobloxDatatypeCallbacksDecode = {
 	["g"] = function(v: string): (Font?, boolean)
 		local parts = v:split("|")
 		if not parts or #parts ~= 3 then
-			doWarn(1, `Malformed Font value, expected Family|Weight|Style: {v}`)
+			DoWarn(1, `Malformed Font value, expected Family|Weight|Style: {v}`)
 			return nil, false
 		end
 
@@ -682,38 +674,38 @@ local RobloxDatatypeCallbacksDecode = {
 
 		-- Validate Family (non-empty string)
 		if #family < 1 then
-			doWarn(1, `Invalid Font Family, expected non-empty string: {family}`)
+			DoWarn(1, `Invalid Font Family, expected non-empty string: {family}`)
 			return nil, false
 		end
 		if not (weightValue and styleValue) then
-			doWarn(1, `Invalid Weight or Style -Font Value, Number expected: weightValue->{weightValue} styleValue->{styleValue}`)
+			DoWarn(1, `Invalid Weight or Style -Font Value, Number expected: weightValue->{weightValue} styleValue->{styleValue}`)
 			return nil, false
 		end
 
 		-- Validate Weight (number or Enum.FontWeight name)
 		local weight = Enum.FontWeight:FromValue(weightValue)
 		if not weight then
-			doWarn(1, `Invalid Font Weight, expected number or Enum.FontWeight name: {weightValue}`)
+			DoWarn(1, `Invalid Font Weight, expected number or Enum.FontWeight name: {weightValue}`)
 			return nil, false
 		end
 
 		-- Validate Style (Enum.FontStyle name, e.g., "Normal", "Italic")
 		local style = Enum.FontStyle:FromValue(styleValue)
 		if not style then
-			doWarn(1, `Invalid Font Style, expected Enum.FontStyle name: {styleValue}`)
+			DoWarn(1, `Invalid Font Style, expected Enum.FontStyle name: {styleValue}`)
 			return nil, false
 		end
 
 		-- Attempt to create Font
 		local success, font = pcall(Font.new, family, weight, style)
 		if not success or not font then
-			doWarn(1, `Failed to create Font with Family={family}, Weight={weightValue}, Style={styleValue}`)
+			DoWarn(1, `Failed to create Font with Family={family}, Weight={weightValue}, Style={styleValue}`)
 			return nil, false
 		end
 
 		return font, true
 	end,
-	
+
 	-- Expects v to be the string after "NumberRange(" (e.g., "5|10" for "_C-NumberRange(5|10" or "5" for "_C-NumberRange(5").
 	-- Splits v on "|" to extract one or two numbers (Min|Max or single Value for Min=Max).
 	-- Uses NumberRange.new(Min, Max) or NumberRange.new(Value) to reconstruct the NumberRange.
@@ -725,7 +717,7 @@ local RobloxDatatypeCallbacksDecode = {
 		if #parts == 1 then
 			local value = tonumber(parts[1])
 			if not value then
-				doWarn(1, `Invalid NumberRange value, expected a number: {parts[1]}`)
+				DoWarn(1, `Invalid NumberRange value, expected a number: {parts[1]}`)
 				return nil, false
 			end
 			return NumberRange.new(value), true
@@ -733,27 +725,27 @@ local RobloxDatatypeCallbacksDecode = {
 
 		-- Handle Min|Max case
 		if #parts ~= 2 then
-			doWarn(1, `Malformed NumberRange value, expected Value or Min|Max: {v}`)
+			DoWarn(1, `Malformed NumberRange value, expected Value or Min|Max: {v}`)
 			return nil, false
 		end
 
 		local min = tonumber(parts[1])
 		local max = tonumber(parts[2])
 		if not min or not max then
-			doWarn(1, `Invalid NumberRange component values, expected numbers: {v}`)
+			DoWarn(1, `Invalid NumberRange component values, expected numbers: {v}`)
 			return nil, false
 		end
 
 		return NumberRange.new(math.min(min, max), math.max(min, max)), true
 	end,
-	
+
 	["S"] = function(v: string): (NumberSequenceKeypoint?, boolean)
 		if not v:find("|") then
-			doWarn(1, `Invalid NumberSequenceKeypoint value, expected a "number|number|number", got: {v}`)
+			DoWarn(1, `Invalid NumberSequenceKeypoint value, expected a "number|number|number", got: {v}`)
 			return nil, false
 		end
-		
-		return fromstringNumberSequenceKeypoint(table.unpack(v:split("|")))
+
+		return FromstringNumberSequenceKeypoint(table.unpack(v:split("|")))
 	end,
 	-- Expects v to be the string after "NumberSequence(" (e.g., "0.5" for "_C-NumberSequence(0.5)" or "0|0.5|0|1|1|0" for "_C-NumberSequence(0|0.5|0|1|1|0").
 	-- For simple cases (single number), creates a NumberSequence with two keypoints at times 0 and 1 with the same value.
@@ -764,7 +756,7 @@ local RobloxDatatypeCallbacksDecode = {
 		if not v:find("|") then
 			local value = tonumber(v)
 			if not value then
-				doWarn(1, `Invalid NumberSequence value, expected a number: {v}`)
+				DoWarn(1, `Invalid NumberSequence value, expected a number: {v}`)
 				return nil, false
 			end
 			-- Simple case: two keypoints with the same value at times 0 and 1
@@ -774,16 +766,16 @@ local RobloxDatatypeCallbacksDecode = {
 		-- Complex case: split by "|" for time|value|envelope triplets
 		local parts = v:split("|")
 		local partsLength = #parts
-		
+
 		local length = partsLength / 3
 		-- Validate Sequence Keypoint Amount Length Limit
 		if length > 20 then
-			doWarn(2, `NumberSequence is limited to 20 Keypoints; Tried Setting {length} Keypoints`)
+			DoWarn(2, `NumberSequence is limited to 20 Keypoints; Tried Setting {length} Keypoints`)
 			return nil, false
 		end
-		
+
 		if #parts % 3 ~= 0 then
-			doWarn(1, `Malformed NumberSequence value, expected triplets (time|value|envelope): {v}`)
+			DoWarn(1, `Malformed NumberSequence value, expected triplets (time|value|envelope): {v}`)
 			return nil, false
 		end
 
@@ -794,34 +786,34 @@ local RobloxDatatypeCallbacksDecode = {
 			local keypointTime = parts[i] --tonumber(parts[i])
 			local keypointValue = parts[i + 1] --tonumber(parts[i + 1])
 			local keypointEnvelope = parts[i + 2] --tonumber(parts[i + 2])
-			
-			local numberSequenceKeypoint, success = fromstringNumberSequenceKeypoint(keypointTime, keypointValue, keypointEnvelope)
-			
+
+			local numberSequenceKeypoint, success = FromstringNumberSequenceKeypoint(keypointTime, keypointValue, keypointEnvelope)
+
 			if not success then
-				doWarn(1, `Invalid NumberSequenceKeypoint in NumberSequence (See all warnings)`)
+				DoWarn(1, `Invalid NumberSequenceKeypoint in NumberSequence (See all warnings)`)
 				return nil, false
 			end
-			
-			
-			
+
+
+
 			if
 				(numberSequenceKeypoint :: NumberSequenceKeypoint).Time < 0 or
 				(numberSequenceKeypoint :: NumberSequenceKeypoint).Time > 1
 			then
-				doWarn(2, `ColorSequence keypoint time out of range [0,1]: {(numberSequenceKeypoint :: NumberSequenceKeypoint).Time}`)
+				DoWarn(2, `ColorSequence keypoint time out of range [0,1]: {(numberSequenceKeypoint :: NumberSequenceKeypoint).Time}`)
 				return nil, false
 			end
 			if
 				lastKeypoint and
 				(numberSequenceKeypoint :: NumberSequenceKeypoint).Time < lastKeypoint.Time
 			then
-				doWarn(2, `ColorSequence keypoints not sorted by time: {v}`)
+				DoWarn(2, `ColorSequence keypoints not sorted by time: {v}`)
 				return nil, false
 			end
-			
+
 			lastKeypoint = numberSequenceKeypoint
 			table.insert(keypoints, numberSequenceKeypoint :: NumberSequenceKeypoint)
-			
+
 			--if not (keypointTime and keypointValue and keypointEnvelope) then
 			--	doWarn(1, `Invalid NumberSequence keypoint values, expected numbers: time={parts[i]}, value={parts[i+1]}, envelope={parts[i+2]}`)
 			--	return nil, false
@@ -837,13 +829,13 @@ local RobloxDatatypeCallbacksDecode = {
 		--end
 
 		-- Validate keypoints (e.g., times in [0,1], sorted)
-		for i, kp in ipairs(keypoints) do
+		for i, kp in keypoints do
 			if kp.Time < 0 or kp.Time > 1 then
-				doWarn(2, `NumberSequence keypoint time out of range [0,1]: {kp.Time}`)
+				DoWarn(2, `NumberSequence keypoint time out of range [0,1]: {kp.Time}`)
 				return nil, false
 			end
 			if i > 1 and kp.Time < keypoints[i-1].Time then
-				doWarn(2, `NumberSequence keypoints not sorted by time: {v}`)
+				DoWarn(2, `NumberSequence keypoints not sorted by time: {v}`)
 				return nil, false
 			end
 		end
@@ -858,14 +850,14 @@ local RobloxDatatypeCallbacksDecode = {
 	["y"] = function(v: string): (Ray?, boolean)
 		local parts = v:split("|")
 		if #parts ~= 6 then
-			doWarn(1, `Malformed Ray value, expected 6 numbers (x|y|z|x|y|z): {v}`)
+			DoWarn(1, `Malformed Ray value, expected 6 numbers (x|y|z|x|y|z): {v}`)
 			return nil, false
 		end
 
 		local originX, originY, originZ = tonumber(parts[1]), tonumber(parts[2]), tonumber(parts[3])
 		local dirX, dirY, dirZ = tonumber(parts[4]), tonumber(parts[5]), tonumber(parts[6])
 		if not (originX and originY and originZ and dirX and dirY and dirZ) then
-			doWarn(1, `Invalid Ray component values, expected numbers: {v}`)
+			DoWarn(1, `Invalid Ray component values, expected numbers: {v}`)
 			return nil, false
 		end
 
@@ -881,13 +873,13 @@ local RobloxDatatypeCallbacksDecode = {
 	["m"] = function(v: string): (Rect?, boolean)
 		local parts = v:split("|")
 		if #parts ~= 4 then
-			doWarn(1, `Malformed Rect value, expected 4 numbers (minX|minY|maxX|maxY): {v}`)
+			DoWarn(1, `Malformed Rect value, expected 4 numbers (minX|minY|maxX|maxY): {v}`)
 			return nil, false
 		end
 
 		local minX, minY, maxX, maxY = tonumber(parts[1]), tonumber(parts[2]), tonumber(parts[3]), tonumber(parts[4])
 		if not (minX and minY and maxX and maxY) then
-			doWarn(1, `Invalid Rect component values, expected numbers: {v}`)
+			DoWarn(1, `Invalid Rect component values, expected numbers: {v}`)
 			return nil, false
 		end
 
@@ -901,13 +893,13 @@ local RobloxDatatypeCallbacksDecode = {
 	["u"] = function(v: string): (UDim?, boolean)
 		local parts = v:split("|")
 		if #parts ~= 2 then
-			doWarn(1, `Malformed UDim value, expected 2 numbers (Scale|Offset): {v}`)
+			DoWarn(1, `Malformed UDim value, expected 2 numbers (Scale|Offset): {v}`)
 			return nil, false
 		end
 
 		local scale, offset = tonumber(parts[1]), tonumber(parts[2])
 		if not (scale and offset) then
-			doWarn(1, `Invalid UDim component values, expected numbers: {v}`)
+			DoWarn(1, `Invalid UDim component values, expected numbers: {v}`)
 			return nil, false
 		end
 
@@ -921,13 +913,13 @@ local RobloxDatatypeCallbacksDecode = {
 	["U"] = function(v: string): (UDim2?, boolean)
 		local parts = v:split("|")
 		if #parts ~= 4 then
-			doWarn(1, `Malformed UDim2 value, expected 4 numbers (xScale|xOffset|yScale|yOffset): {v}`)
+			DoWarn(1, `Malformed UDim2 value, expected 4 numbers (xScale|xOffset|yScale|yOffset): {v}`)
 			return nil, false
 		end
 
 		local xScale, xOffset, yScale, yOffset = tonumber(parts[1]), tonumber(parts[2]), tonumber(parts[3]), tonumber(parts[4])
 		if not (xScale and xOffset and yScale and yOffset) then
-			doWarn(1, `Invalid UDim2 component values, expected numbers: {v}`)
+			DoWarn(1, `Invalid UDim2 component values, expected numbers: {v}`)
 			return nil, false
 		end
 
@@ -941,13 +933,13 @@ local RobloxDatatypeCallbacksDecode = {
 	["2"] = function(v: string): (Vector2?, boolean)
 		local parts = v:split("|")
 		if #parts ~= 2 then
-			doWarn(1, `Malformed Vector2 value, expected 2 numbers (x|y): {v}`)
+			DoWarn(1, `Malformed Vector2 value, expected 2 numbers (x|y): {v}`)
 			return nil, false
 		end
 
 		local x, y = tonumber(parts[1]), tonumber(parts[2])
 		if not (x and y) then
-			doWarn(1, `Invalid Vector2 component values, expected numbers: {v}`)
+			DoWarn(1, `Invalid Vector2 component values, expected numbers: {v}`)
 			return nil, false
 		end
 
@@ -961,13 +953,13 @@ local RobloxDatatypeCallbacksDecode = {
 	["V"] = function(v: string): (Vector3?, boolean)
 		local parts = v:split("|")
 		if #parts ~= 3 then
-			doWarn(1, `Malformed Vector3 value, expected 3 numbers (x|y|z): {v}`)
+			DoWarn(1, `Malformed Vector3 value, expected 3 numbers (x|y|z): {v}`)
 			return nil, false
 		end
 
 		local x, y, z = tonumber(parts[1]), tonumber(parts[2]), tonumber(parts[3])
 		if not (x and y and z) then
-			doWarn(1, `Invalid Vector3 component values, expected numbers: {v}`)
+			DoWarn(1, `Invalid Vector3 component values, expected numbers: {v}`)
 			return nil, false
 		end
 
@@ -978,20 +970,20 @@ local RobloxDatatypeCallbacksDecode = {
 
 --- those functions below will be refactored later once im done refactoring decode.
 
-local function tryEncode(datatype : string, v : SupportedTypesList?)
+local function TryEncode(datatype : string, v : SupportedTypesList?)
 	local cb = RobloxDatatypeCallbacksEncode[datatype] -- O(1)
 	if not cb then
 		return `Unknown_{datatype}` -- such will be defaulted (e.g.: Unknown_Color3 would be decoded as Color3.fromHex("FFFFFF"))
 	end
-	return `{encodePrefix}{cb(v)}`
+	return `{EncodePrefix}{cb(v)}`
 end
 
-local function tryDecode(datatype: string, v: string): (SupportedTypesList | nil, boolean)
+local function TryDecode(datatype: string, v: string): (SupportedTypesList | nil, boolean)
 	if #v < 1 then
 		if datatype == "Content" then
 			return Content.none, true
 		end
-		doWarn(1, `Empty {datatype} value: {v}`)
+		DoWarn(1, `Empty {datatype} value: {v}`)
 		return nil, false -- Empty string (Malformed input)
 	end
 
@@ -1002,7 +994,7 @@ local function tryDecode(datatype: string, v: string): (SupportedTypesList | nil
 	return cb(v)
 end
 
-local function handleNonTableValuesEncode(
+local function HandleNonTableValuesEncode(
 	valueType : TypeofTypeResult,
 	resultData : PrimitiveBasicTable,
 	key : TableIndex,
@@ -1025,33 +1017,33 @@ local function handleNonTableValuesEncode(
 	elseif valueType == "string" or valueType == "boolean" or valueType == "buffer" then
 		resultData[key] = value :: string | boolean | buffer
 	else
-		resultData[key] = tryEncode(typeof(value), value)
+		resultData[key] = TryEncode(typeof(value), value)
 	end
 end
 
-local function encodeData(
+local function EncodeData(
 	data : RuntimeBasicTable,
 	recursion : boolean?
 ) : PrimitiveBasicTable
-	if debugEnabled and not recursion then
+	if DebugEnabled and not recursion then
 		print("Encoding:", data)
 	end
 
 	local resultData = {} :: PrimitiveBasicTable
-	for key, value in pairs(data) do
+	for key, value in data do
 		local valueType = type(value)
 
-		if debugEnabled and not recursion then
+		if DebugEnabled and not recursion then
 			print("Encode:", key, value)
 		end
 
 		if valueType == "table" then
-			resultData[key] = encodeData(
+			resultData[key] = EncodeData(
 				value :: RuntimeBasicTable,
 				true
 			)
 		else
-			handleNonTableValuesEncode(
+			HandleNonTableValuesEncode(
 				valueType,
 				resultData,
 				key,
@@ -1062,23 +1054,23 @@ local function encodeData(
 	return resultData
 end
 
-local function decodeData(
+local function DecodeData(
 	data : PrimitiveBasicTable,
 	recursion : boolean?
 ) : RuntimeBasicTable
-	if debugEnabled and not recursion then
+	if DebugEnabled and not recursion then
 		print("Decoding:", data)
 	end
 	local resultData = {} :: RuntimeBasicTable
-	for key, value in pairs(data) do
+	for key, value in data do
 		local valueType = type(value)
 
-		if debugEnabled and not recursion then
+		if DebugEnabled and not recursion then
 			print("Decode:", key, value)
 		end
 
 		if valueType == "table" then
-			resultData[key] = decodeData(value :: PrimitiveBasicTable, true)
+			resultData[key] = DecodeData(value :: PrimitiveBasicTable, true)
 		elseif valueType == "number" or valueType == "boolean" or valueType == "buffer" then
 			resultData[key] = value
 		elseif valueType == "string" then
@@ -1092,9 +1084,9 @@ local function decodeData(
 				resultData[key] = 0/0  -- NaN
 				continue
 			end
-			
+
 			--if not string.match(value :: string, prefixMatchPattern) then
-			if not (value :: string):match(prefixMatchPattern) then
+			if not (value :: string):match(PrefixMatchPattern) then
 				-- just a usual string
 				resultData[key] = value
 				continue
@@ -1111,13 +1103,13 @@ local function decodeData(
 			local datatype = result[1]
 			local encodedValue = result[2]
 			--]]--
-			
-			local datatype : string = (value :: string):sub(decodeSubLengthBase, decodeSubLengthBase)
-			local encodedValue : string = (value :: string):sub(decodeSubLength)
-			
+
+			local datatype : string = (value :: string):sub(DecodeSubLengthBase, DecodeSubLengthBase)
+			local encodedValue : string = (value :: string):sub(DecodeSubLength)
+
 			--print(datatype, encodedValue)
 
-			local decodeResult, decodeSuccess = tryDecode(datatype, encodedValue)
+			local decodeResult, decodeSuccess = TryDecode(datatype, encodedValue)
 
 			if not decodeSuccess then
 				resultData[key] = value
@@ -1126,17 +1118,19 @@ local function decodeData(
 
 			resultData[key] = decodeResult
 		else
-			doWarn(2, "Unknown key:", key)
+			DoWarn(2, "Unknown key:", key)
 		end
 	end
 	return resultData
 end
 
 local CoffeeParser : CoffeeParser = {
-	Encode = encodeData,
-	Decode = decodeData,
+	Encode = EncodeData,
+	Decode = DecodeData,
 	SupportedTypes = SupportedTypes,
 	SupportedTypesDebugMessage = SupportedTypesDebugMessage,
 }
 
-return CoffeeParser
+table.freeze(CoffeeParser)
+
+return CoffeeParser :: typeof(CoffeeParser) -- frozen

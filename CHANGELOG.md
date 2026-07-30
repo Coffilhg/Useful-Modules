@@ -1,3 +1,10 @@
+# v1.0.4
+- Optimized the code by adding `local` keyword everywhere it was missing and romoved all `pairs`/`ipairs`
+- Added `table.freeze` on the module table to make it secure and read-only
+- Fixed a typo in `CoffeeParser` type definition
+- Global variables are now all in PascalCase
+- Optimized `Round`
+
 # v1.0.3
 - Added `SupportedTypes` lookup table for runtime type validation.
 - Added `SupportedTypesDebugMessage` for convenient debug output.
