@@ -263,6 +263,7 @@ local testData = {
 	brickColor = BrickColor.new(194),  -- Red
 	cframe = CFrame.new(1, 2, 3) * CFrame.Angles(0, math.pi/2, 0),
 	color3 = Color3.new(1, 0.5, 0),  -- Orange
+	white = Color3.fromRGB(255, 255, 255), -- this one shall be optimized to FFF
 	colorSequence = ColorSequence.new(Color3.new(1,0,0), Color3.new(0,1,0)),  -- Red to Green
 	content = Content.fromUri("rbxassetid://123456789"),  -- Example asset ID
 	enumItem = Enum.FontWeight.Bold,

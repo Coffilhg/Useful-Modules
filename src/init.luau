@@ -20,7 +20,7 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser
-    Module Version: 1.0.4
+    Module Version: 1.0.5
 --]]--
 --!strict
 --!optimize 2
@@ -36,11 +36,14 @@ local EncodePrefix : string = "_C-"
 
 -- encodePrefix:gsub("([^%w])", "%%%1") is needed to escape functions of the magical characters
 -- though this actually escapes EVERY non-alphanumeric character automatically
-local PrefixMatchPattern : string = `^{EncodePrefix:gsub("([^%w])", "%%%1")}.%(`
--- Calculation: prefix length + 1 for the "."
+--local PrefixMatchPattern : string = `^{string.gsub(EncodePrefix, "([^%w])", "%%%1")}.%(`
+
+local EncodePrefixLength : number = #EncodePrefix
+-- Calculation: prefix length + 1 for the "." (any character to identify the Type)
+local DecodeSubLengthBase : number = EncodePrefixLength + 1
 -- then + 1 for the "(" and + 1 to skip over "("
-local DecodeSubLengthBase : number = #EncodePrefix + 1
-local DecodeSubLength : number = DecodeSubLengthBase + 2
+local DecodeSubLeftParenthesisLength : number = DecodeSubLengthBase + 1
+local DecodeSubLength : number = DecodeSubLeftParenthesisLength + 1
 local PrecisionMultiplier = 10 ^ (type(Precision) == "number" and Precision or 3)
 
 --[=[--
@@ -216,22 +219,28 @@ local function TostringEnumItem(v : EnumItem) : string
 end
 
 local function TostringColor3(v : Color3, hideWrap : boolean?) : string
-	local base = v:ToHex()
+	local base = string.gsub(
+		-- would be worth it adding string.lower if :ToHex() returned something inconsistent like aA11Ff
+		v:ToHex(),
+		"(%x)%1(%x)%2(%x)%3", -- e.g. "aa11ff" -> "a1f";
+		"%1%2%3"
+	) -- optimize into a 3 digit hexadecimal whenever possible
+
 	return hideWrap and base or `c({base}`
 end
 local function FromstringColor3(v : string) : (Color3?, boolean)
-	if not v:match("^%x%x%x%x%x%x$") then
-		DoWarn(1, `Invalid Color3 hex value, expected 6-digit hexadecimal: {v}`)
+	local hex = string.match(v, "^#?(%x+)$")
+	if not hex then
+		DoWarn(1, `Invalid Color3 hex value, expected hexadecimal string: {v}`)
+		return nil, false
+	end
+	local nHex = #hex
+	if nHex ~= 6 and nHex ~= 3 then
+		DoWarn(1, `Invalid Color3 hex value, expected a 3 or 6 digit hexadecimal (with or without # starting character): {v}`)
 		return nil, false
 	end
 
-	local success, color = pcall(Color3.fromHex, v)
-	if not (success and color) then
-		DoWarn(1, `Failed to decode Color3 from hex: {v}`)
-		return nil, false
-	end
-
-	return color, true
+	return Color3.fromHex(hex), true
 end
 
 local function TostringColorSequenceKeypoint(v : ColorSequenceKeypoint, hideWrap : boolean?) : string
@@ -406,7 +415,7 @@ local RobloxDatatypeCallbacksEncode = {
 
 
 
--- (Minified Roblox Datatype prefix codes)[typeofResult] = (string): typeofResult?, boolean
+-- string.byte( (Minified Roblox Datatype prefix codes)[typeofResult] ) = (string): typeofResult?, boolean
 local RobloxDatatypeCallbacksDecode = {
 	--Axes = function(v : Axes) -- hard to compress, rarely used for player data / game data / admin settings
 	--	return `Axes({v})`
@@ -415,8 +424,8 @@ local RobloxDatatypeCallbacksDecode = {
 	-- Expects v to be the string after "Enum(" (e.g., "EasingDirection|1" for "_C-Enum(EasingDirection|1" ).
 	-- Splits v on "|" to extract enum type and value, then uses Enum[enumTypeName]:FromValue(enumValue) to create an EnumItem.
 	-- Returns (EnumItem, true) on success or (nil, false) with a warning on failure.
-	["H"] = function(v: string): (EnumItem?, boolean)
-		local parts = v:split("|")
+	[string.byte("H")] = function(v: string): (EnumItem?, boolean)
+		local parts = string.split(v, "|")
 		if not parts or #parts < 2 or #parts[1] < 1 or #parts[2] < 1 then
 			DoWarn(1, `Malformed EnumItem value, expected EnumType|Value: {v}`)
 			return nil, false
@@ -429,7 +438,7 @@ local RobloxDatatypeCallbacksDecode = {
 			return nil, false -- Shouldn't happen due to digit check, but included for robustness
 		end
 
-		local enumType = EnumItemLookup[enumTypeName] :: Enum & {FromValue: (number) -> EnumItem}
+		local enumType = EnumItemLookup[enumTypeName] :: Enum & {FromValue: (self: Enum, number) -> EnumItem}
 		if not enumType then
 			DoWarn(1, `Invalid Enum type: {enumTypeName}`)
 			return nil, false
@@ -446,7 +455,7 @@ local RobloxDatatypeCallbacksDecode = {
 
 	-- Expects v to be the numeric string after "BrickColor(" (e.g., "194" for "_C-BrickColor(194" ).
 	-- Returns BrickColor.new(number) or (nil, false) for invalid inputs.
-	["B"] = function(v : string): (BrickColor?, boolean)
+	[string.byte("B")] = function(v : string): (BrickColor?, boolean)
 		local brickColorValue = tonumber(v)
 		if not brickColorValue then
 			DoWarn(1, `Invalid BrickColor value, expected a number: {v}`)
@@ -465,8 +474,8 @@ local RobloxDatatypeCallbacksDecode = {
 	-- Uses CFrame.fromMatrix(Position, RightVector, UpVector) to reconstruct the CFrame.
 	-- Returns (CFrame, true) on success or (nil, false) with a warning on failure.
 	-- Empty input is handled by tryDecode.
-	["C"] = function(v: string): (CFrame?, boolean)
-		local parts = v:split("|")
+	[string.byte("C")] = function(v: string): (CFrame?, boolean)
+		local parts = string.split(v, "|")
 		if not parts or #parts ~= 9 then
 			DoWarn(1, `Malformed CFrame value, expected 9 numbers (x|y|z|x|y|z|x|y|z): {v}`)
 			return nil, false
@@ -495,11 +504,11 @@ local RobloxDatatypeCallbacksDecode = {
 	-- Expects v to be the string after "Color3(" (e.g., "FF0000" for _C-Color3(FF0000)).
 	-- Uses Color3.fromHex to reconstruct the Color3 from the hex string.
 	-- Returns (Color3, true) on success or (nil, false) with a warning on failure.
-	["c"] = FromstringColor3,
+	[string.byte("c")] = FromstringColor3,
 
 	-- Expects v to be the string after "ColorSequenceKeypoint(" (e.g., "0|FF0000")
-	["E"] = function(v: string): (ColorSequenceKeypoint?, boolean)
-		if not v:find("|") then
+	[string.byte("E")] = function(v: string): (ColorSequenceKeypoint?, boolean)
+		if not string.find(v, "|") then
 			DoWarn(1, `Invalid ColorSequenceKeypoint value, expected a "number|hex", got: {v}`)
 			return nil, false
 		end
@@ -510,7 +519,7 @@ local RobloxDatatypeCallbacksDecode = {
 			return nil, false
 		end
 		--]]
-		return FromstringColorSequenceKeypoint(table.unpack(v:split("|")))
+		return FromstringColorSequenceKeypoint(table.unpack(string.split(v, "|")))
 	end,
 
 	-- Expects v to be the string after "ColorSequence(" (e.g., "FF0000" for "_C-ColorSequence(FF0000" or "0|FF0000|1|00FF00" for "_C-ColorSequence(0|FF0000|1|00FF00").
@@ -518,25 +527,26 @@ local RobloxDatatypeCallbacksDecode = {
 	-- For complex cases, splits v on "|" to extract time|color pairs, validates each time as a number and each color as a 6-digit hex string, and creates ColorSequenceKeypoint objects.
 	-- Warns if keypoint times are outside [0,1] or not sorted (severity 0).
 	-- Returns (ColorSequence, true) on success or (nil, false) with a warning (severity 1) for invalid inputs (malformed hex, non-numeric time, or incorrect part count).
-	["e"] = function(v: string): (ColorSequence?, boolean)
-		if not v:find("|") then
-			if not v:match("^%x%x%x%x%x%x$") then
-				DoWarn(1, `Invalid ColorSequence hex value, expected 6-digit hexadecimal: {v}`)
-				return nil, false
-			end
+	[string.byte("e")] = function(v: string): (ColorSequence?, boolean)
+		if not string.find(v, "|") then
+			--if not v:match("^%x%x%x%x%x%x$") then
+			--	DoWarn(1, `Invalid ColorSequence hex value, expected 6-digit hexadecimal: {v}`)
+			--	return nil, false
+			--end
 
-			local success, color = pcall(Color3.fromHex, v)
-			if not success or not color then
+			--local success, color = pcall(Color3.fromHex, v)
+			local color, success = FromstringColor3(v)
+			if not success then
 				DoWarn(1, `Failed to decode Color3 from hex for ColorSequence: {v}`)
 				return nil, false
 			end
 
 			-- Simple case: two keypoints with the same color at times 0 and 1
-			return ColorSequence.new(color), true
+			return ColorSequence.new(color :: Color3), true
 		end
 
 		-- Complex case: split by "|" for time|color pairs
-		local parts = v:split("|")
+		local parts = string.split(v, "|")
 		local partsLength = #parts
 
 		local length = partsLength / 2
@@ -643,7 +653,7 @@ local RobloxDatatypeCallbacksDecode = {
 	-- Returns Content.fromUri(v) for non-empty input, assuming a URI string.  
 	-- Empty input is handled by tryDecode, which returns Content.none for datatype "Content".
 	-- Returns (Content, true) on success or (nil, false) with a warning (severity 1) if Content.fromUri fails.  
-	["F"] = function(v: string): (Content?, boolean)
+	[string.byte("F")] = function(v: string): (Content?, boolean)
 		local success, content = pcall(Content.fromUri, v)
 		if not success or not content then
 			DoWarn(1, `Failed to decode Content from URI: {v}`)
@@ -663,8 +673,8 @@ local RobloxDatatypeCallbacksDecode = {
 	-- Splits v on "|" to extract Family (string), Weight (number or Enum.FontWeight name), and Style (Enum.FontStyle name).
 	-- Uses Font.new(Family, Weight, Style) to reconstruct the Font.
 	-- Returns (Font, true) on success or (nil, false) with a warning (severity 1) for invalid inputs (malformed format, invalid weight, or invalid style)
-	["g"] = function(v: string): (Font?, boolean)
-		local parts = v:split("|")
+	[string.byte("g")] = function(v: string): (Font?, boolean)
+		local parts = string.split(v, "|")
 		if not parts or #parts ~= 3 then
 			DoWarn(1, `Malformed Font value, expected Family|Weight|Style: {v}`)
 			return nil, false
@@ -710,8 +720,8 @@ local RobloxDatatypeCallbacksDecode = {
 	-- Splits v on "|" to extract one or two numbers (Min|Max or single Value for Min=Max).
 	-- Uses NumberRange.new(Min, Max) or NumberRange.new(Value) to reconstruct the NumberRange.
 	-- Returns (NumberRange, true) on success or (nil, false) with a warning (severity 1) for invalid inputs (non-numeric values or incorrect part count)
-	["n"] = function(v: string): (NumberRange?, boolean)
-		local parts = v:split("|")
+	[string.byte("n")] = function(v: string): (NumberRange?, boolean)
+		local parts = string.split(v, "|")
 
 		-- Handle single value case (Min == Max)
 		if #parts == 1 then
@@ -739,21 +749,21 @@ local RobloxDatatypeCallbacksDecode = {
 		return NumberRange.new(math.min(min, max), math.max(min, max)), true
 	end,
 
-	["S"] = function(v: string): (NumberSequenceKeypoint?, boolean)
-		if not v:find("|") then
+	[string.byte("S")] = function(v: string): (NumberSequenceKeypoint?, boolean)
+		if not string.find(v, "|") then
 			DoWarn(1, `Invalid NumberSequenceKeypoint value, expected a "number|number|number", got: {v}`)
 			return nil, false
 		end
 
-		return FromstringNumberSequenceKeypoint(table.unpack(v:split("|")))
+		return FromstringNumberSequenceKeypoint(table.unpack(string.split(v, "|")))
 	end,
 	-- Expects v to be the string after "NumberSequence(" (e.g., "0.5" for "_C-NumberSequence(0.5)" or "0|0.5|0|1|1|0" for "_C-NumberSequence(0|0.5|0|1|1|0").
 	-- For simple cases (single number), creates a NumberSequence with two keypoints at times 0 and 1 with the same value.
 	-- For complex cases, splits v on "|" to extract time|value|envelope triplets, validates each as a number, and creates NumberSequenceKeypoint objects.
 	-- Warns if keypoint times are outside [0,1] or not sorted (severity 0).
 	-- Returns (NumberSequence, true) on success or (nil, false) with a warning (severity 1) for invalid inputs (non-numeric values or incorrect part count).
-	["s"] = function(v: string): (NumberSequence?, boolean)
-		if not v:find("|") then
+	[string.byte("s")] = function(v: string): (NumberSequence?, boolean)
+		if not string.find(v, "|") then
 			local value = tonumber(v)
 			if not value then
 				DoWarn(1, `Invalid NumberSequence value, expected a number: {v}`)
@@ -764,7 +774,7 @@ local RobloxDatatypeCallbacksDecode = {
 		end
 
 		-- Complex case: split by "|" for time|value|envelope triplets
-		local parts = v:split("|")
+		local parts = string.split(v, "|")
 		local partsLength = #parts
 
 		local length = partsLength / 3
@@ -847,8 +857,8 @@ local RobloxDatatypeCallbacksDecode = {
 	-- Splits v on "|" to extract 6 numbers (x|y|z for Origin, x|y|z for Direction).
 	-- Uses Ray.new(Origin, Direction) to reconstruct the Ray.
 	-- Returns (Ray, true) on success or (nil, false) with a warning (severity 1) for invalid inputs (non-numeric values or incorrect part count).
-	["y"] = function(v: string): (Ray?, boolean)
-		local parts = v:split("|")
+	[string.byte("y")] = function(v: string): (Ray?, boolean)
+		local parts = string.split(v, "|")
 		if #parts ~= 6 then
 			DoWarn(1, `Malformed Ray value, expected 6 numbers (x|y|z|x|y|z): {v}`)
 			return nil, false
@@ -870,8 +880,8 @@ local RobloxDatatypeCallbacksDecode = {
 	-- Splits v on "|" to extract 4 numbers (minX|minY|maxX|maxY).
 	-- Uses Rect.new(minX, minY, maxX, maxY) to reconstruct the Rect.
 	-- Returns (Rect, true) on success or (nil, false) with a warning (severity 1) for invalid inputs (non-numeric values or incorrect part count).
-	["m"] = function(v: string): (Rect?, boolean)
-		local parts = v:split("|")
+	[string.byte("m")] = function(v: string): (Rect?, boolean)
+		local parts = string.split(v, "|")
 		if #parts ~= 4 then
 			DoWarn(1, `Malformed Rect value, expected 4 numbers (minX|minY|maxX|maxY): {v}`)
 			return nil, false
@@ -890,8 +900,8 @@ local RobloxDatatypeCallbacksDecode = {
 	-- Splits v on "|" to extract 2 numbers (Scale|Offset).
 	-- Uses UDim.new(Scale, Offset) to reconstruct the UDim.
 	-- Returns (UDim, true) on success or (nil, false) with a warning (severity 1) for invalid inputs (non-numeric values or incorrect part count).
-	["u"] = function(v: string): (UDim?, boolean)
-		local parts = v:split("|")
+	[string.byte("u")] = function(v: string): (UDim?, boolean)
+		local parts = string.split(v, "|")
 		if #parts ~= 2 then
 			DoWarn(1, `Malformed UDim value, expected 2 numbers (Scale|Offset): {v}`)
 			return nil, false
@@ -910,8 +920,8 @@ local RobloxDatatypeCallbacksDecode = {
 	-- Splits v on "|" to extract 4 numbers (xScale|xOffset|yScale|yOffset).
 	-- Uses UDim2.new(xScale, xOffset, yScale, yOffset) to reconstruct the UDim2.
 	-- Returns (UDim2, true) on success or (nil, false) with a warning (severity 1) for invalid inputs (non-numeric values or incorrect part count).
-	["U"] = function(v: string): (UDim2?, boolean)
-		local parts = v:split("|")
+	[string.byte("U")] = function(v: string): (UDim2?, boolean)
+		local parts = string.split(v, "|")
 		if #parts ~= 4 then
 			DoWarn(1, `Malformed UDim2 value, expected 4 numbers (xScale|xOffset|yScale|yOffset): {v}`)
 			return nil, false
@@ -930,8 +940,8 @@ local RobloxDatatypeCallbacksDecode = {
 	-- Splits v on "," to extract 2 numbers (x|y).
 	-- Uses Vector2.new(x, y) to reconstruct the Vector2.
 	-- Returns (Vector2, true) on success or (nil, false) with a warning (severity 1) for invalid inputs (non-numeric values or incorrect part count).
-	["2"] = function(v: string): (Vector2?, boolean)
-		local parts = v:split("|")
+	[string.byte("2")] = function(v: string): (Vector2?, boolean)
+		local parts = string.split(v, "|")
 		if #parts ~= 2 then
 			DoWarn(1, `Malformed Vector2 value, expected 2 numbers (x|y): {v}`)
 			return nil, false
@@ -950,8 +960,8 @@ local RobloxDatatypeCallbacksDecode = {
 	-- Splits v on "|" to extract 3 numbers (x|y|z).
 	-- Uses Vector3.new(x, y, z) to reconstruct the Vector3.
 	-- Returns (Vector3, true) on success or (nil, false) with a warning (severity 1) for invalid inputs (non-numeric values or incorrect part count).
-	["V"] = function(v: string): (Vector3?, boolean)
-		local parts = v:split("|")
+	[string.byte("V")] = function(v: string): (Vector3?, boolean)
+		local parts = string.split(v, "|")
 		if #parts ~= 3 then
 			DoWarn(1, `Malformed Vector3 value, expected 3 numbers (x|y|z): {v}`)
 			return nil, false
@@ -968,7 +978,6 @@ local RobloxDatatypeCallbacksDecode = {
 }
 
 
---- those functions below will be refactored later once im done refactoring decode.
 
 local function TryEncode(datatype : string, v : SupportedTypesList?)
 	local cb = RobloxDatatypeCallbacksEncode[datatype] -- O(1)
@@ -978,9 +987,9 @@ local function TryEncode(datatype : string, v : SupportedTypesList?)
 	return `{EncodePrefix}{cb(v)}`
 end
 
-local function TryDecode(datatype: string, v: string): (SupportedTypesList | nil, boolean)
+local function TryDecode(datatype: number, v: string): (SupportedTypesList | nil, boolean)
 	if #v < 1 then
-		if datatype == "Content" then
+		if datatype == string.byte("F") then
 			return Content.none, true
 		end
 		DoWarn(1, `Empty {datatype} value: {v}`)
@@ -1072,7 +1081,7 @@ local function DecodeData(
 		if valueType == "table" then
 			resultData[key] = DecodeData(value :: PrimitiveBasicTable, true)
 		elseif valueType == "number" or valueType == "boolean" or valueType == "buffer" then
-			resultData[key] = value
+			resultData[key] = value :: number | boolean | buffer
 		elseif valueType == "string" then
 			if value == "math.huge" then
 				resultData[key] = math.huge
@@ -1086,11 +1095,33 @@ local function DecodeData(
 			end
 
 			--if not string.match(value :: string, prefixMatchPattern) then
-			if not (value :: string):match(PrefixMatchPattern) then
-				-- just a usual string
-				resultData[key] = value
+			--if not (value :: string):match(PrefixMatchPattern) then
+			--	-- just a usual string
+			--	resultData[key] = value
+			--	continue
+			--end
+			
+			-- Instead of matching `{EncodePrefix}{T}(` where T is the
+			-- Minified Roblox Datatype prefix code from the top comment
+			
+			-- Check if it starts with EncodePrefix
+			-- Check if the second character after the EncodePrefix is "("
+			if string.sub(value :: string, 1, EncodePrefixLength) ~= EncodePrefix then
+				resultData[key] = value :: string
 				continue
 			end
+			
+			local datatype = string.byte(value :: string, DecodeSubLengthBase)
+			if not datatype then
+				resultData[key] = value :: string
+				continue
+			end
+			
+			if string.byte(value :: string, DecodeSubLeftParenthesisLength) ~= 40 then -- "("
+				resultData[key] = value :: string
+				continue
+			end
+			
 			--[[--
 			--string.split(string.sub(value :: string, decodeSubLength), "(")
 			local result = value:sub(decodeSubLength)
@@ -1104,15 +1135,15 @@ local function DecodeData(
 			local encodedValue = result[2]
 			--]]--
 
-			local datatype : string = (value :: string):sub(DecodeSubLengthBase, DecodeSubLengthBase)
-			local encodedValue : string = (value :: string):sub(DecodeSubLength)
+			--local datatype : string = string.sub(value :: string, DecodeSubLengthBase, DecodeSubLengthBase)
+			local encodedValue : string = string.sub(value :: string, DecodeSubLength)
 
 			--print(datatype, encodedValue)
 
 			local decodeResult, decodeSuccess = TryDecode(datatype, encodedValue)
 
 			if not decodeSuccess then
-				resultData[key] = value
+				resultData[key] = value :: SupportedTypesList | nil
 				continue
 			end
 

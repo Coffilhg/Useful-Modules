@@ -1,3 +1,9 @@
+# v1.0.5
+- Made all string and default library calls "obvious" to the compiler (according to **[https://luau.org/performance/#specialized-builtin-function-calls](<https://luau.org/performance/#specialized-builtin-function-calls>)**: "so calling `string.byte` is more efficient than `s:byte`")
+- Improved `TostringColor3` - now capable of optimizing `Color3:ToHex()` values and `FromstringColor3` - now in full parity with `Color3.fromHex()` allowing 3 or 6 digit hexadecimals, with or without `#` at the start + redundant pcall removed
+- Detection of the Encoded values is now faster - instead of `string.match`'ing the `PrefixMatchPattern`, it now does a `string.sub` to confirm the start mathces `EncodePrefix`, then `string.byte` to make sure the **Minified Roblox Datatype prefix code** is present, lastly `string.byte` to confirm second next character is `(` (`40`), confirming the following structure: `{EncodePrefix}{T - Minified Roblox Datatype prefix code}(`
+- `TryDecode` now expects a **number** received from `string.byte` as the `datatype` argument. Also fixed "Content" detection to it's Minified Roblox Datatype prefix code defined in the top comment. All of `RobloxDatatypeCallbacksDecode` keys now wrapped in `string.byte`. Yet it's all still compatible with the previous versions!
+
 # v1.0.4
 - Optimized the code by adding `local` keyword everywhere it was missing and romoved all `pairs`/`ipairs`
 - Added `table.freeze` on the module table to make it secure and read-only
