@@ -18,12 +18,12 @@ This library intentionally favors **explicitness, performance, and Roblox semant
 - **[Wally](<https://wally.run/package/coffilhg/coffeeobjects>)**
 
     ```toml
-    CoffeeObjects = "coffilhg/coffeeobjects@2.3.4"
+    CoffeeObjects = "coffilhg/coffeeobjects@2.3.5"
     ```
 - **Rotriever**
 
     ```toml
-    CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.3.4"
+    CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.3.5"
     ```
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[CoffeeObjects](<https://create.roblox.com/store/asset/1234567890/CoffeeObjects>)**-->
 

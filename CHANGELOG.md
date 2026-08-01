@@ -1,3 +1,6 @@
+# v2.3.5
+- Patch `script.Parent.Packages.{DepenedencyModuleName}` -> `script.Parent.{DepenedencyModuleName}`
+
 # v2.3.4
 - Dependencies:
     - Swap **[PerfectSignal](<https://github.com/Coffilhg/PerfectSignal>)** for **[LemonSignal](<https://github.com/Data-Oriented-House/LemonSignal>)**

@@ -20,16 +20,16 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
-    Module Version: 2.3.4
+    Module Version: 2.3.5
 --]]--
 --!optimize 2
 
 --- Dependencies ---
 
 -- Signal Source Repository: https://github.com/Data-Oriented-House/LemonSignal
-local LemonSignal = require(script.Parent.Packages.LemonSignal) -- or wherever it's located and whatever it's named
+local LemonSignal = require(script.Parent.LemonSignal) -- or wherever it's located and whatever it's named
 -- CoffeeParser Source Repository: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser
-local CoffeeParser = require(script.Parent.Packages.CoffeeParser) -- or wherever it's located and whatever it's named
+local CoffeeParser = require(script.Parent.CoffeeParser) -- or wherever it's located and whatever it's named
 
 --- /E Dependencies ---
 
