@@ -122,88 +122,34 @@ local function GetPathMethod(self: CoffeeBaseValue | CoffeeFolder) : {[number]: 
 	local path : {TableIndex} = {}
 	local current = self
 	local parent = rawget(current, "_parent")
+	local endId = 0
 
 	-- after this loop is complete, path is actually backwards from what is expected
 	while parent do
 		-- the _key will only be nil if it's the root, but since the root does
 		-- not have a _parent, the loop stops and root' _key (nil) is not read
-		table.insert(path, rawget(current, "_key") :: TableIndex) -- O(1) instead of table.insert(path, 1, rawget(current, "_key") :: TableIndex) O(n)
+		local key = rawget(current, "_key") :: TableIndex
+		endId += 1
+
+		path[endId] = key -- O(1) instead of table.insert O(n)
 
 		current = parent
 		parent = rawget(current, "_parent")
 	end
 
 	-- reverse
-	local length = #path
-	for i = 1, math.floor(length/2) do
-		local j = length - i + 1
-		path[i], path[j] = path[j], path[i]
+	local startId = 1
+	while startId < endId do
+		path[startId], path[endId] = path[endId], path[startId]
+
+		startId += 1
+		endId -= 1
 	end
 
 	return path
 end
---- Methods REQUIRED by CoffeeFolder ---
 
--- Determines if the folder contains sequential numeric keys (behaving like an array/tuple).
--- Returns true if it is an array/tuple, or false if it is a dictionary.
--- @return boolean.
-local function IsArrayORTupleMethod(self : CoffeeFolder) : boolean
-	if #self == 0 then
-		-- if a table is really empty, next will return nil
-		return next(self._data) == nil -- Not an array or a tuple
-	end
-	return true
-end
-
--- Appends a new value to the end of the folder, provided the folder is an array/tuple.
--- Automatically wraps raw tables into CoffeeFolders and primitives into CoffeeBaseValues.
--- @param newValue The value to be wrapped and inserted.
-local function InsertMethod(self : CoffeeFolder, newValue : TableValue)
-	if not self:_IsArrayORTuple() then
-		warn("Can't :Insert to a Dictionary!")
-		return
-	end
-
-	local index = #self + 1
-
-	self[index] = newValue
-end
-
--- Returns the internal data table containing all children.
--- @return A dictionary of keys to CoffeeBaseValues or CoffeeFolders.
-local function GetChildrenMethod(self : CoffeeFolder) : {[TableIndex]: CoffeeFolder | CoffeeBaseValue}
-	return self._data
-end
-
--- Destroys the Folder and all of its children recursively.
--- Disconnects all internal signals.
-local function DestroyMethod(self : CoffeeFolder)
-	self._Destroying:Fire()
-	self.Destroying:Fire()
-
-	self._Destroying:DisconnectAll()
-	self.Destroying:DisconnectAll()
-
-	self.ChildAdded:DisconnectAll()
-	self.ChildRemoved:DisconnectAll()
-
-	for _, item in self._data do
-		local destroy = item["Destroy"]
-		if destroy then
-			destroy(
-				item -- self
-			)
-		end
-	end
-
-	rawset(self, "_data", nil)
-	rawset(self, "_parent", nil)
-	rawset(self, "_key", nil)
-
-	setmetatable(self, nil)
-end
-
---- /E Methods REQUIRED by CoffeeFolder ---
+--- /E GetPathMethod REQUIRED by CoffeeBaseValue AND CoffeeFolder ---
 
 
 
@@ -279,6 +225,8 @@ function Value:Destroy()
 	setmetatable(self, nil)
 end
 
+Value.GetPath = GetPathMethod
+
 -- Creates a new Value instance with a default value, mimicking Roblox BaseValue instances. (Limited To Supported Types; Supports some types, that BaseValues don't).
 -- @param defaultValue The initial value for the Value instance. Must be one of SupportedTypesList.
 -- @return A Value instance with properties Value, Changed, and Destroy.
@@ -293,7 +241,7 @@ function CoffeeBaseValue.new(defaultValue : SupportedTypesList) : CoffeeBaseValu
 	rawset(self, "Changed", LemonSignal.new())
 	rawset(self, "Destroying", LemonSignal.new())
 	rawset(self, "_Destroying", LemonSignal.new())
-	rawset(self, "GetPath", GetPathMethod)
+	--rawset(self, "GetPath", GetPathMethod)
 
 	return self
 end
@@ -332,7 +280,7 @@ end
 
 
 
---- CoffeeFolder REQUIRES Signal AND GetPathMethod AND CoffeeBaseValue AND InsertMethod ---
+--- CoffeeFolder REQUIRES Signal AND GetPathMethod AND CoffeeBaseValue ---
 local CoffeeFolder = {}
 module.CoffeeFolder = CoffeeFolder
 
@@ -419,11 +367,18 @@ function Folder:__newindex(key : TableIndex, newValue : TableValue)
 	self.ChildAdded:Fire(key, itemToStore)
 end
 
--- Provides access to children stored in the internal _data table.
+-- Provides access to methdos stored on the metatable and children stored in the internal _data table.
 -- @param key The name or index of the child to retrieve.
--- @return The CoffeeBaseValue or CoffeeFolder associated with the key.
+-- @return The Method associated with the key or the CoffeeBaseValue or CoffeeFolder associated with the key.
 function Folder:__index(key : TableIndex)
-	return rawget(self._data, key)
+	local method = rawget(Folder, key)
+	if method ~= nil then
+		return method
+	end
+	return rawget(
+		rawget(self, "_data"),
+		key
+	)
 end
 
 -- Allows the folder to be used in generic 'for' loops (e.g.: for key, child in folder do ... end).
@@ -434,6 +389,7 @@ end
 -- Returns the count of children if the folder is an array/tuple.
 -- Works the same way as #, this metamethod is just a proxy.
 -- Expect same quirks in behavior as with #table
+-- Counting elements in a 30-element CoffeeFolder 1M times takes ~0.22s - efficient for Roblox use <- those are results with a "fixed" behavior of #; With current proxy approach the quirks are back, but the same benchmark shows it takes only ~0.045s. https://github.com/Coffilhg/Useful-Modules/blob/CoffeeObjects/src/Tests/Benchmark__len.luau
 function Folder:__len()
 	local data = rawget(self, "_data")
 	if not data then
@@ -442,6 +398,67 @@ function Folder:__len()
 	return #data
 end
 
+-- Determines if the folder contains sequential numeric keys (behaving like an array/tuple).
+-- Returns true if it is an array/tuple, or false if it is a dictionary.
+-- @return boolean.
+function Folder._IsArrayORTuple(self : CoffeeFolder) : boolean
+	if #self == 0 then
+		-- if a table is really empty, next will return nil
+		return next(rawget(self, "_data")) == nil -- Not an array or a tuple
+	end
+	return true
+end
+
+-- Appends a new value to the end of the folder, provided the folder is an array/tuple.
+-- Automatically wraps raw tables into CoffeeFolders and primitives into CoffeeBaseValues.
+-- @param newValue The value to be wrapped and inserted.
+function Folder.Insert(self : CoffeeFolder, newValue : TableValue)
+	if not self:_IsArrayORTuple() then
+		warn("Can't :Insert to a Dictionary!")
+		return
+	end
+
+	local index = #self + 1
+
+	self[index] = newValue
+end
+
+-- Returns the internal data table containing all children.
+-- @return A dictionary of keys to CoffeeBaseValues or CoffeeFolders.
+function Folder.GetChildren(self : CoffeeFolder) : {[TableIndex]: CoffeeFolder | CoffeeBaseValue}
+	return rawget(self, "_data")
+end
+
+-- Destroys the Folder and all of its children recursively.
+-- Disconnects all internal signals.
+function Folder.Destroy(self : CoffeeFolder)
+	self._Destroying:Fire()
+	self.Destroying:Fire()
+
+	self._Destroying:DisconnectAll()
+	self.Destroying:DisconnectAll()
+
+	self.ChildAdded:DisconnectAll()
+	self.ChildRemoved:DisconnectAll()
+	
+	local data = rawget(self, "_data")
+	for _, item in data do
+		local destroy = item["Destroy"]
+		if destroy then
+			destroy(
+				item -- self
+			)
+		end
+	end
+
+	rawset(self, "_data", nil)
+	rawset(self, "_parent", nil)
+	rawset(self, "_key", nil)
+
+	setmetatable(self, nil)
+end
+
+Folder.GetPath = GetPathMethod
 
 -- Creates a new CoffeeFolder instance, mimicking a Roblox Folder Instance.
 -- @param data Optional initial table to populate the folder with.
@@ -453,11 +470,7 @@ function CoffeeFolder.new(data : ({} & PrimitiveTable)?) : CoffeeFolder
 	rawset(self, "ChildRemoved", LemonSignal.new())
 	rawset(self, "Destroying", LemonSignal.new())
 	rawset(self, "_Destroying", LemonSignal.new())
-	rawset(self, "_IsArrayORTuple", IsArrayORTupleMethod)
-	rawset(self, "Insert", InsertMethod)
-	rawset(self, "GetPath", GetPathMethod)
-	rawset(self, "GetChildren", GetChildrenMethod)
-	rawset(self, "Destroy", DestroyMethod)
+	--rawset(self, "GetPath", GetPathMethod)
 
 	if type(data) ~= "table" then
 		return self

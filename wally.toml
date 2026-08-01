@@ -1,7 +1,7 @@
 [package]
 name = "coffilhg/coffeeobjects"
 description = "CoffeeFolder and CoffeeBaseValue Class implementation for parity with most important methods/properties of Roblox' Folder and BaseValue Instances"
-version = "2.3.3"
+version = "2.3.4"
 license = "Apache-2.0"
 authors = ["Coffilhg <coffilhg@gmail.com>"]
 repository = "https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects"
@@ -11,5 +11,5 @@ realm = "shared"
 exclude = ["src/Tests/**/*", "src/Examples/**/*"]
 
 [dependencies]
-CoffeeParser = "coffilhg/coffeeparser@1.0.3"
-PerfectSignal = "coffilhg/perfectsignal@1.0.1"
+CoffeeParser = "coffilhg/coffeeparser@1.0.*"
+LemonSignal = "data-oriented-house/lemonsignal@2.0.0"

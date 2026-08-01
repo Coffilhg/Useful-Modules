@@ -2,7 +2,7 @@
 name = "coffilhg/coffeeobjects"
 author = "Coffilhg"
 content_root = "src"
-version = "2.3.3"
+version = "2.3.4"
 license = "Apache-2.0"
 
 [dependencies]
