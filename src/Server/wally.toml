@@ -1,7 +1,7 @@
 [package]
 name = "coffilhg/coffeeremotes-server"
 description = "CoffeeRemotes is a lightweight QoL wrapper for Remote Instances - RemoteEvent, RemoteFunction and UnreliableRemoteEvent Instances; Adds easily configurable Cooldowns for the Client -> Server traffic; No more path defitions needed, simply do CoffeeRemotes.[RemoteEvent | RemoteFunction | UnreliableRemoteEvent].new(`Example`) on both the server and client side to enable communication thereof, the wrapper will automatically find the Remote Instance; This erases the need to write the full path to remote or even keep track of how to organize it, the module will warn you if you've used the same name for a remote of the same kind already. Please make sure you're also using the Client-Side part of CoffeeRemotes (Refined) - List it as part of your wally [dependencies] and make sure their versions match;"
-version = "1.0.0"
+version = "1.0.1"
 license = "MPL-2.0"
 authors = ["Coffilhg <coffilhg@gmail.com>"]
 repository = "https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotesRefined"

@@ -1,5 +1,5 @@
 --[[--
-    CoffeeRemotesRefined (Server-Side) V1.0.0
+    CoffeeRemotesRefined (Server-Side) V1.0.1
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -12,7 +12,7 @@
     
     Please make sure you're also using the Client-Side part of CoffeeRemotes (Refined)!
     List this as part of your wally [dependencies] (and make sure their versions match):
-    CoffeeRemotesClient = "coffilhg/coffeeremotes-client@1.0.0"
+    CoffeeRemotesClient = "coffilhg/coffeeremotes-client@1.0.1"
 --]]--
 --!strict
 --!optimize 2
@@ -24,7 +24,7 @@ local RS = game:GetService(`ReplicatedStorage`)
 local Debris = game:GetService(`Debris`)
 
 -- The following Three must match on Both Server and Client Side versions of the Module
-local ModuleVersion: string = `V1_0_0` -- must be compatible with query descendants in a way that...
+local ModuleVersion: string = `V1_0_1` -- must be compatible with query descendants in a way that...
 local MainFolderName: string = `CoffeeRemotesRefined`
 local ModuleFoldersTag: string = `CoffeeRemotesRefined_{ModuleVersion}` -- ...this is evaluated as a SINGLE Tag
 
@@ -45,7 +45,7 @@ local RFER_NotFound = IsStudio and
 	function()
 		return RFER_TooQuick
 	end
-local RFER_PlayerLeft = IsStudio and {`Player Has Left`} or RFER_TooQuick
+local RFER_PlayerLeft = IsStudio and {`Player Has Left or the PlayerCooldowns[KindOf][UID] was Wiped`} or RFER_TooQuick
 
 --- Default Cooldown (in seconds) between calls per EventName ---
 local RemoteEventCooldown: number = 0.03
@@ -541,9 +541,9 @@ function RemoteEventBaseClass.new<T>(
 
 
 
-		local lastCallTime = playerEntry[name] or 0
+		local lastCallTime = playerEntry[name]
 		local now = os.clock()
-		if now - lastCallTime < cooldownTime then
+		if type(lastCallTime) == `number` and now - lastCallTime < cooldownTime then
 			return
 		end
 
@@ -719,9 +719,9 @@ function RemoteFunction.new(name: string): RemoteFunctionType
 
 
 
-		local lastCallTime = playerEntry[name] or 0
+		local lastCallTime = playerEntry[name]
 		local now = os.clock()
-		if now - lastCallTime < cooldownTime then
+		if type(lastCallTime) == `number` and now - lastCallTime < cooldownTime then
 			return false, RFER_TooQuick
 		end
 

@@ -1,5 +1,5 @@
 --[[--
-    CoffeeRemotesRefined (Client-Side) V1.0.0
+    CoffeeRemotesRefined (Client-Side) V1.0.1
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -12,7 +12,7 @@
     
     Please make sure you're also using the Server-Side part of CoffeeRemotes (Refined)!
     List this as part of your wally [server-dependencies] (and make sure their versions match):
-    CoffeeRemotesServer = "coffilhg/coffeeremotes-server@1.0.0"
+    CoffeeRemotesServer = "coffilhg/coffeeremotes-server@1.0.1"
 --]]--
 --!strict
 --!optimize 2
@@ -22,7 +22,7 @@ local RunS = game:GetService(`RunService`)
 local RS = game:GetService(`ReplicatedStorage`)
 
 -- The following Three must match on Both Server and Client Side versions of the Module
-local ModuleVersion: string = `V1_0_0`
+local ModuleVersion: string = `V1_0_1`
 local MainFolderName: string = `CoffeeRemotesRefined`
 local ModuleFoldersTag: string = `CoffeeRemotesRefined_{ModuleVersion}`
 
