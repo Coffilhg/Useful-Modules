@@ -73,11 +73,11 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> 
 	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vEasySmoothDamp/1.0.3>)**        
 	> ```toml        
-	> EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.3"
+	> EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.3"        
 	> ```
 	> **[Wally](<https://wally.run/package/coffilhg/easysmoothdamp>)**        
 	> ```toml        
-	> EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.3"
+	> EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.3"        
 	> ```
 - **[FirstPersonDetector](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonDetector>)**
 
@@ -87,11 +87,11 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> 
 	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vFirstPersonDetector/1.0.0>)**        
 	> ```toml        
-	> FirstPersonDetector = "github.com/Coffilhg/Useful-Modules@FirstPersonDetector/1.0.0"
+	> FirstPersonDetector = "github.com/Coffilhg/Useful-Modules@FirstPersonDetector/1.0.0"        
 	> ```
 	> **[Wally](<https://wally.run/package/coffilhg/firstpersondetector>)**        
 	> ```toml        
-	> FirstPersonDetector = "coffilhg/firstpersondetector@1.0.0"
+	> FirstPersonDetector = "coffilhg/firstpersondetector@1.0.0"        
 	> ```
 - **[FirstPersonView](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonView>)**
 
@@ -101,11 +101,11 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> 
 	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vFirstPersonView/1.0.0>)**        
 	> ```toml        
-	> FirstPersonView = "github.com/Coffilhg/Useful-Modules@FirstPersonView/1.0.0"
+	> FirstPersonView = "github.com/Coffilhg/Useful-Modules@FirstPersonView/1.0.0"        
 	> ```
 	> **[Wally](<https://wally.run/package/coffilhg/firstpersonview>)**        
 	> ```toml        
-	> FirstPersonView = "coffilhg/firstpersonview@1.0.0"
+	> FirstPersonView = "coffilhg/firstpersonview@1.0.0"        
 	> ```
 - **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)** (Apache-2.0)
 - **[GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)** (Apache-2.0)
@@ -117,11 +117,11 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> 
 	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vHumanoidCameraOffsetController/1.0.1>)**        
 	> ```toml        
-	> HumanoidCameraOffsetController = "github.com/Coffilhg/Useful-Modules@HumanoidCameraOffsetController/1.0.1"
+	> HumanoidCameraOffsetController = "github.com/Coffilhg/Useful-Modules@HumanoidCameraOffsetController/1.0.1"        
 	> ```
 	> **[Wally](<https://wally.run/package/coffilhg/humanoidcameraoffsetcontroller>)**        
 	> ```toml        
-	> HumanoidCameraOffsetController = "coffilhg/humanoidcameraoffsetcontroller@1.0.1"
+	> HumanoidCameraOffsetController = "coffilhg/humanoidcameraoffsetcontroller@1.0.1"        
 	> ```
 - **[ServerMessages](<https://github.com/Coffilhg/Useful-Modules/tree/ServerMessages>)** (Apache-2.0)
 
