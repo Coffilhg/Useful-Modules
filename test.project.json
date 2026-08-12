@@ -4,11 +4,11 @@
     "$className": "DataModel",
 
     "ReplicatedStorage": {
-      "PascalCasedModuleName": {
-        "$path": "src/"
-      },
       "Packages": {
-        "$path": "Packages"
+        "$path": "Packages",
+        "PascalCasedModuleName": {
+            "$path": "src/"
+        }
       }
     }
     
