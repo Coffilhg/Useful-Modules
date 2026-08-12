@@ -13,8 +13,8 @@
 
 --- Dependencies (Not By @Coffilhg) ---
 
--- Signal's Source Repository: https://github.com/stravant/goodsignal/blob/master/README.md --
-local Signal = require(script.Parent.GoodSignal) -- or wherever it's located and whatever it's named
+-- Signal's Source Repository: https://github.com/Data-Oriented-House/LemonSignal --
+local Signal = require(script.Parent.LemonSignal) -- or wherever it's located and whatever it's named
 
 --- /E Dependencies (Not By @Coffilhg) ---
 

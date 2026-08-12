@@ -1,0 +1,16 @@
+{
+  "name": "Test Counter",
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedStorage": {
+      "Packages": {
+        "$path": "Packages",
+        "Counter": {
+            "$path": "src/"
+        }
+      }
+    }
+    
+  }
+}

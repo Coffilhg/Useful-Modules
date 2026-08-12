@@ -1,0 +1,8 @@
+[package]
+name = "coffilhg/counter"
+author = "Coffilhg"
+content_root = "src"
+version = "1.0.0"
+license = "MPL-2.0"
+
+[dependencies]
