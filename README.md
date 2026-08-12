@@ -6,6 +6,19 @@ At its core, it is a deterministic, read-only key ↔ index mapper.
 
 ---
 
+## Available Here!
+- **[This repository](src/init.luau) ~ [src/init.luau](src/init.luau)**
+- **[Wally](<https://wally.run/package/coffilhg/arrangement>)**
+
+    ```toml
+    Arrangement = "coffilhg/arrangement@1.0.0"
+    ```
+- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vArrangement/1.0.0>)**
+
+    ```toml
+    Arrangement = "github.com/Coffilhg/Useful-Modules@Arrangement/1.0.0"
+    ```
+
 ## What It Does
 
 - Any unique key is assigned a **monotonically increasing integer**
