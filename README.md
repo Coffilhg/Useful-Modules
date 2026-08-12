@@ -121,11 +121,13 @@ Resolves an index back to its original key.
 
 ## License
 
-Licensed under the Apache License, Version 2.0.
+This module is licensed under the **Mozilla Public License 2.0 (MPL-2.0)**.
 
-You may use, modify, and redistribute this module freely, provided that the original
-copyright notice and license header at the top of the file are preserved.
+#### What this means for Roblox Developers:
+* **Use & Modify:** You can freely use this module in any public, private, or commercial Roblox game.
+* **File-Level Copyleft:** If you modify the source code of this module itself, you must make your modified version of the module publicly available under the MPL 2.0.
+* **No Viral Code Leakage:** Including this module in your game does **not** force you to open-source your other game scripts, UI layouts, or proprietary codebase. 
 
-See the [Apache License 2.0](LICENSE) for full terms.
+See the full terms in the [LICENSE](LICENSE) file.
 
-© 2026 Coffilhg
+Copyright © 2026 @Coffilhg (Roblox UserId 517222346)
