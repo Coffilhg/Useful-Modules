@@ -6,7 +6,20 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 
 ## Quick Module Lookup
 
-- **[Arrangement](<https://github.com/Coffilhg/Useful-Modules/tree/Arrangement>)** (Apache-2.0)
+- **[Arrangement](<https://github.com/Coffilhg/Useful-Modules/tree/Arrangement>)**
+
+	> **MPL-2.0**
+	>
+	> **[Useful-Modules/Arrangement](<https://github.com/Coffilhg/Useful-Modules/tree/Arrangement>)**
+	> 
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vArrangement/2.0.0>)**        
+	> ```toml        
+	> Arrangement = "github.com/Coffilhg/Useful-Modules@Arrangement/2.0.0"
+	> ```
+	> **[Wally](<https://wally.run/package/coffilhg/arrangement>)**        
+	> ```toml        
+	> Arrangement = "coffilhg/arrangement@2.0.0"
+	> ```
 - **[CameraController](<https://github.com/Coffilhg/Useful-Modules/tree/CameraController>)**
 
 	> **MPL-2.0**
@@ -247,7 +260,16 @@ type BranchInfo = {
 
 local Branches: {[number]: BranchInfo} = {
     {
-       ModuleNamePascalCase = "Arrangement"
+       ModuleNamePascalCase = "Arrangement",
+       License = "MPL-2.0",
+       Links = {
+        Wally = {
+            Content = `Arrangement = "coffilhg/arrangement@2.0.0"`,
+        },
+        Rotriever = {
+          Content = `Arrangement = "github.com/Coffilhg/Useful-Modules@Arrangement/2.0.0"`
+        },
+       },
     },
     {
        ModuleNamePascalCase = "CoffeeObjects",
