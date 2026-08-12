@@ -2,7 +2,9 @@
 
 `Arrangement` is a lightweight utility for **assigning stable integer IDs to arbitrary keys** and resolving them back when needed.
 
-At its core, it is a deterministic, read-only key ↔ index mapper.
+At its core, it is a deterministic, key ↔ index mapper.
+
+> index / indices / id / identifier - refer to the same concept - the return value of `Arrangement[key]`
 
 ---
 
@@ -11,20 +13,20 @@ At its core, it is a deterministic, read-only key ↔ index mapper.
 - **[Wally](<https://wally.run/package/coffilhg/arrangement>)**
 
     ```toml
-    Arrangement = "coffilhg/arrangement@1.0.0"
+    Arrangement = "coffilhg/arrangement@2.0.0"
     ```
-- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vArrangement/1.0.0>)**
+- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vArrangement/2.0.0>)**
 
     ```toml
-    Arrangement = "github.com/Coffilhg/Useful-Modules@Arrangement/1.0.0"
+    Arrangement = "github.com/Coffilhg/Useful-Modules@Arrangement/2.0.0"
     ```
 
 ## What It Does
 
 - Any unique key is assigned a **monotonically increasing integer**
-- The same key always resolves to the same index
+- The same key always resolves to the same index (as long as it is not removed by you)
 - Indices can be reversed back into their original keys
-- All internal state is protected (read-only by design)
+- All internal state is protected from direct modification
 
 This makes `Arrangement` suitable anywhere you want to:
 - Replace repeated values with compact identifiers
@@ -35,7 +37,7 @@ This makes `Arrangement` suitable anywhere you want to:
 
 ## Example Use Case (Server ↔ Client Replication)
 
-One (of the many possible) practical use case is **reducing high-frequency remote traffic**.
+One (of the many possible) practical use cases is **reducing high-frequency remote traffic**.
 
 Instead of repeatedly sending long strings or table paths:
 
@@ -105,6 +107,8 @@ You could use it for anything you come up with.
 
 If you can benefit from **"assign once, reuse forever" ids**, it likely fits.
 
+> **You can reuse an assigned id for as long as its key remains in the Arrangement. Removing the key invalidates its previous id**
+
 ---
 
 ## API
@@ -116,19 +120,92 @@ Creates a new Arrangement instance.
 ### `Arrangement[key] → number`
 
 Returns the index for a key.
-Creates a new one if it doesn’t exist. (Starts with 0)
 
-### `Arrangement:GetKeyByIndex(index) → key`
+Creates a new one if it doesn’t exist. (Starts with 1)
+
+`Arrangement[nil]` is an exception and always returns 0
+
+### `Arrangement:GetKeyByIndex(index) → key?`
 
 Resolves an index back to its original key.
+
+`Arrangement:GetKeyByIndex(0) → nil` (since `nil` is an exception)
+
+### `Arrangement:RemoveArrangementByKey(key)`
+
+Removes the key from the Arrangement, invalidating its previous id
+
+You should be careful, because using `Arrangement:GetKeyByIndex` with the previously valid index will now return `nil`, because the entry was removed.
+
+Make sure nothing still references it before wiping
+
+Can be achieved by doing `Arrangement[key] = nil`
+
+**Removed ids are never reused.**
+
+### `Arrangement:RemoveArrangementByIndex(index)`
+
+Removes the key entry associated with the given index
+
+Effectively the same as:
+```lua
+Arrangement:RemoveArrangementByKey(
+    Arrangement:GetKeyByIndex(index)
+)
+```
+
+---
+
+## Compact test
+
+```lua
+local FruitArrangements = Arrangement.new()
+
+local AppleId = FruitArrangements.Apple
+print(AppleId) -- 1
+
+local WatermelonId = FruitArrangements.Watermelon
+print(WatermelonId) -- 2
+print(FruitArrangements.Apple) -- 1
+
+FruitArrangements:RemoveArrangementByKey("Apple") -- wipe Apple
+print(FruitArrangements:GetKeyByIndex(AppleId)) -- nil (no longer there)
+print(FruitArrangements.Apple) -- 3
+
+FruitArrangements.Watermelon = nil -- same as FruitArrangements:RemoveArrangementByKey("Watermelon")
+print(FruitArrangements.Watermelon) -- 4
+print(FruitArrangements:GetKeyByIndex(4)) -- "Watermelon"
+
+FruitArrangements:RemoveArrangementByIndex(4)
+print(FruitArrangements:GetKeyByIndex(4)) -- nil
+
+
+
+-- nil
+print(FruitArrangements[nil]) -- 0
+print(FruitArrangements:GetKeyByIndex(0)) -- nil
+
+FruitArrangements:RemoveArrangementByKey(nil) -- the only case when these methods do nothing
+FruitArrangements:RemoveArrangementByIndex(0) -- the only case when these methods do nothing
+
+print(FruitArrangements[nil]) -- 0
+print(FruitArrangements:GetKeyByIndex(0)) -- nil
+```
 
 ---
 
 ## Notes
 
-* Indexing starts at **0**
+* Indexing starts at **1**
 * Keys are stored exactly as provided
 * Lifetime and synchronization strategy are intentionally left to the user
+* `nil` is an exception, never an entry and always returns 0
+    > Trying to remove it does nothing because it is never stored; it is handled as a special case
+    ```lua
+    Arrangement:RemoveArrangementByKey(nil) -- does nothing
+    Arrangement:RemoveArrangementByIndex(0) -- does nothing
+    ```
+* Removed ids are never reused
 
 ---
 

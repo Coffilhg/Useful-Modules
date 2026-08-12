@@ -1,7 +1,7 @@
 [package]
 name = "coffilhg/arrangement"
 description = "Arrangement is a lightweight utility for assigning stable integer IDs to arbitrary keys and resolving them back when needed."
-version = "1.0.0"
+version = "2.0.0"
 license = "MPL-2.0"
 authors = ["Coffilhg <coffilhg@gmail.com>"]
 repository = "https://github.com/Coffilhg/Useful-Modules/tree/Arrangement"
