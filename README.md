@@ -77,7 +77,20 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml        
 	> CoffeeRemotesServer = "coffilhg/coffeeremotes-server@1.0.1"
 	> ```
-- **[Counter](<https://github.com/Coffilhg/Useful-Modules/tree/Counter>)** (Apache-2.0)
+- **[Counter](<https://github.com/Coffilhg/Useful-Modules/tree/Counter>)**
+
+	> **MPL-2.0**
+	>
+	> **[Useful-Modules/Counter](<https://github.com/Coffilhg/Useful-Modules/tree/Counter>)**
+	> 
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCounter/1.0.0>)**        
+	> ```toml        
+	> Counter = "github.com/Coffilhg/Useful-Modules@Counter/1.0.0"
+	> ```
+	> **[Wally](<https://wally.run/package/coffilhg/counter>)**        
+	> ```toml        
+	> Counter = "coffilhg/counter@1.0.0"
+	> ```
 - **[EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
 
 	> **MPL-2.0**
@@ -297,7 +310,16 @@ local Branches: {[number]: BranchInfo} = {
        ModuleNamePascalCase = "CoffeeRemotes"
     },
     {
-       ModuleNamePascalCase = "Counter"
+       ModuleNamePascalCase = "Counter",
+       License = "MPL-2.0",
+       Links = {
+        Wally = {
+            Content = `Counter = "coffilhg/counter@1.0.0"`,
+        },
+        Rotriever = {
+          Content = `Counter = "github.com/Coffilhg/Useful-Modules@Counter/1.0.0"`
+        },
+       },
     },
     {
        ModuleNamePascalCase = "EasySmoothDamp",
