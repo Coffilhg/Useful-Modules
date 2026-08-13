@@ -18,12 +18,12 @@ This library intentionally favors **explicitness, performance, and Roblox semant
 - **[Wally](<https://wally.run/package/coffilhg/coffeeobjects>)**
 
     ```toml
-    CoffeeObjects = "coffilhg/coffeeobjects@2.3.5"
+    CoffeeObjects = "coffilhg/coffeeobjects@2.3.6"
     ```
 - **Rotriever**
 
     ```toml
-    CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.3.5"
+    CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.3.6"
     ```
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[CoffeeObjects](<https://create.roblox.com/store/asset/1234567890/CoffeeObjects>)**-->
 
@@ -51,7 +51,7 @@ This library intentionally favors **explicitness, performance, and Roblox semant
    [https://github.com/stravant/goodsignal](https://github.com/stravant/goodsignal)
 3. Require the module:
 
-```luau
+```lua
 local CoffeeObjects = require(path.To.CoffeeObjects)
 ```
 
@@ -61,7 +61,7 @@ local CoffeeObjects = require(path.To.CoffeeObjects)
 
 ### Creating folders and values
 
-```luau
+```lua
 local CoffeeFolder = CoffeeObjects.CoffeeFolder
 local CoffeeBaseValue = CoffeeObjects.CoffeeBaseValue
 
@@ -83,7 +83,7 @@ Everything is wrapped automatically.
 
 ### Reading & writing values
 
-```luau
+```lua
 print(data.Stats.Honey.Value) -- number: 0
 
 data.Stats.Honey.Value = 10
@@ -91,11 +91,131 @@ data.Stats.Honey.Value = 10
 
 ### Listening for changes
 
-```luau
+```lua
 data.Stats.Honey.Changed:Connect(function(old, new)
 	print(old, "→", new)
 end)
 ```
+
+### Mutable value changes are not detected
+
+**`.Changed` only fires when the `.Value` property is assigned. Mutating the object currently stored in `.Value` does not fire `.Changed`.**
+
+Assignments to `.Value` fire `.Changed`, including compound assignments such as `+=`, `*=`, `/=`, `-=`.
+
+You can manually fire `.Changed` after mutating a value, but be aware that `old == new` may still be true if both arguments reference the same mutable object or the arguments you've passed to `.Changed:Fire(old, new)` are the same value.
+
+<details>
+
+<summary><strong>Example with buffer</strong></summary>
+
+```lua
+local function ReadBinary(bufferToRead: buffer, startBit: number, endBit: number): string
+	if startBit == endBit then
+		return `{buffer.readbits(bufferToRead, startBit, 1)}`
+	end
+	if startBit > endBit then
+		local originalEnd: number = endBit
+		endBit = startBit
+		startBit = originalEnd
+	end
+
+	local result = {}
+
+	for i = startBit, endBit do
+		table.insert(result, buffer.readbits(bufferToRead, i, 1))
+	end
+
+	return table.concat(result, "")
+end
+
+local function ReadAllBinary(bufferToRead: buffer): string
+	return ReadBinary(
+		bufferToRead,
+		0,
+		buffer.len(bufferToRead)*8 - 1 -- buffers are 0-indexed
+	)
+end
+
+-- type is automatically CoffeeObjects.CoffeeBaseValueStrict<buffer>
+-- because we are using the strictNew
+local BufferValue = CoffeeBaseValue.strictNew(buffer.create(3))
+
+BufferValue.Changed:Connect(function(old, new)
+	local isTheSame = old == new -- this will always be true with approach #1
+	local oldBinary = ReadAllBinary(old)
+	local newBinary = ReadAllBinary(new)
+	
+	print(`{isTheSame}\nOld: {oldBinary}\n |\n\\ /\nNew: {newBinary}`)
+end)
+
+-- approach #1: you could change the buffer and Fire the signal!
+buffer.writeu8(BufferValue.Value, 1, 255)
+BufferValue.Changed:Fire(BufferValue.Value, BufferValue.Value)
+
+-- approach #2: you could make a copy and change the .Value
+local old = BufferValue.Value
+local new = buffer.create(buffer.len(old))
+buffer.copy(new, 0, old) -- make copy
+buffer.writeu8(new, 2, 5) -- modify copy
+
+BufferValue.Value = new -- update
+```
+
+if you run this, you'll see the following output for both approaches
+```lua
+  true
+Old: 000000001111111100000000
+ |
+\ /
+New: 000000001111111100000000
+  false
+Old: 000000001111111100000000
+ |
+\ /
+New: 000000001111111110100000
+```
+
+</details>
+
+<details>
+
+<summary><strong>Example with CFrame</strong></summary>
+
+```lua
+local CFrameValue = CoffeeBaseValue.strictNew(CFrame.identity)
+
+CFrameValue.Changed:Connect(function(old, new)
+	print("Change detected:", old, "\t->\t", new)
+end)
+
+CFrameValue.Value:Lerp(CFrame.new(1, 0, 1), 0.5) -- stays undetected
+print(CFrameValue.Value) -- although the CFrame changes
+
+-- that is detected
+CFrameValue.Value = CFrameValue.Value:Lerp(CFrame.new(0, 0, 0), 0.5)
+```
+
+</details>
+
+<details>
+
+<summary><strong>Example with Vector3</strong></summary>
+
+```lua
+local Vector3Value = CoffeeBaseValue.strictNew(Vector3.zero)
+
+Vector3Value.Changed:Connect(function(old, new)
+	print("Change detected:", old, "\t->\t", new)
+end)
+
+Vector3Value.Value += Vector3.new(1, 2, 3) -- detected --   Change detected: 0, 0, 0 	->	 1, 2, 3
+Vector3Value.Value *= 3 -- detected --   Change detected: 1, 2, 3 	->	 3, 6, 9
+Vector3Value.Value /= 2 -- detected --   Change detected: 3, 6, 9 	->	 1.5, 3, 4.5
+Vector3Value.Value -= Vector3.new(5, 5, 5) -- detected --   Change detected: 1.5, 3, 4.5 	->	 -3.5, -2, -0.5
+```
+
+</details>
 
 ---
 
@@ -111,7 +231,7 @@ The internal fields have an export type definition if you ever truly need those.
 
 ### Child signals
 
-```luau
+```lua
 data.ChildAdded:Connect(function(key, child)
 	print("Added:", key)
 end)
@@ -127,7 +247,7 @@ end)
 
 Every object knows where it lives in the tree:
 
-```luau
+```lua
 print(data.Stats.Honey:GetPath())
 -- { "Stats", "Honey" }
 ```
@@ -141,7 +261,7 @@ Keep that in mind when making a DeepCopy() - ignore "_parent" key when it's a Co
 
 `CoffeeFolder` distinguishes **array-like** folders from dictionaries using Roblox semantics:
 
-```luau
+```lua
 print(#data.Inventory, data.Inventory:_IsArrayORTuple())
 -- 2, true
 
@@ -151,7 +271,7 @@ print(#data.Stats, data.Stats:_IsArrayORTuple())
 
 ### Inserting into arrays
 
-```luau
+```lua
 data.Inventory:Insert("Potion")
 ```
 
@@ -165,7 +285,7 @@ Attempting to insert into a dictionary will warn and do nothing.
 
 When you overwrite an existing key or index in a `CoffeeFolder`:
 
-```luau
+```lua
 data.Stats.Honey = 25
 ```
 
@@ -176,7 +296,7 @@ data.Stats.Honey = 25
 This behavior is **intentional and NOT configurable**.
 **If you want to avoid such behavior**, do this:
 
-```luau
+```lua
 -- instead of overwriting the index as in example above (data.Stats.Honey = 25)
 -- use the API!
 data.Stats.Honey.Value = 25
@@ -188,7 +308,7 @@ data.Stats.Honey.Value = 25
 
 Functions like:
 
-```luau
+```lua
 CoffeeBaseValue.validateUnlinkedClass(v)
 CoffeeFolder.validateUnlinkedClass(v)
 ```
@@ -203,7 +323,7 @@ exist to support:
 
 If you want stricter validation, you can add a marker:
 
-```luau
+```lua
 rawset(self, "__coffee", "BaseValue")
 -- or
 rawset(self, "__coffee", "Folder")
@@ -235,7 +355,7 @@ Destroying a folder:
 * clears parent links
 * removes the metatable
 
-```luau
+```lua
 data:Destroy()
 ```
 
@@ -245,10 +365,19 @@ If you understand Roblox' `Folder` and `BaseValue`, you already understand this 
 
 ---
 
+## DEPENDENCIES
+
+- **[LemonSignal](<https://github.com/Data-Oriented-House/LemonSignal>)**
+- **[CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
+
+---
+
 ## 📜 License & Attribution
 
 This project is licensed under **Apache License 2.0**.
 
-It uses **GoodSignal** by Mark Langen (Stravant), which is MIT-licensed.
+See the full terms in the [LICENSE](LICENSE) file.
 
-Attribution is preserved in the NOTICE file.
+Attribution is preserved in the [NOTICE](NOTICE) file.
+
+Copyright © 2025 @Coffilhg (Roblox UserId 517222346)

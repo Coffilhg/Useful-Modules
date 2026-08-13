@@ -1,3 +1,8 @@
+# v2.3.6
+- Defined types for `validateClass` and `validateUnlinkedClass` on both `CoffeeBaseValue` and `CoffeeFolder`
+- `Value:__newindex` was broken, it used to check `SupportedTypes[newValue]`. Now it does `SupportedTypes[typeofNewValue]` as it should have had initially.
+- Documented unique behaviour with `buffer`s and added a section "**Mutable value changes are not detected**" in README.md
+
 # v2.3.5
 - Patch `script.Parent.Packages.{DepenedencyModuleName}` -> `script.Parent.{DepenedencyModuleName}`
 

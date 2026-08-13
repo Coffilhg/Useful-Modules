@@ -20,7 +20,7 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
-    Module Version: 2.3.5
+    Module Version: 2.3.6
 --]]--
 --!optimize 2
 
@@ -233,7 +233,7 @@ local Value = {}
 function Value:__newindex(key, newValue)
 	if key == "Value" then
 		local typeofNewValue = typeof(newValue)
-		if not SupportedTypes[newValue] then
+		if not SupportedTypes[typeofNewValue] then
 			error(`\n>\tCoffeeBaseValue Does Not Support typeof: "{typeofNewValue}";\n>\tAll supported Types:{CoffeeParser.SupportedTypesDebugMessage};`)
 		end
 
@@ -311,11 +311,11 @@ end
 -- Validates whether a given object is a valid Value instance.
 -- @param v The object to validate.
 -- @return True if the object is a Value instance, false otherwise.
-function CoffeeBaseValue.validateClass(v)
+function CoffeeBaseValue.validateClass(v: any): boolean
 	return getmetatable(v) == Value
 end
 
-function CoffeeBaseValue.validateUnlinkedClass(v)
+function CoffeeBaseValue.validateUnlinkedClass(v: any): boolean
 	-- rawget is used to avoid triggering Folder:__index when
 	-- doing CoffeeBaseValue.validateUnlinkedClass(CoffeeFolder)
 	return type(v) == "table"
@@ -485,14 +485,14 @@ end
 -- Validates whether a given object is a valid CoffeeFolder instance.
 -- @param v The object to validate.
 -- @return True if the object is a CoffeeFolder instance, false otherwise.
-function CoffeeFolder.validateClass(v)
+function CoffeeFolder.validateClass(v: any): boolean
 	return getmetatable(v) == Folder
 end
 
 -- Validates whether a given table mimics the structure of a CoffeeFolder. (Useful when metatable is lost after a DeepCopy)
 -- @param v The object to validate.
 -- @return True if the object has the required internal Folder properties.
-function CoffeeFolder.validateUnlinkedClass(v)
+function CoffeeFolder.validateUnlinkedClass(v: any): boolean
 	return type(v) == "table"
 		and	rawget(v, "_data") ~= nil
 		and	rawget(v, "ChildAdded") ~= nil

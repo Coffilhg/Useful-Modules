@@ -1,5 +1,8 @@
 CoffeeObjects
-Copyright 2025 @Coffilhg
+Copyright © 2025 @Coffilhg (Roblox UserId 517222346)
 
-This product includes software developed by:
-- Data-Oriented-House (LemonSignal): https://github.com/Data-Oriented-House/LemonSignal (MIT License)
+This software depends on (but does not vendor or redistribute) software developed by:
+- Data-Oriented-House
+    - LemonSignal (MIT License): https://github.com/Data-Oriented-House/LemonSignal
+- Coffilhg
+    - CoffeeParser (Apache-2.0): https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser
