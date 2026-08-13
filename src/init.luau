@@ -20,7 +20,7 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
-    Module Version: 2.3.6
+    Module Version: 2.3.7
 --]]--
 --!optimize 2
 
