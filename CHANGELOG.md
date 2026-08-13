@@ -15,7 +15,7 @@
     > Tried to achieve reduced memory usage by moving all previously rawset methods onto the metatables. However dispatching the methods will now be 2x-3x slower.
     > to achieve that `Folder.__index` was changed, it'll now first evaluate the metatable
     > **Verdict:** Not worth it. 0.8% less memory usage, but 2.8x slower method dispatch. Reverted.
-    > **[Benchmarks and a backup can be found here](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects/src/Tests/Memory234>)**
+    > **[Benchmarks and a backup can be found here](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects/assets/Tests/Memory234>)**
 
 # v2.3.3
 - `SupportedTypes` lookup table and `SupportedTypesDebugMessage` are now provided by CoffeeParser, just like the SupportedTypesList type previously

@@ -389,7 +389,7 @@ end
 -- Returns the count of children if the folder is an array/tuple.
 -- Works the same way as #, this metamethod is just a proxy.
 -- Expect same quirks in behavior as with #table
--- Counting elements in a 30-element CoffeeFolder 1M times takes ~0.22s - efficient for Roblox use <- those are results with a "fixed" behavior of #; With current proxy approach the quirks are back, but the same benchmark shows it takes only ~0.045s. https://github.com/Coffilhg/Useful-Modules/blob/CoffeeObjects/src/Tests/Benchmark__len.luau
+-- Counting elements in a 30-element CoffeeFolder 1M times takes ~0.22s - efficient for Roblox use <- those are results with a "fixed" behavior of #; With current proxy approach the quirks are back, but the same benchmark shows it takes only ~0.045s. https://github.com/Coffilhg/Useful-Modules/blob/CoffeeObjects/assets/Tests/Benchmark__len.luau
 function Folder:__len()
 	local data = rawget(self, "_data")
 	if not data then
@@ -485,7 +485,7 @@ function CoffeeFolder.new(data : ({} & PrimitiveTable)?) : CoffeeFolder
 end
 
 -- Creates a strictly-typed CoffeeFolder instance (for better autocomplete and type inference).
--- See examples at https://github.com/Coffilhg/Useful-Modules/blob/CoffeeObjects/src/Examples/StrictTypesAndObjects.luau
+-- See examples at https://github.com/Coffilhg/Useful-Modules/blob/CoffeeObjects/assets/Examples/StrictTypesAndObjects.luau
 -- Behaves identically to CoffeeFolder.new, but the returned object's children are typed as T.
 -- The structure of the initial data table will now follow in autocomplete for this CoffeeFolderStrict<T>.
 -- @param data Optional initial table to populate the folder with (T is inferred from it).

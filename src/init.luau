@@ -472,7 +472,7 @@ function CoffeeFolder.new(data : ({} & PrimitiveTable)?) : CoffeeFolder
 end
 
 -- Creates a strictly-typed CoffeeFolder instance (for better autocomplete and type inference).
--- See examples at https://github.com/Coffilhg/Useful-Modules/blob/CoffeeObjects/src/Examples/StrictTypesAndObjects.luau
+-- See examples at https://github.com/Coffilhg/Useful-Modules/blob/CoffeeObjects/assets/Examples/StrictTypesAndObjects.luau
 -- Behaves identically to CoffeeFolder.new, but the returned object's children are typed as T.
 -- The structure of the initial data table will now follow in autocomplete for this CoffeeFolderStrict<T>.
 -- @param data Optional initial table to populate the folder with (T is inferred from it).
