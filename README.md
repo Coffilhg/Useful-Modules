@@ -40,13 +40,13 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	>
 	> **[Useful-Modules/CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCoffeeObjects/2.3.5>)**        
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCoffeeObjects/2.4.0>)**        
 	> ```toml        
-	> CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.3.5"
+	> CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.4.0"
 	> ```
 	> **[Wally](<https://wally.run/package/coffilhg/coffeeobjects>)**        
 	> ```toml        
-	> CoffeeObjects = "coffilhg/coffeeobjects@2.3.5"
+	> CoffeeObjects = "coffilhg/coffeeobjects@2.4.0"
 	> ```
 - **[CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
 
@@ -288,10 +288,10 @@ local Branches: {[number]: BranchInfo} = {
        ModuleNamePascalCase = "CoffeeObjects",
        Links = {
         Wally = {
-            Content = `CoffeeObjects = "coffilhg/coffeeobjects@2.3.5"`,
+            Content = `CoffeeObjects = "coffilhg/coffeeobjects@2.4.0"`,
         },
         Rotriever = {
-            Content = `CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.3.5"`
+            Content = `CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.4.0"`
         },
        },
     },
