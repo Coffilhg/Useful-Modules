@@ -50,7 +50,7 @@ export type CoffeeFolder = {
 	Destroying: LemonSignal.Signal<>, -- Fired before destruction
 	-- _Destroying: PerfectSignal.Signal<>, -- Fired before destruction, right before Destroying fires.
 	Insert: (self: CoffeeFolder, newValue: TableValue) -> (),
-	GetPath: (self: CoffeeFolder) -> {string},
+	GetPath: (self: CoffeeFolder) -> {TableIndex},
 	GetChildren: (self: CoffeeFolder) -> {[TableIndex]: CoffeeFolder | CoffeeBaseValue},
 	Destroy: (self: CoffeeFolder) -> (),
 	-- _IsArrayORTuple: (self: CoffeeFolder) -> boolean,
@@ -66,7 +66,7 @@ export type CoffeeFolderStrict<T> = { -- T must be {[TableIndex]: CoffeeFolder |
 	Destroying: LemonSignal.Signal<>, -- Fired before destruction
 	-- _Destroying: PerfectSignal.Signal<>, -- Fired before destruction, right before Destroying fires.
 	Insert: (self: CoffeeFolderStrict<T>, newValue: TableValue) -> (),
-	GetPath: (self: CoffeeFolderStrict<T>) -> {string},
+	GetPath: (self: CoffeeFolderStrict<T>) -> {TableIndex},
 	GetChildren: (self: CoffeeFolderStrict<T>) -> T,
 	Destroy: (self: CoffeeFolderStrict<T>) -> (),
 	-- _IsArrayORTuple: (self: CoffeeFolderStrict<T>) -> boolean,
