@@ -1,3 +1,24 @@
+# v2.4.0
+- Added `:GetFullName()` method for `CoffeeBaseValue` and `CoffeeFolder`
+    It is an optimized implementation so you can avoid using the unoptimized workflow:
+    ```lua
+    -- GetPath is O(n) by implementation
+    local path = CoffeeObject:GetPath() -- an array containing string | number (TableIndex from CoffeeParser)
+    -- doing this is another O(n) on top
+    for k, v in path do
+        if type(v) ~= `string` then
+            path[k] = `{v}`
+        end
+    end
+    local fullPath = table.concat(path :: {string}, `.`)
+    ```
+    and instead do
+    ```lua
+    -- Duplicate logic (same as GetPath) - O(n),
+    -- but converts all values to string on the go and does table.concat
+    local fullPath = CoffeeObject:GetFullName()
+    ```
+
 # v2.3.7
 - Patch `GetPath` method type definition for CoffeeFolder type definitions. It had a return value of `{string}`, should have been `{TableIndex}` instead
 

@@ -20,7 +20,7 @@
     limitations under the License.
 
     Full License & Notices: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
-    Module Version: 2.3.7
+    Module Version: 2.4.0
 --]]--
 --!optimize 2
 
@@ -51,6 +51,7 @@ export type CoffeeFolder = {
 	-- _Destroying: PerfectSignal.Signal<>, -- Fired before destruction, right before Destroying fires.
 	Insert: (self: CoffeeFolder, newValue: TableValue) -> (),
 	GetPath: (self: CoffeeFolder) -> {TableIndex},
+	GetFullName: (self: CoffeeFolder, separator: string?) -> string,
 	GetChildren: (self: CoffeeFolder) -> {[TableIndex]: CoffeeFolder | CoffeeBaseValue},
 	Destroy: (self: CoffeeFolder) -> (),
 	-- _IsArrayORTuple: (self: CoffeeFolder) -> boolean,
@@ -67,6 +68,7 @@ export type CoffeeFolderStrict<T> = { -- T must be {[TableIndex]: CoffeeFolder |
 	-- _Destroying: PerfectSignal.Signal<>, -- Fired before destruction, right before Destroying fires.
 	Insert: (self: CoffeeFolderStrict<T>, newValue: TableValue) -> (),
 	GetPath: (self: CoffeeFolderStrict<T>) -> {TableIndex},
+	GetFullName: (self: CoffeeFolderStrict<T>, separator: string?) -> string,
 	GetChildren: (self: CoffeeFolderStrict<T>) -> T,
 	Destroy: (self: CoffeeFolderStrict<T>) -> (),
 	-- _IsArrayORTuple: (self: CoffeeFolderStrict<T>) -> boolean,
@@ -90,6 +92,7 @@ export type CoffeeBaseValue = {
 	-- _Destroying: PerfectSignal.Signal<>, -- Fired before destruction, right before Destroying fires.
 	Destroy: (self: CoffeeBaseValue) -> (),
 	GetPath: (self: CoffeeBaseValue) -> {TableIndex},
+	GetFullName: (self: CoffeeBaseValue, separator: string?) -> string,
 	-- _Value: SupportedTypesList,
 	-- _parent: CoffeeFolder?,
 	-- _key: string?,
@@ -102,6 +105,7 @@ export type CoffeeBaseValueStrict<T> = { -- T is ONE of the types from Supported
 	-- _Destroying: PerfectSignal.Signal<>, -- Fired before destruction, right before Destroying fires.
 	Destroy: (self: CoffeeBaseValueStrict<T>) -> (),
 	GetPath: (self: CoffeeBaseValueStrict<T>) -> {TableIndex},
+	GetFullName: (self: CoffeeBaseValueStrict<T>, separator: string?) -> string,
 	-- _Value: T,
 	-- _parent: CoffeeFolder?,
 	-- _key: string?,
@@ -114,7 +118,7 @@ export type CoffeeBaseValueInternals<T> = {
 	_key: TableIndex?,
 }
 
---- GetPathMethod REQUIRED by CoffeeBaseValue AND CoffeeFolder ---
+--- Methods REQUIRED by CoffeeBaseValue AND CoffeeFolder ---
 
 -- Traverses up the hierarchy via _parent references to reconstruct the object's location.
 -- @return An array of keys (strings or numbers) representing the path from the root.
@@ -142,6 +146,39 @@ local function GetPathMethod(self: CoffeeBaseValue | CoffeeFolder) : {[number]: 
 
 	return path
 end
+
+-- Duplicate of the logic performed by the GetPath Method, except the return value and small tweaks to make it optimized.
+-- @param optional separator to be used as a second argument of table.concat(path, separator). Defaults to period (`.`).
+-- @return A string representing the path from the root. Equivalent of Roblox' Instance:GetFullName method
+local function GetFullNameMethod(self: CoffeeBaseValue | CoffeeFolder, separator: string?) : string
+	local path : {string} = {}
+	local current = self
+	local parent = rawget(current, "_parent")
+
+	-- after this loop is complete, path is actually backwards from what is expected
+	while parent do
+		-- the _key will only be nil if it's the root, but since the root does
+		-- not have a _parent, the loop stops and root' _key (nil) is not read
+		table.insert(
+			path,
+			`{rawget(current, "_key") :: TableIndex}` -- convert right away
+		) -- O(1) instead of table.insert(path, 1, rawget(current, "_key") :: TableIndex) O(n)
+
+		current = parent
+		parent = rawget(current, "_parent")
+	end
+
+	-- reverse
+	local length = #path
+	for i = 1, math.floor(length/2) do
+		local j = length - i + 1
+		path[i], path[j] = path[j], path[i]
+	end
+
+	return table.concat(path, separator or `.`)
+end
+
+--- /E Methods REQUIRED by CoffeeBaseValue AND CoffeeFolder ---
 --- Methods REQUIRED by CoffeeFolder ---
 
 -- Determines if the folder contains sequential numeric keys (behaving like an array/tuple).
@@ -294,6 +331,7 @@ function CoffeeBaseValue.new(defaultValue : SupportedTypesList) : CoffeeBaseValu
 	rawset(self, "Destroying", LemonSignal.new())
 	rawset(self, "_Destroying", LemonSignal.new())
 	rawset(self, "GetPath", GetPathMethod)
+	rawset(self, "GetFullName", GetFullNameMethod)
 
 	return self
 end
@@ -456,6 +494,7 @@ function CoffeeFolder.new(data : ({} & PrimitiveTable)?) : CoffeeFolder
 	rawset(self, "_IsArrayORTuple", IsArrayORTupleMethod)
 	rawset(self, "Insert", InsertMethod)
 	rawset(self, "GetPath", GetPathMethod)
+	rawset(self, "GetFullName", GetFullNameMethod)
 	rawset(self, "GetChildren", GetChildrenMethod)
 	rawset(self, "Destroy", DestroyMethod)
 

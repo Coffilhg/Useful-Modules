@@ -18,12 +18,12 @@ This library intentionally favors **explicitness, performance, and Roblox semant
 - **[Wally](<https://wally.run/package/coffilhg/coffeeobjects>)**
 
     ```toml
-    CoffeeObjects = "coffilhg/coffeeobjects@2.3.7"
+    CoffeeObjects = "coffilhg/coffeeobjects@2.4.0"
     ```
-- **Rotriever**
+- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCoffeeObjects/2.4.0>)**
 
     ```toml
-    CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.3.7"
+    CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.4.0"
     ```
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[CoffeeObjects](<https://create.roblox.com/store/asset/1234567890/CoffeeObjects>)**-->
 
@@ -39,7 +39,7 @@ This library intentionally favors **explicitness, performance, and Roblox semant
 
   * primitives → `CoffeeBaseValue`
   * tables → `CoffeeFolder`
-* Deterministic tree paths via `GetPath()`
+* Deterministic tree paths via `GetPath()` and `GetFullName()`
 * Deterministic recursive destruction
 
 ---
@@ -74,6 +74,13 @@ local data = CoffeeFolder.new({
 		"Sword",
 		"Shield",
 	},
+  Pets = {
+		{
+			Name = "Mark",
+      Age = 1,
+      Species = "Dog",
+		},
+	}
 })
 ```
 
@@ -248,12 +255,20 @@ end)
 Every object knows where it lives in the tree:
 
 ```lua
-print(data.Stats.Honey:GetPath())
--- { "Stats", "Honey" }
+print(data.Stats.Honey:GetPath()) -- { "Stats", "Honey" }
+print(data.Stats.Honey:GetFullName()) -- Stats.Honey
+print(data.Stats.Honey:GetFullName("/")) -- Stats/Honey
+
+print(data.Pets[1].Name:GetPath()) -- { "Pets", 1, "Name" }
+print(data.Pets[1].Name:GetFullName()) -- Pets.1.Name
+print(data.Pets[1].Name:GetFullName("/")) -- Pets/1/Name
 ```
 
 Paths are reconstructed via parent references - no global registry.
-Keep that in mind when making a DeepCopy() - ignore "_parent" key when it's a CoffeeBaseValue or CoffeeFolder. Use `.validateClass(CoffeeObject)` and `validateUnlinkedClass(CoffeeObject)` methods for checking!
+
+When making a DeepCopy(), make sure internal "_parent" references are not copied when copying a CoffeeBaseValue or CoffeeFolder.
+
+Use `.validateClass(CoffeeObject)` and `validateUnlinkedClass(CoffeeObject)` methods to check for CoffeeBaseValue or CoffeeFolder whenever you encounter a value whose `type()` is `"table"`!
 
 ---
 
