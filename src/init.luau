@@ -1,5 +1,5 @@
 --[[--
-    Counter V1.0.0
+    Counter V1.0.1
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -26,8 +26,15 @@ export type Counter = setmetatable<{
     startValue: number,
     interval: number,
     _taskId: number,
-    Changed: Signal.Signal<>,
-}, typeof(Counter)>
+	Changed: Signal.Signal<>,
+	new: (interval : number?, default: number?) -> Counter,
+	clear: (self: Counter) -> Counter,
+	setInterval: (self: Counter, interval : number?) -> Counter,
+	destroy: (self: Counter) -> (),
+}, {
+	__call: (self: Counter) -> number,
+	__tostring: (self: Counter) -> number,
+}>
 
 
 -- creates new 'Counter' metatable

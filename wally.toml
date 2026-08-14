@@ -1,7 +1,7 @@
 [package]
 name = "coffilhg/counter"
-description = "ModuleDescription"
-version = "1.0.0"
+description = "A Luau counter that automatically decrements its value after a configurable time interval, ideal for sliding-window tracking and rate limiting."
+version = "1.0.1"
 license = "MPL-2.0"
 authors = ["Coffilhg <coffilhg@gmail.com>"]
 repository = "https://github.com/Coffilhg/Useful-Modules/tree/Counter"

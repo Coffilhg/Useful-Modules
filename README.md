@@ -1,5 +1,5 @@
 # Counter
-ModuleDescription
+A Luau counter that automatically decrements its value after a configurable time interval, ideal for sliding-window tracking and rate limiting.
 
 
 
@@ -8,12 +8,12 @@ ModuleDescription
 - **[Wally](<https://wally.run/package/coffilhg/counter>)**
 
     ```toml
-    Counter = "coffilhg/counter@1.0.0"
+    Counter = "coffilhg/counter@1.0.1"
     ```
-- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCounter/1.0.0>)**
+- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCounter/1.0.1>)**
 
     ```toml
-    Counter = "github.com/Coffilhg/Useful-Modules@Counter/1.0.0"
+    Counter = "github.com/Coffilhg/Useful-Modules@Counter/1.0.1"
     ```
 
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[Counter](<https://create.roblox.com/store/asset/123456789/Counter>)**-->
