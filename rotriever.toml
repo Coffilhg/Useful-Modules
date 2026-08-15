@@ -1,8 +1,8 @@
 [package]
-name = "coffilhg/modulenamelowercase"
+name = "coffilhg/greatuibutton"
 author = "Coffilhg"
 content_root = "src"
-version = "ModuleVersion"
+version = "0.0.0"
 license = "MPL-2.0"
 
 [dependencies]
