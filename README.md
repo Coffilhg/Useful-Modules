@@ -12,12 +12,12 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	>
 	> **[Useful-Modules/Arrangement](<https://github.com/Coffilhg/Useful-Modules/tree/Arrangement>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vArrangement/2.0.0>)**        
-	> ```toml        
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vArrangement/2.0.0>)**
+	> ```toml
 	> Arrangement = "github.com/Coffilhg/Useful-Modules@Arrangement/2.0.0"
 	> ```
-	> **[Wally](<https://wally.run/package/coffilhg/arrangement>)**        
-	> ```toml        
+	> **[Wally](<https://wally.run/package/coffilhg/arrangement>)**
+	> ```toml
 	> Arrangement = "coffilhg/arrangement@2.0.0"
 	> ```
 - **[CameraController](<https://github.com/Coffilhg/Useful-Modules/tree/CameraController>)**
@@ -26,12 +26,12 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	>
 	> **[Useful-Modules/CameraController](<https://github.com/Coffilhg/Useful-Modules/tree/CameraController>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCameraController/1.0.1>)**        
-	> ```toml        
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCameraController/1.0.1>)**
+	> ```toml
 	> CameraController = "github.com/Coffilhg/Useful-Modules@CameraController/1.0.1"
 	> ```
-	> **[Wally](<https://wally.run/package/coffilhg/cameracontroller>)**        
-	> ```toml        
+	> **[Wally](<https://wally.run/package/coffilhg/cameracontroller>)**
+	> ```toml
 	> CameraController = "coffilhg/cameracontroller@1.0.1"
 	> ```
 - **[CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)**
@@ -40,12 +40,12 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	>
 	> **[Useful-Modules/CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCoffeeObjects/2.4.0>)**        
-	> ```toml        
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCoffeeObjects/2.4.0>)**
+	> ```toml
 	> CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.4.0"
 	> ```
-	> **[Wally](<https://wally.run/package/coffilhg/coffeeobjects>)**        
-	> ```toml        
+	> **[Wally](<https://wally.run/package/coffilhg/coffeeobjects>)**
+	> ```toml
 	> CoffeeObjects = "coffilhg/coffeeobjects@2.4.0"
 	> ```
 - **[CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
@@ -54,12 +54,12 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	>
 	> **[Useful-Modules/CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCoffeeParser/1.0.5>)**        
-	> ```toml        
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCoffeeParser/1.0.5>)**
+	> ```toml
 	> CoffeeParser = "github.com/Coffilhg/Useful-Modules@CoffeeParser/1.0.5"
 	> ```
-	> **[Wally](<https://wally.run/package/coffilhg/coffeeparser>)**        
-	> ```toml        
+	> **[Wally](<https://wally.run/package/coffilhg/coffeeparser>)**
+	> ```toml
 	> CoffeeParser = "coffilhg/coffeeparser@1.0.5"
 	> ```
 - **[CoffeeRemotes](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotes>)** (Apache-2.0)
@@ -69,12 +69,12 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	>
 	> **[Useful-Modules/CoffeeRemotesRefined](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotesRefined>)**
 	> 
-	> **[Client-Side Wally](<https://wally.run/package/coffilhg/coffeeremotes-client>)**        
-	> ```toml        
+	> **[Client-Side Wally](<https://wally.run/package/coffilhg/coffeeremotes-client>)**
+	> ```toml
 	> CoffeeRemotesClient = "coffilhg/coffeeremotes-client@1.0.1"
 	> ```
-	> **[Server-Side Wally](<https://wally.run/package/coffilhg/coffeeremotes-server>)**        
-	> ```toml        
+	> **[Server-Side Wally](<https://wally.run/package/coffilhg/coffeeremotes-server>)**
+	> ```toml
 	> CoffeeRemotesServer = "coffilhg/coffeeremotes-server@1.0.1"
 	> ```
 - **[Counter](<https://github.com/Coffilhg/Useful-Modules/tree/Counter>)**
@@ -83,13 +83,13 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	>
 	> **[Useful-Modules/Counter](<https://github.com/Coffilhg/Useful-Modules/tree/Counter>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCounter/1.0.0>)**        
-	> ```toml        
-	> Counter = "github.com/Coffilhg/Useful-Modules@Counter/1.0.0"
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCounter/1.0.1>)**
+	> ```toml
+	> Counter = "github.com/Coffilhg/Useful-Modules@Counter/1.0.1"
 	> ```
-	> **[Wally](<https://wally.run/package/coffilhg/counter>)**        
-	> ```toml        
-	> Counter = "coffilhg/counter@1.0.0"
+	> **[Wally](<https://wally.run/package/coffilhg/counter>)**
+	> ```toml
+	> Counter = "coffilhg/counter@1.0.1"
 	> ```
 - **[EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
 
@@ -97,12 +97,12 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	>
 	> **[Useful-Modules/EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vEasySmoothDamp/1.0.3>)**        
-	> ```toml        
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vEasySmoothDamp/1.0.3>)**
+	> ```toml
 	> EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.3"
 	> ```
-	> **[Wally](<https://wally.run/package/coffilhg/easysmoothdamp>)**        
-	> ```toml        
+	> **[Wally](<https://wally.run/package/coffilhg/easysmoothdamp>)**
+	> ```toml
 	> EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.3"
 	> ```
 - **[FirstPersonDetector](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonDetector>)**
@@ -111,12 +111,12 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	>
 	> **[Useful-Modules/FirstPersonDetector](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonDetector>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vFirstPersonDetector/1.0.0>)**        
-	> ```toml        
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vFirstPersonDetector/1.0.0>)**
+	> ```toml
 	> FirstPersonDetector = "github.com/Coffilhg/Useful-Modules@FirstPersonDetector/1.0.0"
 	> ```
-	> **[Wally](<https://wally.run/package/coffilhg/firstpersondetector>)**        
-	> ```toml        
+	> **[Wally](<https://wally.run/package/coffilhg/firstpersondetector>)**
+	> ```toml
 	> FirstPersonDetector = "coffilhg/firstpersondetector@1.0.0"
 	> ```
 - **[FirstPersonView](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonView>)**
@@ -125,12 +125,12 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	>
 	> **[Useful-Modules/FirstPersonView](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonView>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vFirstPersonView/1.0.0>)**        
-	> ```toml        
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vFirstPersonView/1.0.0>)**
+	> ```toml
 	> FirstPersonView = "github.com/Coffilhg/Useful-Modules@FirstPersonView/1.0.0"
 	> ```
-	> **[Wally](<https://wally.run/package/coffilhg/firstpersonview>)**        
-	> ```toml        
+	> **[Wally](<https://wally.run/package/coffilhg/firstpersonview>)**
+	> ```toml
 	> FirstPersonView = "coffilhg/firstpersonview@1.0.0"
 	> ```
 - **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)** (Apache-2.0)
@@ -141,12 +141,12 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	>
 	> **[Useful-Modules/HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vHumanoidCameraOffsetController/1.0.1>)**        
-	> ```toml        
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vHumanoidCameraOffsetController/1.0.1>)**
+	> ```toml
 	> HumanoidCameraOffsetController = "github.com/Coffilhg/Useful-Modules@HumanoidCameraOffsetController/1.0.1"
 	> ```
-	> **[Wally](<https://wally.run/package/coffilhg/humanoidcameraoffsetcontroller>)**        
-	> ```toml        
+	> **[Wally](<https://wally.run/package/coffilhg/humanoidcameraoffsetcontroller>)**
+	> ```toml
 	> HumanoidCameraOffsetController = "coffilhg/humanoidcameraoffsetcontroller@1.0.1"
 	> ```
 - **[ServerMessages](<https://github.com/Coffilhg/Useful-Modules/tree/ServerMessages>)** (Apache-2.0)
@@ -314,10 +314,10 @@ local Branches: {[number]: BranchInfo} = {
        License = "MPL-2.0",
        Links = {
         Wally = {
-            Content = `Counter = "coffilhg/counter@1.0.0"`,
+            Content = `Counter = "coffilhg/counter@1.0.1"`,
         },
         Rotriever = {
-          Content = `Counter = "github.com/Coffilhg/Useful-Modules@Counter/1.0.0"`
+          Content = `Counter = "github.com/Coffilhg/Useful-Modules@Counter/1.0.1"`
         },
        },
     },
@@ -465,9 +465,9 @@ for _, branch in ipairs(Branches) do
 
     if type(content) == "string" then
       serviceString = serviceString..[[
-        
+
 	> ```]]..`{format}`..[[
-        
+
 	> ]]..`{type(content) == "string" and content:gsub("\n", "\n	> ") or content}`..[[
 
 	> ```]]
