@@ -134,6 +134,20 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> FirstPersonView = "coffilhg/firstpersonview@1.0.0"
 	> ```
 - **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)** (Apache-2.0)
+- **[GreatUIButton](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIButton>)**
+
+	> **MPL-2.0**
+	>
+	> **[Useful-Modules/GreatUIButton](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIButton>)**
+	> 
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vGreatUIButton/0.0.0>)**
+	> ```toml
+	> GreatUIButton = "github.com/Coffilhg/Useful-Modules@GreatUIButton/0.0.0"
+	> ```
+	> **[Wally](<https://wally.run/package/coffilhg/greatuibutton>)**
+	> ```toml
+	> GreatUIButton = "coffilhg/greatuibutton@0.0.0"
+	> ```
 - **[GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)** (Apache-2.0)
 - **[HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>)**
 
@@ -397,6 +411,18 @@ local Branches: {[number]: BranchInfo} = {
         },
         [`[Client-Side Wally](<https://wally.run/package/coffilhg/coffeeremotes-client>)`] = {
             Content = `CoffeeRemotesClient = "coffilhg/coffeeremotes-client@1.0.1"`,
+        },
+       },
+    },
+    {
+      ModuleNamePascalCase = "GreatUIButton",
+      License = "MPL-2.0",
+      Links = {
+        Wally = {
+            Content = `GreatUIButton = "coffilhg/greatuibutton@0.0.0"`,
+        },
+        Rotriever = {
+          Content = `GreatUIButton = "github.com/Coffilhg/Useful-Modules@GreatUIButton/0.0.0"`
         },
        },
     },
