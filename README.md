@@ -1,12 +1,15 @@
 # NamespaceSync
+# THIS IS WORK IN PROGRESS
+# NO WALLY/ROTRIEVER RELEASES YET
+
 ModuleDescription (placeholder)
 
 version 0.0.0 is a placholder too
 
-this is a snapshot to consider experiment with making more simple GetOrCreate and Await functions - those that only check for name and className, no metadata, achieving simple singletone instances.
+yet another snapshot, now to preserve inspiration source (commented) (it's CoffeeRemotesRefined), and, checkpoint before figuring out how to fix `Type Error: Code is too complex to typecheck!` Likely caused by two generic layers of `ClassType<T>`
 
 
-
+<!--
 ## Available Here!
 - **[This repository](src/init.luau) ~ [src/init.luau](src/init.luau)**
 - **[Wally](<https://wally.run/package/coffilhg/namespacesync>)**
