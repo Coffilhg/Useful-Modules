@@ -53,6 +53,7 @@ const MainFolder = NamespaceSync:mkdir(
 )
 ```
 and then on client-side you'd indefinitely await for the folder until server creates it
+> the projectVersion and name must be matching
 ```lua
 -- awaiting a Folder
 const MainFolder = NamespaceSync:cd(
@@ -65,7 +66,14 @@ const MainFolder = NamespaceSync:cd(
     -- yieldWarningTime got you covered, if nothing is found in yieldWarningTime seconds, a warning is emitted, defaults to 15
 )
 ```
-now parent any instances inside, you can be almost certain this never overlaps with modules or projects of other developers and different versions of your own module/project. This is especially good if dependencies are intentionally not deduplicated, but use this, achieving foolproof isolation.
+now parent any instances inside, you can be almost certain this never overlaps with modules or projects of other developers and different versions of your own module/project.
+
+This is especially good if dependencies are not deduplicated, using this module they achieve foolproof isolation between versions.
+
+For a further example, see **[CoffeeRemotesRefined](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotesRefined>)**, the server-side init.luau and client-side init.luau (the links are there at the top of it's README)
+> as of now, CoffeeRemotesRefined latest is not yet using NamespaceSync, but is using it's prototype. This line will be removed once it is updated to use NamespaceSync.
+
+
 
 And maybe you don't want a **Folder**, maybe you want a **Model** or an **ArcHandles** for whichever reason, sure, anything that **Instance.new** supports, just use
 ```lua
@@ -81,6 +89,7 @@ const MainWhatever = NamespaceSync:GetOrCreate(
 )
 ```
 and in a different script
+> make sure everything is matching! (name, peojectVersion, ClassName, how and where it's parentd)
 ```lua
 -- awaiting for your whatever ClassName
 const MainWhatever = NamespaceSync:Await(
@@ -103,7 +112,9 @@ Such combination makes it quite unique, but if that's not enough or too much (e.
 
 GetOrCreateManual always validates for name + ClassName.
 
-You can set custom modifiers or keep no modifiers - you only have name + ClassName, nothing else.
+You can set custom modifiers or keep default of no modifiers to get name + ClassName, (where and how it's parented too, but) nothing else.
+
+More in detail about modifiers below.
 
 ```lua
 const YouNameIt = NamespaceSync:GetOrCreateManual(
@@ -128,11 +139,55 @@ const YouNameIt = NamespaceSync:AwaitManual(
 )
 ```
 
+There are two types of modifiers. A validator and a mutator.
+
+You can use none, either one of or both of them for `:GetOrCreateManual`.
+
+You can use a validator or nothing for `:AwaitManual`.
+
+The type definitions are as follows:
+
+```lua
+export type ValidatorModifier = (Instance) -> boolean
+export type MutatorModifier = (Instance) -> ()
+export type GetOrCreateModifiers = {
+	Validator: ValidatorModifier?,
+	Mutator: MutatorModifier?,
+}
+export type AwaitModifiers = {
+	Validator: ValidatorModifier?,
+}
+```
+
+- **Validator** callback
+  Every time a match by name + ClassName is found, it is passed to the validator callback if given. A boolean return value is expected for the callback.
+
+  `true` means "this instance matches all of our additional criteria on top of name + ClassName", `false` means "this isn't a match, keep searching".
+  
+  For an example of such you can see `:GetOrCreate` ([here](<https://github.com/Coffilhg/Useful-Modules/blob/NamespaceSync/src/init.luau#:~:text=const%20function%20GetOrCreate>)) and `:Await` ([here](<https://github.com/Coffilhg/Useful-Modules/blob/NamespaceSync/src/init.luau#:~:text=const%20function%20Await>)) methods, they implement tag + attribute metadata on top of name + ClassName
+
+- **Mutator** callback
+  It is the opposite of the **Validator**, this one is only used by `:GetOrCreate` methods, only in case there were no matches found.
+  
+  It is called with a newly created Instance, before it'll be parented. Mutate the Instance in a way it passes your **Validator**.
+
+  For an example of such you can see `:GetOrCreate` ([here](<https://github.com/Coffilhg/Useful-Modules/blob/NamespaceSync/src/init.luau#:~:text=const%20function%20GetOrCreate>))
+
 ---
 
-## To-Do
+## Notes
 
-- [ ] Expand the README
+- As already stated in **[Server Unit tests of CoffeeRemotesRefined](<https://github.com/Coffilhg/Useful-Modules/blob/CoffeeRemotesRefined/src/Test/ServerScriptService/ServerMain/init.server.luau>)**:
+> **things left untested**
+> 
+> mkdir and mkremote tested for exact spoofing at runtime;
+> That would likely fail, unless we over-engineer and introduce scoring for folders and checks for usage in existing remote objects. ...
+
+  this module does not guarantee runtime stabilty if it is poorly used. This module is more about "create at startup" or "have one create and everyone else await"
+
+- It is advised, if you think your project name is commonly used, to ensure isolation from other projects like yours, you add a uuid at the end of your module name, similar to how it works with minecraft add-ons, but even better. Here you have `{name}_{uuid}`  which makes it near impossible to collapse with someone else' project using NamespaceSync under the ssme name and version.
+
+- The source itself has no type errors, but when required and used by any script, likely causes a Type Error: type is too complex to typecheck, in those cases, for now, just cast the type to be any inside some function.
 
 ---
 
