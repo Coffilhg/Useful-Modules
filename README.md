@@ -6,7 +6,7 @@ ModuleDescription (placeholder)
 
 version 0.0.0 is a placholder too
 
-yet another snapshot, now to preserve inspiration source (commented) (it's CoffeeRemotesRefined), and, checkpoint before figuring out how to fix `Type Error: Code is too complex to typecheck!` Likely caused by two generic layers of `ClassType<T>`
+Should be usable now, `-- LSP` are the type definition changes without which Roblox Studio is fine, but LSP isn't.
 
 
 <!--

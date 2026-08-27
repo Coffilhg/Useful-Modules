@@ -221,7 +221,7 @@ end
 -- Newly created ones can be mutated between `.new` and `.Parent = where` by a MutatorModifier
 -- It is recommended to have both modifiers if you are using either, however it is allowed to also have only one
 const function GetOrCreateManual<T>(
-	className: (T & ClassName),
+	className: T, -- LSP (T & ClassName)
 	name: string,
 	where: Instance?,
 	modifiers: GetOrCreateModifiers?,
@@ -276,7 +276,7 @@ const function GetOrCreateManual<T>(
 
 		instance.Parent = where -- Parent after naming (and performing other mutations) for compliance with WaitForChild
 
-		return instance
+		return instance :: ClassType<T> -- LSP
 	end
 	
 	if matches > 1 then
@@ -292,12 +292,12 @@ end
 
 -- read desc of NamespaceSync.GetOrCreate
 const function GetOrCreate<T>(
-	className: (T & ClassName),
+	className: T, -- actually T & ClassName
 	projectVersion: string,
 	name: string,
 	where: Instance?,
 	debugPrefix: DebugPrefix?
-): ClassType<T>
+): Instance -- actually ClassType<T>
 	const tag, attributeName, attributeValue = GenerateTagAndAttributeInfo(name, projectVersion)
 
 	-- both a tag of {tag}
@@ -325,7 +325,7 @@ end
 -- Wait for [instance of a given className] named as provided and matching
 -- ones can be further validated by a ValidatorModifier `modifiers.Validator`
 const function AwaitManual<T>(
-	className: (T & ClassName),
+	className: T, -- LSP (T & ClassName)
 	name: string,
 	where: Instance?,
 	modifiers: AwaitModifiers?,
@@ -402,13 +402,13 @@ end
 
 -- read desc of NamespaceSync.Await
 const function Await<T>(
-	className: (T & ClassName),
+	className: T, -- actually T & ClassName
 	projectVersion: string,
 	name: string,
 	where: Instance?,
 	debugPrefix: DebugPrefix?,
 	yieldWarningTime: number?
-): ClassType<T>
+): Instance -- actually ClassType<T>
 	const tag, attributeName, attributeValue = GenerateTagAndAttributeInfo(name, projectVersion)
 
 	return AwaitManual(
@@ -482,7 +482,7 @@ function NamespaceSync.GetOrCreate<T>(
 		name,
 		where,
 		debugPrefix
-	)
+	) :: ClassType<T>
 end
 
 
@@ -524,7 +524,7 @@ function NamespaceSync.Await<T>(
 		where,
 		debugPrefix,
 		yieldWarningTime
-	)
+	) :: ClassType<T>
 end
 
 -- Make a folder named as provided or return an already existing one with matching specifications
@@ -534,14 +534,14 @@ function NamespaceSync.mkdir(
 	name: string,
 	where: Instance?,
 	debugPrefix: (string | any)?
-)
+): Folder
 	return GetOrCreate(
 		"Folder",
 		projectVersion,
 		name,
 		where,
 		debugPrefix
-	)
+	) :: Folder
 end
 
 -- Wait for folder named as provided and with matching specifications;
@@ -553,7 +553,7 @@ function NamespaceSync.cd(
 	where: Instance?,
 	debugPrefix: (string | any)?,
 	yieldWarningTime: number?
-)
+): Folder
 	return Await(
 		"Folder",
 		projectVersion,
@@ -561,7 +561,7 @@ function NamespaceSync.cd(
 		where,
 		debugPrefix,
 		yieldWarningTime
-	)
+	) :: Folder
 end
 
 -- Set a function to be called instead of `warn`
