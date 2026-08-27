@@ -32,7 +32,6 @@ export type GetOrCreateModifiers = {
 }
 export type AwaitModifiers = {
 	Validator: ValidatorModifier?,
-	Mutator: MutatorModifier?,
 }
 type DebugPrefix = (string | any)
 
@@ -108,11 +107,13 @@ end
 -- Already existing ones can be further validated by a ValidatorModifier `modifiers.Validator`
 -- Newly created ones can be mutated between `.new` and `.Parent = where` by a MutatorModifier
 -- It is recommended to have both modifiers if you are using either, however it is allowed to also have only one
+-- If isRecursive is true, all of the where' descendants will be searched, otherwise only direct children of where
 const function GetOrCreateManual<T>(
 	className: T, -- LSP (T & ClassName)
 	name: string,
 	where: Instance?,
 	modifiers: GetOrCreateModifiers?,
+	isRecursive: boolean?,
 	debugPrefix: DebugPrefix?
 ): ClassType<T>
 	if typeof(where) ~= `Instance` then
@@ -120,30 +121,38 @@ const function GetOrCreateManual<T>(
 	end
 
 	const isModifiersATable = type(modifiers) == `table`
-	const validator: ValidatorModifier? = isModifiersATable and (modifiers :: any).Validator or nil
-	const mutator: MutatorModifier? = isModifiersATable and (modifiers :: any).Mutator or nil
+	const validator: ValidatorModifier? = isModifiersATable and (modifiers :: GetOrCreateModifiers).Validator or nil
+	const mutator: MutatorModifier? = isModifiersATable and (modifiers :: GetOrCreateModifiers).Mutator or nil
 	const isValidatorCallable = type(validator) == `function`
 
 	local firstMatch: ClassType<T>?
 	const furtherMatches: {[number]: Instance} = {}
+	const furtherMatchesPath: {[number]: string} = {}
 	local matches = 0
-
-	for _, child in (where :: Instance):GetChildren() do
-		if child.ClassName ~= className or child.Name ~= name then
+	
+	const childrenOrDescendants = isRecursive
+		and (where :: Instance):GetDescendants()
+		or (where :: Instance):GetChildren()
+	
+	for _, childOrDescendant in childrenOrDescendants do
+		if childOrDescendant.ClassName ~= className or childOrDescendant.Name ~= name then
 			continue
 		end
 		if isValidatorCallable then
-			if not (validator :: ValidatorModifier)(child) then
+			if not (validator :: ValidatorModifier)(childOrDescendant) then
 				continue
 			end
 		end
 
 		matches += 1
 		if matches > 1 then
-			table.insert(furtherMatches, child)
+			table.insert(furtherMatches, childOrDescendant)
+			if isRecursive then
+				table.insert(furtherMatchesPath, childOrDescendant:GetFullName())
+			end
 			continue
 		end
-		firstMatch = child :: ClassType<T>
+		firstMatch = childOrDescendant :: ClassType<T>
 	end
 
 
@@ -172,7 +181,7 @@ const function GetOrCreateManual<T>(
 			match.Parent = nil
 			Debris:AddItem(match, 180)
 		end
-		warnFunction(`{debugPrefix} Multiple matches found for selector: {className} named "{name}" with{isValidatorCallable and ` a custom validator modifier` or ``}; You have up to 180 seconds to troubleshoot them via clickable references:`, furtherMatches)
+		warnFunction(`{debugPrefix} Multiple matches found for selector: {className} named "{name}" with{isValidatorCallable and ` a custom validator modifier` or ``}; IsRecursive = {not not isRecursive}; You have up to 180 seconds to troubleshoot them via clickable references:`, furtherMatches, furtherMatchesPath)
 	end
 
 	return firstMatch :: ClassType<T>
@@ -184,6 +193,7 @@ const function GetOrCreate<T>(
 	projectVersion: string,
 	name: string,
 	where: Instance?,
+	isRecursive: boolean?,
 	debugPrefix: DebugPrefix?
 ): Instance -- actually ClassType<T>
 	const tag, attributeName, attributeValue = GenerateTagAndAttributeInfo(name, projectVersion)
@@ -206,6 +216,7 @@ const function GetOrCreate<T>(
 				instance:SetAttribute(attributeName, attributeValue)
 			end,
 		},
+		isRecursive,
 		debugPrefix
 	)
 end
@@ -214,11 +225,13 @@ end
 
 -- Wait for [instance of a given className] named as provided and matching
 -- ones can be further validated by a ValidatorModifier `modifiers.Validator`
+-- If isRecursive is true, all of the where' descendants will be searched/awaited/queryed, otherwise only direct children of where
 const function AwaitManual<T>(
 	className: T, -- LSP (T & ClassName)
 	name: string,
 	where: Instance?,
 	modifiers: AwaitModifiers?,
+	isRecursive: boolean?,
 	debugPrefix: DebugPrefix?,
 	yieldWarningTime: number?
 ): ClassType<T>
@@ -229,10 +242,12 @@ const function AwaitManual<T>(
 		yieldWarningTime = 15
 	end
 
-	const validator: ValidatorModifier? = type(modifiers) == `table` and (modifiers :: any).ValidatorModifier or nil
+	const validator: ValidatorModifier? = type(modifiers) == `table` and (modifiers :: AwaitModifiers).Validator or nil
 	const isValidatorCallable = type(validator) == `function`
 
-	const firstMatch = (where :: Instance):FindFirstChild(name)
+	const firstMatch = if isRecursive
+		then (where :: Instance):FindFirstDescendant(name)
+		else (where :: Instance):FindFirstChild(name)
 
 	if typeof(firstMatch) == `Instance`
 		and (firstMatch :: Instance).ClassName == className
@@ -249,15 +264,15 @@ const function AwaitManual<T>(
 	const query = LemonSignal.new() :: LemonSignal.Signal<>
 	local searchResult: ClassType<T>
 
-	const function evaluateChild(child: Instance): boolean | any
-		if (child :: Instance).ClassName == className
-			and child.Name == name
+	const function evaluateChildOrDescendant(childOrDescendant: Instance): boolean | any
+		if (childOrDescendant :: Instance).ClassName == className
+			and childOrDescendant.Name == name
 			and (
 				(not isValidatorCallable)
-					or (validator :: ValidatorModifier)(child)
+					or (validator :: ValidatorModifier)(childOrDescendant)
 			)
 		then
-			searchResult = child :: ClassType<T>
+			searchResult = childOrDescendant :: ClassType<T>
 			query:Fire()
 			return true
 		end
@@ -265,9 +280,15 @@ const function AwaitManual<T>(
 		return
 	end
 
-	const connection: RBXScriptConnection = (where :: Instance).ChildAdded:Connect(evaluateChild)
-	for _, child in (where :: Instance):GetChildren() do
-		if evaluateChild(child) then
+	const connection: RBXScriptConnection = isRecursive
+		and (where :: Instance).DescendantAdded:Connect(evaluateChildOrDescendant)
+		or (where :: Instance).ChildAdded:Connect(evaluateChildOrDescendant)
+	
+	const childrenOrDescendants = isRecursive
+		and (where :: Instance):GetDescendants()
+		or (where :: Instance):GetChildren()
+	for _, childOrDescendant in childrenOrDescendants do
+		if evaluateChildOrDescendant(childOrDescendant) then
 			break
 		end
 	end
@@ -276,7 +297,7 @@ const function AwaitManual<T>(
 		local yieldWarningThread = task.delay(
 			yieldWarningTime,
 			warnFunction,
-			`{debugPrefix} Waiting for {className} {(where :: Instance):GetFullName()}["{name}"]. Did you :{className == `Folder` and `mkdir` or `GetOrCreate`} such "{name}"? Do their versions match?`
+			`{debugPrefix} Waiting for {className} {(where :: Instance):GetFullName()}["{name}"]. Did you :{className == `Folder` and `mkdir` or `GetOrCreate`} such "{name}"? Does their metadata match?`
 		)
 
 		query:Wait()
@@ -296,6 +317,7 @@ const function Await<T>(
 	projectVersion: string,
 	name: string,
 	where: Instance?,
+	isRecursive: boolean?,
 	debugPrefix: DebugPrefix?,
 	yieldWarningTime: number?
 ): Instance -- actually ClassType<T>
@@ -310,6 +332,7 @@ const function Await<T>(
 				return VerifyMetadata(instance, tag, attributeName, attributeValue)
 			end,
 		},
+		isRecursive,
 		debugPrefix,
 		yieldWarningTime
 	)
@@ -337,6 +360,7 @@ function NamespaceSync.GetOrCreateManual<T>(
 	name: string,
 	where: Instance?,
 	modifiers: GetOrCreateModifiers?,
+	isRecursive: boolean?,
 	debugPrefix: DebugPrefix?
 ): ClassType<T>
 	return GetOrCreateManual(
@@ -344,6 +368,7 @@ function NamespaceSync.GetOrCreateManual<T>(
 		name,
 		where,
 		modifiers,
+		isRecursive,
 		debugPrefix
 	)
 end
@@ -356,6 +381,7 @@ function NamespaceSync.GetOrCreate<T>(
 	projectVersion: string,
 	name: string,
 	where: Instance?,
+	isRecursive: boolean?,
 	debugPrefix: DebugPrefix?
 ): ClassType<T>
 	return GetOrCreate(
@@ -363,6 +389,7 @@ function NamespaceSync.GetOrCreate<T>(
 		projectVersion,
 		name,
 		where,
+		isRecursive,
 		debugPrefix
 	) :: ClassType<T>
 end
@@ -385,6 +412,7 @@ function NamespaceSync.AwaitManual<T>(
 	name: string,
 	where: Instance?,
 	modifiers: AwaitModifiers?,
+	isRecursive: boolean?,
 	debugPrefix: DebugPrefix?,
 	yieldWarningTime: number?
 ): ClassType<T>
@@ -393,6 +421,7 @@ function NamespaceSync.AwaitManual<T>(
 		name,
 		where,
 		modifiers,
+		isRecursive,
 		debugPrefix,
 		yieldWarningTime
 	)
@@ -406,6 +435,7 @@ function NamespaceSync.Await<T>(
 	projectVersion: string,
 	name: string,
 	where: Instance?,
+	isRecursive: boolean?,
 	debugPrefix: DebugPrefix?,
 	yieldWarningTime: number?
 ): ClassType<T>
@@ -414,6 +444,7 @@ function NamespaceSync.Await<T>(
 		projectVersion,
 		name,
 		where,
+		isRecursive,
 		debugPrefix,
 		yieldWarningTime
 	) :: ClassType<T>
@@ -437,6 +468,7 @@ function NamespaceSync.mkdir(
 	projectVersion: string,
 	name: string,
 	where: Instance?,
+	isRecursive: boolean?,
 	debugPrefix: (string | any)?
 ): Folder
 	return GetOrCreate(
@@ -444,6 +476,7 @@ function NamespaceSync.mkdir(
 		projectVersion,
 		name,
 		where,
+		isRecursive,
 		debugPrefix
 	) :: Folder
 end
@@ -455,6 +488,7 @@ function NamespaceSync.cd(
 	projectVersion: string,
 	name: string,
 	where: Instance?,
+	isRecursive: boolean?,
 	debugPrefix: (string | any)?,
 	yieldWarningTime: number?
 ): Folder
@@ -463,6 +497,7 @@ function NamespaceSync.cd(
 		projectVersion,
 		name,
 		where,
+		isRecursive,
 		debugPrefix,
 		yieldWarningTime
 	) :: Folder
