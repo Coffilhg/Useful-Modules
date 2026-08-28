@@ -1,7 +1,7 @@
 [package]
 name = "coffilhg/namespacesync"
 description = "This module is a great utility if you need 'singletone' Instances, e.g. your Client and Server modules need a shared folder for their Project state or your custom Plugin should always output in a predictable place."
-version = "0.0.0"
+version = "0.0.1"
 license = "MPL-2.0"
 authors = ["Coffilhg <coffilhg@gmail.com>"]
 repository = "https://github.com/Coffilhg/Useful-Modules/tree/NamespaceSync"

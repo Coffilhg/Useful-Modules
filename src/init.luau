@@ -1,5 +1,5 @@
 --[[--
-    NamespaceSync V0.0.0
+    NamespaceSync V0.0.1
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -109,7 +109,7 @@ end
 -- It is recommended to have both modifiers if you are using either, however it is allowed to also have only one
 -- If isRecursive is true, all of the where' descendants will be searched, otherwise only direct children of where
 const function GetOrCreateManual<T>(
-	className: T, -- LSP (T & ClassName)
+	className: T | ClassName,
 	name: string,
 	where: Instance?,
 	modifiers: GetOrCreateModifiers?,
@@ -189,7 +189,7 @@ end
 
 -- read desc of NamespaceSync.GetOrCreate
 const function GetOrCreate<T>(
-	className: T, -- actually T & ClassName
+	className: T, -- actually T | ClassName
 	projectVersion: string,
 	name: string,
 	where: Instance?,
@@ -227,7 +227,7 @@ end
 -- ones can be further validated by a ValidatorModifier `modifiers.Validator`
 -- If isRecursive is true, all of the where' descendants will be searched/awaited/queryed, otherwise only direct children of where
 const function AwaitManual<T>(
-	className: T, -- LSP (T & ClassName)
+	className: T | ClassName,
 	name: string,
 	where: Instance?,
 	modifiers: AwaitModifiers?,
@@ -313,7 +313,7 @@ end
 
 -- read desc of NamespaceSync.Await
 const function Await<T>(
-	className: T, -- actually T & ClassName
+	className: T, -- actually T | ClassName
 	projectVersion: string,
 	name: string,
 	where: Instance?,
@@ -356,7 +356,7 @@ end
 -- It is recommended to have both modifiers if you are using either, however it is allowed to also have only one
 function NamespaceSync.GetOrCreateManual<T>(
 	self: NamespaceSync,
-	className: (T & ClassName),
+	className: (T | ClassName),
 	name: string,
 	where: Instance?,
 	modifiers: GetOrCreateModifiers?,
@@ -377,7 +377,7 @@ end
 -- Applies preset auto-generated metadata: tag and attribute with a value and matches by the same criteria
 function NamespaceSync.GetOrCreate<T>(
 	self: NamespaceSync,
-	className: (T & ClassName),
+	className: (T | ClassName),
 	projectVersion: string,
 	name: string,
 	where: Instance?,
@@ -408,7 +408,7 @@ end
 
 function NamespaceSync.AwaitManual<T>(
 	self: NamespaceSync,
-	className: (T & ClassName),
+	className: (T | ClassName),
 	name: string,
 	where: Instance?,
 	modifiers: AwaitModifiers?,
@@ -431,7 +431,7 @@ end
 -- specifications; usually you'd only want to use this on the client-side
 function NamespaceSync.Await<T>(
 	self: NamespaceSync,
-	className: (T & ClassName),
+	className: (T | ClassName),
 	projectVersion: string,
 	name: string,
 	where: Instance?,
