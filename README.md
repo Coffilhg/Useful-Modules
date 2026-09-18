@@ -8,12 +8,12 @@ Simple Camera Controls made easy - BindToPart (with mouse follow) and SetFOV; Cu
 - **[Wally](<https://wally.run/package/coffilhg/cameracontroller>)**
 
     ```toml
-    CameraController = "coffilhg/cameracontroller@1.0.1"
+    CameraController = "coffilhg/cameracontroller@1.0.2"
     ```
 - **Rotriever**
 
     ```toml
-    CameraController = "github.com/Coffilhg/Useful-Modules@CameraController/1.0.1"
+    CameraController = "github.com/Coffilhg/Useful-Modules@CameraController/1.0.2"
     ```
 <!--
  **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[CameraController](<https://create.roblox.com/store/asset/123456789/CameraController>)**-->

@@ -4,11 +4,11 @@
     "$className": "DataModel",
 
     "ReplicatedStorage": {
-      "CameraController": {
-        "$path": "src/"
-      },
       "Packages": {
-        "$path": "Packages"
+        "$path": "Packages",
+        "CameraController": {
+          "$path": "src/"
+        }
       }
     }
     

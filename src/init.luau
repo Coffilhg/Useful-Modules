@@ -1,5 +1,5 @@
 --[[--
-    CameraController V1.0.1
+    CameraController V1.0.2
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -74,65 +74,65 @@ local FOVTween : Tween?
 
 --- Utility
 -- Coffilhgs Enum Good Lookup ~ CameraType
-export type CameraTypeAcceptable = Enum.CameraType | "Fixed" | "Attach" | "Watch" | "Track" | "Follow" | "Custom" | "Scriptable" | "Orbital"
-local CameraTypeLookup = {
-	["track"] = Enum.CameraType.Track,
-	["orbital"] = Enum.CameraType.Orbital,
+export type CameraTypeAcceptable = Enum.CameraType | "Attach" | "Custom" | "Fixed" | "Follow" | "Orbital" | "Scriptable" | "Track" | "Watch"
+local CameraTypeLookup = table.freeze({
+	["attach"] = Enum.CameraType.Attach,
 	["custom"] = Enum.CameraType.Custom,
 	["fixed"] = Enum.CameraType.Fixed,
-	["attach"] = Enum.CameraType.Attach,
-	["watch"] = Enum.CameraType.Watch,
 	["follow"] = Enum.CameraType.Follow,
+	["orbital"] = Enum.CameraType.Orbital,
 	["scriptable"] = Enum.CameraType.Scriptable,
-}
-local DefaultCameraTypeResolveValue = Enum.CameraType.Custom
+	["track"] = Enum.CameraType.Track,
+	["watch"] = Enum.CameraType.Watch,
+})
+local DefaultCameraTypeResolveValue = Enum.CameraType.Fixed
 local function ResolveCameraType(v : CameraTypeAcceptable?) : Enum.CameraType
 	if typeof(v) == "EnumItem" and v.EnumType == Enum.CameraType then
 		return v
 	elseif type(v) == "string" then
-		return (CameraTypeLookup[v:lower()] :: any) or DefaultCameraTypeResolveValue
+		return (CameraTypeLookup :: any)[string.lower(v)] or DefaultCameraTypeResolveValue
 	end
 	return DefaultCameraTypeResolveValue
 end
 
 -- Coffilhgs Enum Good Lookup ~ EasingStyle
-export type EasingStyleAcceptable = Enum.EasingStyle | "Linear" | "Sine" | "Back" | "Quad" | "Quart" | "Quint" | "Bounce" | "Elastic" | "Exponential" | "Circular" | "Cubic"
-local EasingStyleLookup = {
-	["sine"] = Enum.EasingStyle.Sine,
-	["elastic"] = Enum.EasingStyle.Elastic,
-	["quad"] = Enum.EasingStyle.Quad,
+export type EasingStyleAcceptable = Enum.EasingStyle | "Back" | "Bounce" | "Circular" | "Cubic" | "Elastic" | "Exponential" | "Linear" | "Quad" | "Quart" | "Quint" | "Sine"
+local EasingStyleLookup = table.freeze({
 	["back"] = Enum.EasingStyle.Back,
-	["quart"] = Enum.EasingStyle.Quart,
-	["linear"] = Enum.EasingStyle.Linear,
-	["cubic"] = Enum.EasingStyle.Cubic,
-	["circular"] = Enum.EasingStyle.Circular,
-	["exponential"] = Enum.EasingStyle.Exponential,
 	["bounce"] = Enum.EasingStyle.Bounce,
+	["circular"] = Enum.EasingStyle.Circular,
+	["cubic"] = Enum.EasingStyle.Cubic,
+	["elastic"] = Enum.EasingStyle.Elastic,
+	["exponential"] = Enum.EasingStyle.Exponential,
+	["linear"] = Enum.EasingStyle.Linear,
+	["quad"] = Enum.EasingStyle.Quad,
+	["quart"] = Enum.EasingStyle.Quart,
 	["quint"] = Enum.EasingStyle.Quint,
-}
-local DefaultEasingStyleResolveValue = Enum.EasingStyle.Circular
+	["sine"] = Enum.EasingStyle.Sine,
+})
+local DefaultEasingStyleResolveValue = Enum.EasingStyle.Linear
 local function ResolveEasingStyle(v : EasingStyleAcceptable?) : Enum.EasingStyle
 	if typeof(v) == "EnumItem" and v.EnumType == Enum.EasingStyle then
 		return v
 	elseif type(v) == "string" then
-		return (EasingStyleLookup[v:lower()] :: any) or DefaultEasingStyleResolveValue
+		return (EasingStyleLookup :: any)[string.lower(v)] or DefaultEasingStyleResolveValue
 	end
 	return DefaultEasingStyleResolveValue
 end
 
 -- Coffilhgs Enum Good Lookup ~ EasingDirection
-export type EasingDirectionAcceptable = Enum.EasingDirection | "In" | "Out" | "InOut"
-local EasingDirectionLookup = {
+export type EasingDirectionAcceptable = Enum.EasingDirection | "In" | "InOut" | "Out"
+local EasingDirectionLookup = table.freeze({
 	["in"] = Enum.EasingDirection.In,
 	["inout"] = Enum.EasingDirection.InOut,
 	["out"] = Enum.EasingDirection.Out,
-}
-local DefaultEasingDirectionResolveValue = Enum.EasingDirection.InOut
+})
+local DefaultEasingDirectionResolveValue = Enum.EasingDirection.In
 local function ResolveEasingDirection(v : EasingDirectionAcceptable?) : Enum.EasingDirection
 	if typeof(v) == "EnumItem" and v.EnumType == Enum.EasingDirection then
 		return v
 	elseif type(v) == "string" then
-		return (EasingDirectionLookup[v:lower()] :: any) or DefaultEasingDirectionResolveValue
+		return (EasingDirectionLookup :: any)[string.lower(v)] or DefaultEasingDirectionResolveValue
 	end
 	return DefaultEasingDirectionResolveValue
 end
@@ -303,7 +303,6 @@ end
 
 --- Public Module API
 local CameraController = {}
-export type CameraController = typeof(CameraController)
 
 -- defaults to unbinding Camera - moves the Camera back to Character
 function CameraController.BindToPart(
@@ -365,15 +364,14 @@ end
 
 local ModuleSettings = {} :: ModuleSettings
 export type ModuleSettings = {
-	["CameraBackToCharacter"]: CameraBackToCharacter,
-	["MouseFollow"]: MouseFollow,
-	["BindCameraToPartDamper"]: EasySmoothDamp.SmoothDamper<CFrame>,
-	["FOVControl"]: FOVControl,
+	read CameraBackToCharacter: CameraBackToCharacter,
+	read MouseFollow: MouseFollow,
+	read BindCameraToPartDamper: EasySmoothDamp.SmoothDamper<CFrame>,
+	read FOVControl: FOVControl,
 }
 
 
 local CameraBackToCharacter = {}
-export type CameraBackToCharacter = typeof(CameraBackToCharacter)
 
 -- defaults to 0.9 and only positive numbers
 function CameraBackToCharacter.SetTransitionTime(
@@ -408,10 +406,12 @@ function CameraBackToCharacter.SetTransitionEasingDirection(
 	return ModuleSettings
 end
 
+table.freeze(CameraBackToCharacter)
+export type CameraBackToCharacter = typeof(CameraBackToCharacter)
+
 
 
 local MouseFollow = {}
-export type MouseFollow = typeof(MouseFollow)
 
 -- defaults to 9 and only positive numbers
 function MouseFollow.SetMaxTiltDegrees(
@@ -454,10 +454,12 @@ function MouseFollow.SetYClampPercent(
 	return ModuleSettings
 end
 
+table.freeze(MouseFollow)
+export type MouseFollow = typeof(MouseFollow)
+
 
 
 local FOVControl = {}
-export type FOVControl = typeof(FOVControl)
 
 -- defaults to 70
 -- If you set negative or big numbers make sure such FOV is supported by Roblox
@@ -489,16 +491,20 @@ function FOVControl.SetFOVTransitionTweenInfo(
 	return ModuleSettings
 end
 
+table.freeze(FOVControl)
+export type FOVControl = typeof(FOVControl)
 
 
 
-ModuleSettings = {
+ModuleSettings = table.freeze({
 	CameraBackToCharacter = CameraBackToCharacter,
 	MouseFollow = MouseFollow,
 	BindCameraToPartDamper = BindCameraToPartDamper,
 	FOVControl = FOVControl,
-}
+})
 
-CameraController.ModuleSettings = ModuleSettings :: ModuleSettings
+CameraController.ModuleSettings = ModuleSettings
 
+table.freeze(CameraController)
+export type CameraController = typeof(CameraController)
 return CameraController
