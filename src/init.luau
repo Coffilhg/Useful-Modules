@@ -1,5 +1,5 @@
 --[[--
-    EasySmoothDamp V1.0.3
+    EasySmoothDamp V1.0.4
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -15,9 +15,16 @@
 local TS = game:GetService(`TweenService`)
 
 local EPSILONDEFAULT = 1e-3
-local EPSILON: number = EPSILONDEFAULT
+-- EPSILON must be <= 0.1 as per the FuzzyEq error: "The eps value provided to FuzzyEq should be a small positive value <= 0.1"
+local EPSILON: number = math.min(math.abs(EPSILONDEFAULT), 0.1)
 
+local Vector2Zero = Vector2.zero
+local Vector3Zero = Vector3.zero
+local CFrameIdentity = CFrame.identity
 
+local Vector2FuzzyEq = Vector2Zero.FuzzyEq
+local Vector3FuzzyEq = Vector3Zero.FuzzyEq
+local CFrameFuzzyEq = CFrameIdentity.FuzzyEq
 
 local IsFinishedCallbacks = {
 	["number"] = function(self: SmoothDamper<number>)
@@ -25,31 +32,23 @@ local IsFinishedCallbacks = {
 			and math.abs(self.CurrentSpeed) < EPSILON
 	end,
 	["Vector2"] = function(self: SmoothDamper<Vector2>)
-		return (self.CurrentValue - self.CurrentGoal).Magnitude < EPSILON
-			and self.CurrentSpeed.Magnitude < EPSILON
+		return Vector2FuzzyEq(self.CurrentValue, self.CurrentGoal, EPSILON)
+			and Vector2FuzzyEq(self.CurrentSpeed, Vector2Zero, EPSILON)
 	end,
 	["Vector3"] = function(self: SmoothDamper<Vector3>)
-		return (self.CurrentValue - self.CurrentGoal).Magnitude < EPSILON
-			and self.CurrentSpeed.Magnitude < EPSILON
+		return Vector3FuzzyEq(self.CurrentValue, self.CurrentGoal, EPSILON)
+			and Vector3FuzzyEq(self.CurrentSpeed, Vector3Zero, EPSILON)
 	end,
 	["CFrame"] = function(self: SmoothDamper<CFrame>)
-		local posDist = (self.CurrentValue.Position - self.CurrentGoal.Position).Magnitude
-		local _, angle = (self.CurrentValue:ToObjectSpace(self.CurrentGoal)):ToAxisAngle()
-
-		local linVel = self.CurrentSpeed.Position.Magnitude
-		local _, angVel = self.CurrentSpeed:ToAxisAngle()
-
-		return posDist < EPSILON 
-			and math.abs(angle) < EPSILON 
-			and linVel < EPSILON 
-			and math.abs(angVel) < EPSILON
+		return CFrameFuzzyEq(self.CurrentValue, self.CurrentGoal, EPSILON)
+			and CFrameFuzzyEq(self.CurrentSpeed, CFrameIdentity, EPSILON)
 	end,
 }
 local CurrentSpeedDefaults = {
 	["number"] = 0,
-	["Vector2"] = Vector2.zero,
-	["Vector3"] = Vector3.zero,
-	["CFrame"] = CFrame.identity,
+	["Vector2"] = Vector2Zero,
+	["Vector3"] = Vector3Zero,
+	["CFrame"] = CFrameIdentity,
 }
 export type SmoothDampSupported = number | Vector2 | Vector3 | CFrame
 export type SmoothDamper<T = SmoothDampSupported> = {
@@ -72,9 +71,9 @@ export type SmoothDamper<T = SmoothDampSupported> = {
 	_IsReturnIsFinishedStateOnUpdateEnabled : boolean,
 }
 local SmoothDamperMetatable = {}
-function SmoothDamperMetatable:Update(deltaTime : number?)
+function SmoothDamperMetatable.Update(self: SmoothDamper, deltaTime : number?)
 	local now = time()
-	deltaTime = type(deltaTime) == "number" and deltaTime or now - self._LastUpdateTime :: number
+	deltaTime = type(deltaTime) == "number" and deltaTime or now - self._LastUpdateTime
 
 	self._LastUpdateTime = now
 
@@ -95,7 +94,7 @@ function SmoothDamperMetatable:Update(deltaTime : number?)
 
 	return currentValue
 end
-function SmoothDamperMetatable:ResetInternalTime()
+function SmoothDamperMetatable.ResetInternalTime(self: SmoothDamper)
 	self._LastUpdateTime = time()
 end
 function SmoothDamperMetatable:__index(key : string)
@@ -187,8 +186,16 @@ function EasySmoothDamp.new<T>(
 end
 
 -- Default EPSILON is 1e-3 (0.001)
+-- type newEPSILONValue ~= number -> EPSILON is set to the default
+-- otherwise EPSILON is set to min(|newEPSILONValue|, 0.1)
+-- 0 (zero) is a valid input, but it is generally recommended to use a value greater than zero
 function EasySmoothDamp.SetEPSILON(newEPSILONValue : number?)
-	EPSILON = type(newEPSILONValue) == "number" and newEPSILONValue or EPSILONDEFAULT
+	EPSILON = math.min(
+		math.abs(
+			type(newEPSILONValue) == "number" and newEPSILONValue or EPSILONDEFAULT
+		),
+		0.1
+	)
 end
 
 return EasySmoothDamp

@@ -8,12 +8,12 @@ Easier way to use TweenService:SmoothDamp() - keeps the required variables in a 
 - **[Wally](<https://wally.run/package/coffilhg/easysmoothdamp>)**
 
     ```toml
-    EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.3"
+    EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.4"
     ```
 - **Rotriever**
 
     ```toml
-    EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.3"
+    EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.4"
     ```
 <!--- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[EasySmoothDamp](<https://create.roblox.com/store/asset/114136223178149/CoffeeBaseValue>)**-->
 
@@ -262,7 +262,7 @@ print(SmoothDamper:IsFinished()) -- true
 
 > CurrentValue, CurrentGoal and CurrentSpeed can only be reassigned to the same initial type T later.
 - `.SetEPSILON(newEPSILONValue : number?)`
-> Default EPSILON is 1e-3 (0.001); Given no newEPSILONValue applies the default.
+> Default EPSILON is 1e-3 (0.001); If `type(newEPSILONValue)` is `number`, then it is used, otherwise the default will be used. The used number is automatically capped to be non-negative and <= 0.1 to avoid getting FuzzyEq error of `"The eps value provided to FuzzyEq should be a small positive value <= 0.1"`. This means a `0` (zero) is a valid input, but it is generally recomended to use a value greater than zero.
 
 **SmoothDamper**
 - `:Update(deltaTime: number?): (T, boolean?)`
