@@ -20,6 +20,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml
 	> Arrangement = "coffilhg/arrangement@2.0.0"
 	> ```
+	> **Dependencies ~> *None :3***
 - **[CameraController](<https://github.com/Coffilhg/Useful-Modules/tree/CameraController>)**
 
 	> **MPL-2.0**
@@ -34,6 +35,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml
 	> CameraController = "coffilhg/cameracontroller@1.0.2"
 	> ```
+	> **Dependencies ~>** *[EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)*
 - **[CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)**
 
 	> **Apache-2.0**
@@ -48,6 +50,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml
 	> CoffeeObjects = "coffilhg/coffeeobjects@2.4.0"
 	> ```
+	> **Dependencies ~>** *[CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>) | [LemonSignal](<https://github.com/Data-Oriented-House/LemonSignal>)*
 - **[CoffeeParser](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeParser>)**
 
 	> **Apache-2.0**
@@ -62,6 +65,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml
 	> CoffeeParser = "coffilhg/coffeeparser@1.0.5"
 	> ```
+	> **Dependencies ~> *None :3***
 - **[CoffeeRemotes](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotes>)** (Apache-2.0)
 - **[CoffeeRemotesRefined](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeRemotesRefined>)**
 
@@ -77,6 +81,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml
 	> CoffeeRemotesServer = "coffilhg/coffeeremotes-server@1.0.1"
 	> ```
+	> **Dependencies ~>** *[LemonSignal](<https://github.com/Data-Oriented-House/LemonSignal>)*
 - **[Counter](<https://github.com/Coffilhg/Useful-Modules/tree/Counter>)**
 
 	> **MPL-2.0**
@@ -91,6 +96,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml
 	> Counter = "coffilhg/counter@1.0.1"
 	> ```
+	> **Dependencies ~>** *[LemonSignal](<https://github.com/Data-Oriented-House/LemonSignal>)*
 - **[EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
 
 	> **MPL-2.0**
@@ -105,6 +111,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml
 	> EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.4"
 	> ```
+	> **Dependencies ~> *None :3***
 - **[FirstPersonDetector](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonDetector>)**
 
 	> **Apache-2.0**
@@ -119,6 +126,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml
 	> FirstPersonDetector = "coffilhg/firstpersondetector@1.0.0"
 	> ```
+	> **Dependencies ~>** *[HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>) | [PerfectSignal](<https://github.com/Coffilhg/PerfectSignal>)*
 - **[FirstPersonView](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonView>)**
 
 	> **MPL-2.0**
@@ -133,6 +141,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml
 	> FirstPersonView = "coffilhg/firstpersonview@1.0.0"
 	> ```
+	> **Dependencies ~>** *[FirstPersonDetector](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonDetector>) | [HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>)*
 - **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)** (Apache-2.0)
 - **[GreatUIButton](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIButton>)**
 
@@ -148,6 +157,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml
 	> GreatUIButton = "coffilhg/greatuibutton@0.0.0"
 	> ```
+	> **Dependencies ~>** *[LemonSignal](<https://github.com/Data-Oriented-House/LemonSignal>)*
 - **[GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)** (Apache-2.0)
 - **[HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>)**
 
@@ -163,6 +173,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml
 	> HumanoidCameraOffsetController = "coffilhg/humanoidcameraoffsetcontroller@1.0.1"
 	> ```
+	> **Dependencies ~>** *[EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)*
 - **[NamespaceSync](<https://github.com/Coffilhg/Useful-Modules/tree/NamespaceSync>)**
 
 	> **MPL-2.0**
@@ -177,6 +188,7 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml
 	> NamespaceSync = "coffilhg/namespacesync@0.0.1"
 	> ```
+	> **Dependencies ~>** *[ClassNameTypePairs](<https://github.com/Coffilhg/ClassNameTypePairs>) | [LemonSignal](<https://github.com/Data-Oriented-House/LemonSignal>)*
 - **[ServerMessages](<https://github.com/Coffilhg/Useful-Modules/tree/ServerMessages>)** (Apache-2.0)
 
 ---
@@ -284,6 +296,10 @@ Copyright © 2026 @Coffilhg (Roblox UserId 517222346)
 
 --!strict
 -- Auto Quick Module Lookup Generator to be used at https://play.luau.org/
+type Dependency = {
+    Name: string,
+    Link: string?,
+}
 
 type BranchInfo = {
   ["ModuleNamePascalCase"]: string,
@@ -297,6 +313,34 @@ type BranchInfo = {
       -- Link is invalidated if none of the available properties are specified.
     },
   }?,
+    ["Dependencies"]: {Dependency}?,
+}
+
+const Ds: {[string]: Dependency} = {
+    LemonSignal = {
+        Name = `LemonSignal`,
+        Link = `https://github.com/Data-Oriented-House/LemonSignal`,
+    },
+    CoffeeParser = {
+        Name = `CoffeeParser`,
+    },
+    EasySmoothDamp = {
+        Name = `EasySmoothDamp`,
+    },
+    HumanoidCameraOffsetController = {
+        Name = `HumanoidCameraOffsetController`,
+    },
+    PerfectSignal = {
+        Name = `PerfectSignal`,
+        Link = `https://github.com/Coffilhg/PerfectSignal`,
+    },
+    FirstPersonDetector = {
+        Name = `FirstPersonDetector`,
+    },
+    ClassNameTypePairs = {
+        Name = `ClassNameTypePairs`,
+        Link = `https://github.com/Coffilhg/ClassNameTypePairs`,
+    },
 }
 
 local Branches: {[number]: BranchInfo} = {
@@ -322,6 +366,10 @@ local Branches: {[number]: BranchInfo} = {
             Content = `CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.4.0"`
         },
        },
+        Dependencies = {
+            Ds.LemonSignal,
+            Ds.CoffeeParser,
+        },
     },
     {
        ModuleNamePascalCase = "CoffeeParser",
@@ -335,7 +383,8 @@ local Branches: {[number]: BranchInfo} = {
        },
     },
     {
-       ModuleNamePascalCase = "CoffeeRemotes"
+       ModuleNamePascalCase = "CoffeeRemotes",
+        -- GoodSignal is the only dependency here, but this module is not published to anywhere anyways
     },
     {
        ModuleNamePascalCase = "Counter",
@@ -348,6 +397,7 @@ local Branches: {[number]: BranchInfo} = {
           Content = `Counter = "github.com/Coffilhg/Useful-Modules@Counter/1.0.1"`
         },
        },
+        Dependencies = {Ds.LemonSignal},
     },
     {
        ModuleNamePascalCase = "EasySmoothDamp",
@@ -380,6 +430,7 @@ local Branches: {[number]: BranchInfo} = {
           Content = `HumanoidCameraOffsetController = "github.com/Coffilhg/Useful-Modules@HumanoidCameraOffsetController/1.0.1"`
         },
        },
+        Dependencies = {Ds.EasySmoothDamp},
     },
     {
       ModuleNamePascalCase = "FirstPersonDetector",
@@ -391,6 +442,10 @@ local Branches: {[number]: BranchInfo} = {
           Content = `FirstPersonDetector = "github.com/Coffilhg/Useful-Modules@FirstPersonDetector/1.0.0"`
         },
        },
+        Dependencies = {
+            Ds.PerfectSignal,
+            Ds.HumanoidCameraOffsetController,
+        }
     },
     {
        ModuleNamePascalCase = "CameraController",
@@ -403,6 +458,7 @@ local Branches: {[number]: BranchInfo} = {
           Content = `CameraController = "github.com/Coffilhg/Useful-Modules@CameraController/1.0.2"`
         },
        },
+        Dependencies = {Ds.EasySmoothDamp},
     },
     {
       ModuleNamePascalCase = "FirstPersonView",
@@ -415,6 +471,10 @@ local Branches: {[number]: BranchInfo} = {
           Content = `FirstPersonView = "github.com/Coffilhg/Useful-Modules@FirstPersonView/1.0.0"`
         },
        },
+        Dependencies = {
+            Ds.FirstPersonDetector,
+            Ds.HumanoidCameraOffsetController,
+        },
     },
     {
       ModuleNamePascalCase = "CoffeeRemotesRefined",
@@ -427,6 +487,7 @@ local Branches: {[number]: BranchInfo} = {
             Content = `CoffeeRemotesClient = "coffilhg/coffeeremotes-client@1.0.1"`,
         },
        },
+        Dependencies = {Ds.LemonSignal},
     },
     {
       ModuleNamePascalCase = "GreatUIButton",
@@ -439,6 +500,7 @@ local Branches: {[number]: BranchInfo} = {
           Content = `GreatUIButton = "github.com/Coffilhg/Useful-Modules@GreatUIButton/0.0.0"`
         },
        },
+        Dependencies = {Ds.LemonSignal},
     },
     {
         ModuleNamePascalCase = "NamespaceSync",
@@ -450,7 +512,11 @@ local Branches: {[number]: BranchInfo} = {
             Rotriever = {
                 Content = `NamespaceSync = "github.com/Coffilhg/Useful-Modules@NamespaceSync/0.0.1"`,
             },
-        }
+        },
+        Dependencies = {
+            Ds.LemonSignal,
+            Ds.ClassNameTypePairs,
+        },
     }
 }
 
@@ -539,7 +605,21 @@ for _, branch in ipairs(Branches) do
     continue
   end
   table.insert(result, table.concat(serviceLinks, "\n"))
-  
+
+    const dependencies = branch.Dependencies
+    if type(dependencies) ~= `table` then
+        table.insert(result, `	> **Dependencies ~> *None :3***`)
+        continue
+    end
+
+    const styledDependencies = {}
+    for _, dependency in dependencies do
+        const dependencyName = dependency.Name
+        const dependencyLink = type(dependency.Link) == `string` and dependency.Link or `https://github.com/Coffilhg/Useful-Modules/tree/{dependencyName}`
+        table.insert(styledDependencies, `[{dependencyName}](<{dependencyLink}>)`)
+    end
+    table.sort(styledDependencies)
+    table.insert(result, `	> **Dependencies ~>** *{table.concat(styledDependencies, ` | `)}*`)
 end
 
 print(table.concat(result, "\n"))
