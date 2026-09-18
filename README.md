@@ -26,13 +26,13 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	>
 	> **[Useful-Modules/CameraController](<https://github.com/Coffilhg/Useful-Modules/tree/CameraController>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCameraController/1.0.1>)**
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCameraController/1.0.2>)**
 	> ```toml
-	> CameraController = "github.com/Coffilhg/Useful-Modules@CameraController/1.0.1"
+	> CameraController = "github.com/Coffilhg/Useful-Modules@CameraController/1.0.2"
 	> ```
 	> **[Wally](<https://wally.run/package/coffilhg/cameracontroller>)**
 	> ```toml
-	> CameraController = "coffilhg/cameracontroller@1.0.1"
+	> CameraController = "coffilhg/cameracontroller@1.0.2"
 	> ```
 - **[CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)**
 
@@ -397,10 +397,10 @@ local Branches: {[number]: BranchInfo} = {
        License = "MPL-2.0",
        Links = {
         Wally = {
-            Content = `CameraController = "coffilhg/cameracontroller@1.0.1"`,
+            Content = `CameraController = "coffilhg/cameracontroller@1.0.2"`,
         },
         Rotriever = {
-          Content = `CameraController = "github.com/Coffilhg/Useful-Modules@CameraController/1.0.1"`
+          Content = `CameraController = "github.com/Coffilhg/Useful-Modules@CameraController/1.0.2"`
         },
        },
     },
