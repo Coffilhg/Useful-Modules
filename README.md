@@ -169,13 +169,13 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	>
 	> **[Useful-Modules/NamespaceSync](<https://github.com/Coffilhg/Useful-Modules/tree/NamespaceSync>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vNamespaceSync/0.0.0>)**
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vNamespaceSync/0.0.1>)**
 	> ```toml
-	> NamespaceSync = "github.com/Coffilhg/Useful-Modules@NamespaceSync/0.0.0"
+	> NamespaceSync = "github.com/Coffilhg/Useful-Modules@NamespaceSync/0.0.1"
 	> ```
 	> **[Wally](<https://wally.run/package/coffilhg/namespacesync>)**
 	> ```toml
-	> NamespaceSync = "coffilhg/namespacesync@0.0.0"
+	> NamespaceSync = "coffilhg/namespacesync@0.0.1"
 	> ```
 - **[ServerMessages](<https://github.com/Coffilhg/Useful-Modules/tree/ServerMessages>)** (Apache-2.0)
 
@@ -445,10 +445,10 @@ local Branches: {[number]: BranchInfo} = {
         License = "MPL-2.0",
         Links = {
             Wally = {
-                Content = `NamespaceSync = "coffilhg/namespacesync@0.0.0"`,
+                Content = `NamespaceSync = "coffilhg/namespacesync@0.0.1"`,
             },
             Rotriever = {
-                Content = `NamespaceSync = "github.com/Coffilhg/Useful-Modules@NamespaceSync/0.0.0"`,
+                Content = `NamespaceSync = "github.com/Coffilhg/Useful-Modules@NamespaceSync/0.0.1"`,
             },
         }
     }
