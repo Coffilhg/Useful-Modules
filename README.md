@@ -97,13 +97,13 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	>
 	> **[Useful-Modules/EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vEasySmoothDamp/1.0.3>)**
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vEasySmoothDamp/1.0.4>)**
 	> ```toml
-	> EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.3"
+	> EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.4"
 	> ```
 	> **[Wally](<https://wally.run/package/coffilhg/easysmoothdamp>)**
 	> ```toml
-	> EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.3"
+	> EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.4"
 	> ```
 - **[FirstPersonDetector](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonDetector>)**
 
@@ -354,10 +354,10 @@ local Branches: {[number]: BranchInfo} = {
        License = "MPL-2.0",
        Links = {
         Wally = {
-            Content = `EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.3"`,
+            Content = `EasySmoothDamp = "coffilhg/easysmoothdamp@1.0.4"`,
         },
         Rotriever = {
-          Content = `EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.3"`
+          Content = `EasySmoothDamp = "github.com/Coffilhg/Useful-Modules@EasySmoothDamp/1.0.4"`
         },
        },
     },
