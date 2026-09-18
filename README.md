@@ -163,6 +163,20 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> ```toml
 	> HumanoidCameraOffsetController = "coffilhg/humanoidcameraoffsetcontroller@1.0.1"
 	> ```
+- **[NamespaceSync](<https://github.com/Coffilhg/Useful-Modules/tree/NamespaceSync>)**
+
+	> **MPL-2.0**
+	>
+	> **[Useful-Modules/NamespaceSync](<https://github.com/Coffilhg/Useful-Modules/tree/NamespaceSync>)**
+	> 
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vNamespaceSync/0.0.0>)**
+	> ```toml
+	> NamespaceSync = "github.com/Coffilhg/Useful-Modules@NamespaceSync/0.0.0"
+	> ```
+	> **[Wally](<https://wally.run/package/coffilhg/namespacesync>)**
+	> ```toml
+	> NamespaceSync = "coffilhg/namespacesync@0.0.0"
+	> ```
 - **[ServerMessages](<https://github.com/Coffilhg/Useful-Modules/tree/ServerMessages>)** (Apache-2.0)
 
 ---
@@ -426,6 +440,18 @@ local Branches: {[number]: BranchInfo} = {
         },
        },
     },
+    {
+        ModuleNamePascalCase = "NamespaceSync",
+        License = "MPL-2.0",
+        Links = {
+            Wally = {
+                Content = `NamespaceSync = "coffilhg/namespacesync@0.0.0"`,
+            },
+            Rotriever = {
+                Content = `NamespaceSync = "github.com/Coffilhg/Useful-Modules@NamespaceSync/0.0.0"`,
+            },
+        }
+    }
 }
 
 -- Sort Alphabetically
