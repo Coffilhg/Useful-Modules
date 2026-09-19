@@ -1,5 +1,5 @@
 --[[--
-    GreatUIDrag V1.0.0
+    GreatUIDrag V0.0.0
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -20,10 +20,10 @@ local RunS = game:GetService("RunService")
 --- Dependencies (By @Coffilhg) ---
 
 -- GUICompatibility's Source Repository: https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility
-local GUICompatibility = require(script.GUICompatibility) -- or wherever it's located and whatever it's named
+local GUICompatibility = require(script.Parent.GUICompatibility) -- or wherever it's located and whatever it's named
 
 -- CoffeeObjects's Source Repository: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
-local CoffeeObjects = require(script.CoffeeObjects) -- or wherever it's located and whatever it's named
+local CoffeeObjects = require(script.Parent.CoffeeObjects) -- or wherever it's located and whatever it's named
 local CoffeeBaseValue = CoffeeObjects.CoffeeBaseValue
 
 --- /E Dependencies (By @Coffilhg) ---
@@ -143,6 +143,10 @@ function DragElement:_AdjustInsets()
 	
 	if not screenGui then
 		self._blocked = true
+		self._InputInset = GUIInsetZero
+		self._InitInsetVector = GUIInsetZeroVector
+		self._GUIInset = GUIInsetZero
+		self._GUIInsetVector = GUIInsetZeroVector
 		return
 	end
 
