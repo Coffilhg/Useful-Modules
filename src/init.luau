@@ -1,5 +1,5 @@
 --[[--
-    GreatUIDrag V0.0.1
+    GreatUIDrag V0.0.2
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -228,6 +228,11 @@ function DragElement:Reposition()
 		return
 	end
 	
+	-- Never been dragged yet: nothing to reposition
+	if not (self._startObjectPos and self._startMousePos) then
+		return
+	end
+	
 	local startObjectPos = self._startObjectPos
 	local currentSpringState = self._position.Position
 	local startMousePos = self._startMousePos
@@ -279,6 +284,7 @@ function DragElement:InitDrag()
 end
 function DragElement:Stop()
 	self._isActive = false
+	if self["_blocked"] then return end
 	self:_KeepAlive()
 end
 
