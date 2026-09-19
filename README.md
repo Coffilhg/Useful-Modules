@@ -142,7 +142,21 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> FirstPersonView = "coffilhg/firstpersonview@1.0.0"
 	> ```
 	> **Dependencies ~>** *[FirstPersonDetector](<https://github.com/Coffilhg/Useful-Modules/tree/FirstPersonDetector>) | [HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>)*
-- **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)** (Apache-2.0)
+- **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)**
+
+	> **MPL-2.0**
+	>
+	> **[Useful-Modules/GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)**
+	> 
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vGUICompatibility/1.0.0>)**
+	> ```toml
+	> GUICompatibility = "github.com/Coffilhg/Useful-Modules@GUICompatibility/1.0.0"
+	> ```
+	> **[Wally](<https://wally.run/package/coffilhg/guicompatibility>)**
+	> ```toml
+	> GUICompatibility = "coffilhg/guicompatibility@1.0.0"
+	> ```
+	> **Dependencies ~>** *[CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)*
 - **[GreatUIButton](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIButton>)**
 
 	> **MPL-2.0**
@@ -344,6 +358,9 @@ const Ds: {[string]: Dependency} = {
     NamespaceSync = {
         Name = `NamespaceSync`,
     },
+    CoffeeObjects = {
+        Name = `CoffeeObjects`,
+    },
 }
 
 local Branches: {[number]: BranchInfo} = {
@@ -415,7 +432,19 @@ local Branches: {[number]: BranchInfo} = {
        },
     },
     {
-       ModuleNamePascalCase = "GUICompatibility"
+        ModuleNamePascalCase = "GUICompatibility",
+        License = "MPL-2.0",
+        Links = {
+            Wally = {
+                Content = `GUICompatibility = "coffilhg/guicompatibility@1.0.0"`,
+            },
+            Rotriever = {
+                Content = `GUICompatibility = "github.com/Coffilhg/Useful-Modules@GUICompatibility/1.0.0"`
+            },
+        },
+        Dependencies = {
+            Ds.CoffeeObjects,
+        },
     },
     {
        ModuleNamePascalCase = "GreatUIDrag"
