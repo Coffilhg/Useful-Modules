@@ -1,5 +1,5 @@
 --[[--
-    CoffeeRemotesRefined (Client-Side) V1.0.1
+    CoffeeRemotesRefined (Client-Side) V1.0.2
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -12,7 +12,11 @@
     
     Please make sure you're also using the Server-Side part of CoffeeRemotes (Refined)!
     List this as part of your wally [server-dependencies] (and make sure their versions match):
-    CoffeeRemotesServer = "coffilhg/coffeeremotes-server@1.0.1"
+    CoffeeRemotesServer = "coffilhg/coffeeremotes-server@1.0.2"
+
+    Namespacing (awaiting the module's Folders and Remote Instances) is delegated
+    to NamespaceSync, which must sit next to this module (script.Parent):
+    https://github.com/Coffilhg/Useful-Modules/tree/NamespaceSync
 --]]--
 --!strict
 --!optimize 2
@@ -21,13 +25,20 @@
 local RunS = game:GetService(`RunService`)
 local RS = game:GetService(`ReplicatedStorage`)
 
--- The following Three must match on Both Server and Client Side versions of the Module
-local ModuleVersion: string = `V1_0_1`
+-- The following Two must match on Both Server and Client Side versions of the Module
+-- ModuleVersion is handed to NamespaceSync as the projectVersion, so it takes part
+-- in the Folders' metadata (tag `{FolderName}_{ModuleVersion}` + a matching attribute).
+-- Bump it on BOTH sides whenever that metadata scheme changes.
+local ModuleVersion: string = `V1_0_2`
 local MainFolderName: string = `CoffeeRemotesRefined`
-local ModuleFoldersTag: string = `CoffeeRemotesRefined_{ModuleVersion}`
 
 local YieldWarningTime: number = 15
 local Prefix: string = `[CoffeeRemotes-Client {ModuleVersion}] ` -- This is only for Output
+-- NamespaceSync inserts its own space after the debugPrefix, hence the unpadded variants.
+-- The hints replace the ones the old handwritten yield warnings used to carry.
+local DebugPrefix: string = `[CoffeeRemotes-Client {ModuleVersion}]`
+local FolderDebugPrefix: string = `{DebugPrefix} [Did you add and require the Server-Side part of CoffeeRemotes (Refined)? Do their versions match?]`
+local RemoteDebugPrefix: string = `{DebugPrefix} [Did you create it on the Server-Side, or is this a typo?]`
 
 if not RunS:IsClient() then
 	error(`{Prefix} can only be required by Client-Side scripts!`)
@@ -39,6 +50,9 @@ end
 
 -- Signal's Source Repository: https://github.com/Data-Oriented-House/LemonSignal --
 local LemonSignal = require(script.Parent.LemonSignal) -- or wherever it's located and whatever it's named
+
+-- NamespaceSync's Source Repository/Branch: https://github.com/Coffilhg/Useful-Modules/tree/NamespaceSync --
+local NamespaceSync = require(script.Parent.NamespaceSync) -- or wherever it's located and whatever it's named
 
 --- /E Dependencies ---
 
@@ -56,60 +70,11 @@ type RemoteEventClassInstancesTable = ClassInstancesTable<RemoteEvent, RemoteEve
 type RemoteFunctionClassInstancesTable = ClassInstancesTable<RemoteFunction, RemoteFunctionType>
 type UnreliableRemoteEventClassInstancesTable = ClassInstancesTable<UnreliableRemoteEvent, UnreliableRemoteEventType>
 
-local function VerifyFolderMetadata(folder: Folder): boolean
-	return folder:HasTag(ModuleFoldersTag) and folder:GetAttribute(`CRRV`) == ModuleVersion
-end
-local function WaitForFolder(name: string, parent: Instance): Folder
-	local folder = parent:FindFirstChild(name)
-	
-	if typeof(folder) == `Instance` and (folder :: Instance).ClassName == `Folder` and VerifyFolderMetadata(folder :: Folder) then
-		return folder :: Folder
-	end
-	
-	local query = LemonSignal.new() :: LemonSignal.Signal<>
-	local searchResult: Folder
-	local connection: RBXScriptConnection
-	
-	local function evaluateChild(child: Instance): boolean | any
-		if (child :: Instance).ClassName == `Folder` and child.Name == name and VerifyFolderMetadata(child :: Folder) then
-			searchResult = child :: Folder
-			query:Fire()
-			return true
-		end
-		
-		return
-	end
-	
-	connection = parent.ChildAdded:Connect(evaluateChild)
-	for _, child in parent:GetChildren() do
-		if evaluateChild(child) then
-			break
-		end
-	end
-	
-	if not searchResult then
-		local yieldWarningThread = task.delay(
-			YieldWarningTime,
-			warn,
-			`{Prefix}Waiting for Folder {parent:GetFullName()}["{name}"]. Did you add and require the Server-Side part of CoffeeRemotes (Refined)? Do their versions match?`
-		)
-		
-		query:Wait()
-		
-		task.cancel(yieldWarningThread)
-		query:Destroy() -- the variable will then be gc'ed
-	end
-	
-	connection:Disconnect()
-	
-	return searchResult :: Folder
-end
-
-local MainFolder = WaitForFolder(MainFolderName, RS)
+local MainFolder = NamespaceSync:cd(ModuleVersion, MainFolderName, RS, false, FolderDebugPrefix, YieldWarningTime)
 -- The following Three (Folder names) must match on Both Server and Client Side versions of the Module
-local RemoteEventsFolder = WaitForFolder(`Events`, MainFolder)
-local RemoteFunctionsFolder = WaitForFolder(`Functions`, MainFolder)
-local UnreliableRemoteEventsFolder = WaitForFolder(`UnreliableEvents`, MainFolder)
+local RemoteEventsFolder = NamespaceSync:cd(ModuleVersion, `Events`, MainFolder, false, FolderDebugPrefix, YieldWarningTime)
+local RemoteFunctionsFolder = NamespaceSync:cd(ModuleVersion, `Functions`, MainFolder, false, FolderDebugPrefix, YieldWarningTime)
+local UnreliableRemoteEventsFolder = NamespaceSync:cd(ModuleVersion, `UnreliableEvents`, MainFolder, false, FolderDebugPrefix, YieldWarningTime)
 
 
 
@@ -166,60 +131,28 @@ local function GetRemote(name: string, where: Folder): (RemoteInstance | CoffeeR
 	local kindOf: KindOf = where == RemoteEventsFolder and `RemoteEvent`
 		or where == RemoteFunctionsFolder and `RemoteFunction`
 		or `UnreliableRemoteEvent`
-	local remote = where:FindFirstChild(name)
 	
-	if typeof(remote) == `Instance` and (remote :: Instance).ClassName == kindOf then
-		return CheckForRemoteUsage(kindOf, remote :: RemoteInstance | any, name) -- any to suppress linter
-	end
-	
-	local query = LemonSignal.new() :: LemonSignal.Signal<>
-	local searchResult: RemoteInstance
-	local connection: RBXScriptConnection
-	
-	-- while `child: RemoteInstance` is false, we sort for such; (suppress linter)
-	local function evaluateChild(child: RemoteInstance): boolean | any
-		if child.Name == name and (child :: Instance).ClassName == kindOf then
-			searchResult = child
-			query:Fire()
-			return true
-		end
-
-		return
-	end
-
-	connection = where.ChildAdded:Connect(evaluateChild :: any)
-	for _, child in where:GetChildren() do
-		if (evaluateChild :: any)(child) then
-			break
-		end
-	end
-
-	if not searchResult then
-		local yieldWarningThread = task.delay(
-			YieldWarningTime,
-			warn,
-			`{Prefix}Waiting for {kindOf} named "{name}". Did you create it on the Server-Side, or is this a typo?`
-		)
-
-		query:Wait()
-
-		task.cancel(yieldWarningThread)
-		query:Destroy() -- the variable will then be gc'ed
-	end
-
-	connection:Disconnect()
+	local remote: RemoteInstance = NamespaceSync:AwaitManual(
+		kindOf,
+		name,
+		where,
+		nil, -- no modifiers; no Validator is needed for plain Remote Instances
+		false, -- isRecursive; direct children of {where} only
+		RemoteDebugPrefix,
+		YieldWarningTime
+	) :: any
 	
 	-- First thoughts: no check for
 	-- `local object = module[kindOf][`instances`][remote] :: CoffeeRemotesObject?`
-	-- is needed, the instance was JUST REPLICATED TO THE CLIENT SIDE THIS EXACT MOMENT
+	-- is needed, cuz the Instance was JUST REPLICATED TO THE CLIENT SIDE THIS EXACT MOMENT
 	-- So the code would surely be just:
-	--return searchResult, false
+	--return remote, false
 	-- Pooling Considerations:
 	-- If you reparent .Remote of the CoffeeRemotesObject anywhere else, then
 	-- call a .new for that same kind and name, once you reparent that one .Remote
 	-- back, it lands right here, so we'll still check.
 	-- So the final code shall be:
-	return CheckForRemoteUsage(kindOf, searchResult, name)
+	return CheckForRemoteUsage(kindOf, remote, name)
 end
 
 export type BaseRemoteEventSubtypes = RemoteEvent | UnreliableRemoteEvent

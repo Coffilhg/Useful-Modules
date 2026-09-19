@@ -62,7 +62,7 @@ But I mean, you could still use Legacy CoffeeRemotes - they make it harder for e
 > - **[This repository (src/Server/scr/init.luau)](<src/Server/src/init.luau>)**
 > - **[Wally](<https://wally.run/package/coffilhg/coffeeremotes-server>)**
 >	>	```toml
->	>	CoffeeRemotesServer = "coffilhg/coffeeremotes-server@1.0.1"
+>	>	CoffeeRemotesServer = "coffilhg/coffeeremotes-server@1.0.2"
 >	>	```
 
 2. Place **CoffeeRemotesRefined (Client-Side)** where needed on the client
@@ -70,7 +70,7 @@ But I mean, you could still use Legacy CoffeeRemotes - they make it harder for e
 > - **[This repository (src/Client/src/init.luau)](<src/Client/src/init.luau>)**
 > - **[Wally](<https://wally.run/package/coffilhg/coffeeremotes-client>)**
 >	>	```toml
->	>	CoffeeRemotesClient = "coffilhg/coffeeremotes-client@1.0.1"
+>	>	CoffeeRemotesClient = "coffilhg/coffeeremotes-client@1.0.2"
 >	>	```
 3. Ensure [**LemonSignal** ( https://github.com/Data-Oriented-House/LemonSignal )](<https://github.com/Data-Oriented-House/LemonSignal>) is available as a dependency
 4. Require **CoffeeRemotesRefined (Server-Side)** module **once** on startup (required for **CoffeeRemotesRefined (Client-Side)** to load)
@@ -325,6 +325,7 @@ You should not rely on those messages in production, because for security reason
 ## Dependencies
 
 - [LemonSignal](<https://github.com/Data-Oriented-House/LemonSignal>)
+- [NamespaceSync](<https://github.com/Coffilhg/Useful-Modules/tree/NamespaceSync>)
 - Please note: CoffeeRemotesRefined consists of two modules, one for Server-Side and one for Client-Side, both require the other one in order to work properly / be useful!
 
 ---

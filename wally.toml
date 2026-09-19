@@ -6,3 +6,4 @@ realm = "dev"
 
 [dependencies]
 LemonSignal = "data-oriented-house/lemonsignal@2.0.0"
+NamespaceSync = "coffilhg/namespacesync@0.0.1"

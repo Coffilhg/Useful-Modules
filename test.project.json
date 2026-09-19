@@ -4,11 +4,11 @@
     "$className": "DataModel",
 
     "ReplicatedStorage": {
-      "CoffeeRemotesClient": {
-        "$path": "src/Client/src"
-      },
       "Packages": {
-        "$path": "Packages"
+        "$path": "Packages",
+        "CoffeeRemotesClient": {
+          "$path": "src/Client/src"
+        }
       },
       "ClientMain": {
         "$path": "src/Test/ClientMain",
@@ -19,8 +19,11 @@
     },
     
     "ServerScriptService": {
-      "CoffeeRemotesServer": {
-        "$path": "src/Server/src"
+      "ServerPackages": {
+        "$path": "Packages",
+        "CoffeeRemotesServer": {
+          "$path": "src/Server/src"
+        }
       },
       "$path": "src/Test/ServerScriptService"
     }

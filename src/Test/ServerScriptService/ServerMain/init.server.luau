@@ -3,7 +3,7 @@ local SSS = game:GetService(`ServerScriptService`)
 local RS = game:GetService(`ReplicatedStorage`)
 
 -- Coffee Remote Refined ~ Server
-local CRRServer = SSS.CoffeeRemotesServer
+local CRRServer = SSS.ServerPackages.CoffeeRemotesServer
 local CoffeeRemotes = require(CRRServer)
 --local RemoteEvent, RemoteFunction, URemoteEvent =
 --	CoffeeRemotes.RemoteEvent,
@@ -22,7 +22,7 @@ local FailCount = 0
 local PassCount = 0
 
 local function TestPass(test_txt: string, is_pass: boolean)
-	local mainPrefix = --[[PREFIX .. ]]test_txt:gsub(`%|`, `\\|`)
+	local mainPrefix = --[[PREFIX .. ]]test_txt:gsub(`|`, `\\|`)
 	print(mainPrefix .. ": " .. (if is_pass == true then "PASS ✅" else "FAIL ❌"))
 	table.insert(
 		Timestamps,
@@ -1085,8 +1085,6 @@ Test10Event:Wait()
 
 
 
-
-
 --- ENTERING THE DANGER ZONE ---
 warn(`{Padding} {PREFIX}Test #11: Ensuring mkdir is safe (re-requiring the module)`)
 local NewlyCreatedFolders = 0
@@ -1111,8 +1109,8 @@ end)
 
 local CRRSCloneModule = CRRServer:Clone()
 CRRSCloneModule.Name = `Test11CRRSClone`
-CRRSCloneModule.Parent = script
-local CRRSClone = require(script:WaitForChild(`Test11CRRSClone`)) :: typeof(CoffeeRemotes)
+CRRSCloneModule.Parent = CRRServer.Parent
+local CRRSClone = require(CRRSCloneModule) :: typeof(CoffeeRemotes)
 
 TestPass(
 	`[11] mkdir is safe when re-requiring (no new Folders created)`,
@@ -1131,13 +1129,13 @@ print(`{PREFIX} [INFO] Cleaning up the previous Folders, no further tests shall 
 ---[[
 -- Taken from the Server Side of the Module
 -- The following Three must match on Both Server and Client Side versions of the Module
-local ModuleVersion: string = `V1_0_0`
+local ModuleVersion: string = `V1_0_2`
 local MainFolderName: string = `CoffeeRemotesRefined`
-local ModuleFoldersTag: string = `CoffeeRemotesRefined_{ModuleVersion}`
+local ModuleFoldersTag: string = `{MainFolderName}_{ModuleVersion}`
 --]]
 
 local Matches = 0
-for _, folder in RS:QueryDescendants(`>Folder#{MainFolderName}.{ModuleFoldersTag}[$CRRV = "{ModuleVersion}"]`) do
+for _, folder in RS:QueryDescendants(`>Folder#{MainFolderName}.{ModuleFoldersTag}[$CoffeeRemotesRefinedV = "{ModuleFoldersTag}"]`) do
 	folder:Destroy()
 	Matches += 1
 end
@@ -1145,10 +1143,11 @@ print(`{PREFIX} [INFO] Cleaned up, previously {Matches} used Main Folders (Only 
 
 local function rawmkdir(name: string, where: Instance): Folder
 	local folder = Instance.new(`Folder`)
-
+	
+	local tag = `{name}_{ModuleVersion}`
 	folder.Name = name
-	folder:SetAttribute(`CRRV`, ModuleVersion)
-	folder:AddTag(ModuleFoldersTag)
+	folder:SetAttribute(`{name}V`, tag)
+	folder:AddTag(tag)
 
 	folder.Parent = where -- Parent after naming for compliance with Client's WaitForChild
 
@@ -1182,8 +1181,8 @@ local Test12SpoofedUnreliableRemoteEventsFolder1 = rawmkdir(`UnreliableEvents`, 
 print(`Expect two warning with "...Multiple matches found for selector:..."`)
 local CRRSCloneModule12 = CRRServer:Clone()
 CRRSCloneModule12.Name = `Test12CRRSClone`
-CRRSCloneModule12.Parent = script
-local CRRSClone12 = require(script:WaitForChild(`Test12CRRSClone`)) :: typeof(CoffeeRemotes)
+CRRSCloneModule12.Parent = CRRServer.Parent
+local CRRSClone12 = require(CRRSCloneModule12) :: typeof(CoffeeRemotes)
 
 local isSpoofPack1PutToUse = Test12SpoofedMainFolder.Parent ~= nil
 local isSpoofPack2PutToUse = Test12SpoofedMainFolder1.Parent ~= nil

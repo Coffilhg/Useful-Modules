@@ -1,3 +1,8 @@
+# v1.0.2
+
+## NamespaceSync, a new dependency
+Previosly, to ensure server and client agreement on which Instance to use, a specific algorithm was used. Later this algorithm was rewritten, improved and published as NamespaceSync. Now it replaces it's own predecessor here.
+
 # v1.0.1
 
 ## Server-Side changes

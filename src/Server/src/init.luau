@@ -1,5 +1,5 @@
 --[[--
-    CoffeeRemotesRefined (Server-Side) V1.0.1
+    CoffeeRemotesRefined (Server-Side) V1.0.2
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -12,7 +12,7 @@
     
     Please make sure you're also using the Client-Side part of CoffeeRemotes (Refined)!
     List this as part of your wally [dependencies] (and make sure their versions match):
-    CoffeeRemotesClient = "coffilhg/coffeeremotes-client@1.0.1"
+    CoffeeRemotesClient = "coffilhg/coffeeremotes-client@1.0.2"
 --]]--
 --!strict
 --!optimize 2
@@ -21,15 +21,18 @@
 local Players = game:GetService(`Players`)
 local RunS = game:GetService(`RunService`)
 local RS = game:GetService(`ReplicatedStorage`)
-local Debris = game:GetService(`Debris`)
 
--- The following Three must match on Both Server and Client Side versions of the Module
-local ModuleVersion: string = `V1_0_1` -- must be compatible with query descendants in a way that...
+-- The following Two must match on Both Server and Client Side versions of the Module
+-- ModuleVersion is handed to NamespaceSync as the projectVersion, so it takes part
+-- in the Folders' metadata (tag `{FolderName}_{ModuleVersion}` + a matching attribute).
+-- Bump it on BOTH sides whenever that metadata scheme changes.
+local ModuleVersion: string = `V1_0_2`
 local MainFolderName: string = `CoffeeRemotesRefined`
-local ModuleFoldersTag: string = `CoffeeRemotesRefined_{ModuleVersion}` -- ...this is evaluated as a SINGLE Tag
 
 local IsStudio: boolean = RunS:IsStudio()
 local Prefix: string = `[CoffeeRemotes-Server {ModuleVersion}] ` -- This is only for Output
+-- NamespaceSync inserts its own space after the debugPrefix, hence the unpadded variant
+local DebugPrefix: string = `[CoffeeRemotes-Server {ModuleVersion}]`
 
 -- Remote Function Exit Reasons (RFER)
 -- Be an oracle only if IsStudio testing, not in-game!
@@ -62,6 +65,9 @@ end
 
 -- Signal's Source Repository: https://github.com/Data-Oriented-House/LemonSignal --
 local LemonSignal = require(script.Parent.LemonSignal) -- or wherever it's located and whatever it's named
+
+-- NamespaceSync's Source Repository/Branch: https://github.com/Coffilhg/Useful-Modules/tree/NamespaceSync --
+local NamespaceSync = require(script.Parent.NamespaceSync) -- or wherever it's located and whatever it's named
 
 --- /E Dependencies ---
 
@@ -105,59 +111,11 @@ local PlayerCooldowns: PlayerCooldowns = {
 }
 local BackUpPlayerCooldowns: LemonSignal.Signal<Player, PlayerCooldownsBackup> = LemonSignal.new()
 
--- Please make sure the name given is compatible with use in :QueryDescendants via the very unsafe #{name} part of the selector
--- There is no safe escape implemented to make the name compatible automatically; And this shall remain such by design, there's no need to overengineer a function just to create four folders with hardcoded names (no user input).
-local function mkdir(name: string, where: Instance?): Folder
-	if typeof(where) ~= `Instance` then
-		where = RS
-	end
-
-	local folder_s = (where :: Instance):QueryDescendants(
-		`>Folder#{name}.{ModuleFoldersTag}[$CRRV = "{ModuleVersion}"]`
-	) :: {[number]: Folder}
-	local matches = #folder_s
-	-- both a tag of {ModuleFoldersTag}
-	-- and an attribute CRRV = {ModuleVersion}
-	-- (CRRV ~ CoffeeRemotesRefinedVersion)
-	-- all this on top of the Instance being
-	-- a Folder and named {name}
-
-	-- if there's multiple matches, every
-	-- single of them except one will be
-	-- :Destroy()'ed with a warning
-
-	-- most expected and the best case scenario
-	if matches < 1 then
-		local folder = Instance.new(`Folder`)
-
-		folder.Name = name
-		folder:SetAttribute(`CRRV`, ModuleVersion)
-		folder:AddTag(ModuleFoldersTag)
-
-		folder.Parent = where -- Parent after naming for compliance with Client's WaitForChild
-
-		return folder
-	end
-
-	if matches > 1 then
-		local destroyedReferences = {}
-		for i = 2, matches do
-			local folder = folder_s[i]
-			table.insert(destroyedReferences, folder)
-			folder.Parent = nil
-			Debris:AddItem(folder, 180)
-		end
-		warn(`{Prefix}Multiple matches found for selector: Folder named "{name}" with Tag {ModuleFoldersTag} and an Attribute "CRRV" equal to "{ModuleVersion}"; You have up to 180 seconds to troubleshoot them via clickable references:`, destroyedReferences)
-	end
-
-	return folder_s[1]
-end
-
-local MainFolder = mkdir(MainFolderName)
+local MainFolder = NamespaceSync:mkdir(ModuleVersion, MainFolderName, RS, false, DebugPrefix)
 -- The following Three (Folder names) must match on Both Server and Client Side versions of the Module
-local RemoteEventsFolder = mkdir(`Events`, MainFolder)
-local RemoteFunctionsFolder = mkdir(`Functions`, MainFolder)
-local UnreliableRemoteEventsFolder = mkdir(`UnreliableEvents`, MainFolder)
+local RemoteEventsFolder = NamespaceSync:mkdir(ModuleVersion, `Events`, MainFolder, false, DebugPrefix)
+local RemoteFunctionsFolder = NamespaceSync:mkdir(ModuleVersion, `Functions`, MainFolder, false, DebugPrefix)
+local UnreliableRemoteEventsFolder = NamespaceSync:mkdir(ModuleVersion, `UnreliableEvents`, MainFolder, false, DebugPrefix)
 
 
 
@@ -205,56 +163,43 @@ local function mkremote(name: string, where: Folder): (RemoteInstance | CoffeeRe
 	local kindOf: KindOf = where == RemoteEventsFolder and `RemoteEvent`
 		or where == RemoteFunctionsFolder and `RemoteFunction`
 		or `UnreliableRemoteEvent`
-	-- safely escaping names just to use QueryDescendants might be a waste of resources
-	--local remote_s = where:QueryDescendants(`>{kindOf}#{name}`)
 	
-	local firstMatch: RemoteInstance?
-	local furtherMatches: {[number]: RemoteInstance} = {}
-	local matches = 0
-	-- while `remote: RemoteInstance` is false, we sort for such; (suppress linter)
-	for _, remote: RemoteInstance in where:GetChildren() do
-		if remote.Name ~= name or remote.ClassName ~= kindOf then
-			continue
-		end
-		
-		matches += 1
-		if matches > 1 then
-			table.insert(furtherMatches, remote)
-			continue
-		end
-		firstMatch = remote
-	end
+	-- NamespaceSync only runs the Mutator on freshly created Instances (between
+	-- `.new` and `.Parent = where`), which is exactly how we tell a brand new
+	-- Remote Instance apart from one that was already sitting in the Folder.
+	local isNewlyCreated = false
 	
+	-- Duplicates (same ClassName + Name inside {where}) are reparented to nil and
+	-- :Destroy()'ed in 180 seconds with a warning by NamespaceSync itself.
+	-- Client sided scripts shall use CoffeeRemotesObject.Remote .AncestryChanged
+	-- to detect such stuff safely, although this is very unlikely to happen.
+	local remote: RemoteInstance = NamespaceSync:GetOrCreateManual(
+		kindOf,
+		name,
+		where,
+		{
+			Mutator = function()
+				isNewlyCreated = true
+			end,
+		},
+		false, -- isRecursive; direct children of {where} only
+		DebugPrefix
+	) :: any
 	
-	
-	if matches < 1 then
-		local remote = Instance.new(kindOf) :: RemoteInstance
-		
-		remote.Name = name
-		remote.Parent = where -- Parent after naming for compliance with Client's WaitForChild
-		
+	if isNewlyCreated then
 		return remote, false
 	end
 	
-	if matches > 1 then
-		for _, remote in furtherMatches do
-			-- client sided scripts shall use CoffeeRemotesObject.Remote
-			-- .AncestryChanged event to detect such stuff safely, although
-			-- this is very unlikely to happen
-			remote.Parent = nil
-			Debris:AddItem(remote, 180)
-		end
-		warn(`{Prefix}Multiple matches found for selector: {kindOf} named "{name}"; You have up to 180 seconds to troubleshoot them via clickable references:`, furtherMatches)
-	end
 	
-	local object = CoffeeRemotesRefinedServer[kindOf][`instances`][firstMatch] :: CoffeeRemotesObject?
+	
+	local object = CoffeeRemotesRefinedServer[kindOf][`instances`][remote] :: CoffeeRemotesObject?
 	if object then
 		warn(`{Prefix}{kindOf}Object with the name "{name}" already exists! Return the existing object.`)
 		return object, true
 	end
 	
 	warn(`{Prefix}{kindOf} with the name "{name}" already exists! Return the existing Instance.`)
-	return firstMatch :: RemoteInstance | any, false
+	return remote :: RemoteInstance, false
 end
 
 

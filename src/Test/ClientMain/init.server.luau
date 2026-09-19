@@ -2,8 +2,9 @@
 local RS = game:GetService(`ReplicatedStorage`)
 local RunS = game:GetService(`RunService`)
 
+local Packages = RS:WaitForChild(`Packages`)
 -- Coffee Remote Refined ~ Client
-local CRRClient = RS:WaitForChild(`CoffeeRemotesClient`)
+local CRRClient = Packages:WaitForChild(`CoffeeRemotesClient`)
 local CoffeeRemotes = require(CRRClient)
 --local RemoteEvent, RemoteFunction, URemoteEvent =
 --	CoffeeRemotes.RemoteEvent,
