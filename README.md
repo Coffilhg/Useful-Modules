@@ -75,13 +75,13 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> 
 	> **[Client-Side Wally](<https://wally.run/package/coffilhg/coffeeremotes-client>)**
 	> ```toml
-	> CoffeeRemotesClient = "coffilhg/coffeeremotes-client@1.0.1"
+	> CoffeeRemotesClient = "coffilhg/coffeeremotes-client@1.0.2"
 	> ```
 	> **[Server-Side Wally](<https://wally.run/package/coffilhg/coffeeremotes-server>)**
 	> ```toml
-	> CoffeeRemotesServer = "coffilhg/coffeeremotes-server@1.0.1"
+	> CoffeeRemotesServer = "coffilhg/coffeeremotes-server@1.0.2"
 	> ```
-	> **Dependencies ~>** *[LemonSignal](<https://github.com/Data-Oriented-House/LemonSignal>)*
+	> **Dependencies ~>** *[LemonSignal](<https://github.com/Data-Oriented-House/LemonSignal>) | [NamespaceSync](<https://github.com/Coffilhg/Useful-Modules/tree/NamespaceSync>)*
 - **[Counter](<https://github.com/Coffilhg/Useful-Modules/tree/Counter>)**
 
 	> **MPL-2.0**
@@ -341,6 +341,9 @@ const Ds: {[string]: Dependency} = {
         Name = `ClassNameTypePairs`,
         Link = `https://github.com/Coffilhg/ClassNameTypePairs`,
     },
+    NamespaceSync = {
+        Name = `NamespaceSync`,
+    },
 }
 
 local Branches: {[number]: BranchInfo} = {
@@ -481,13 +484,16 @@ local Branches: {[number]: BranchInfo} = {
       License = "MPL-2.0",
       Links = {
         [`[Server-Side Wally](<https://wally.run/package/coffilhg/coffeeremotes-server>)`] = {
-            Content = `CoffeeRemotesServer = "coffilhg/coffeeremotes-server@1.0.1"`,
+            Content = `CoffeeRemotesServer = "coffilhg/coffeeremotes-server@1.0.2"`,
         },
         [`[Client-Side Wally](<https://wally.run/package/coffilhg/coffeeremotes-client>)`] = {
-            Content = `CoffeeRemotesClient = "coffilhg/coffeeremotes-client@1.0.1"`,
+            Content = `CoffeeRemotesClient = "coffilhg/coffeeremotes-client@1.0.2"`,
         },
        },
-        Dependencies = {Ds.LemonSignal},
+        Dependencies = {
+            Ds.LemonSignal,
+            Ds.NamespaceSync,
+        },
     },
     {
       ModuleNamePascalCase = "GreatUIButton",
