@@ -172,7 +172,21 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> GreatUIButton = "coffilhg/greatuibutton@0.0.0"
 	> ```
 	> **Dependencies ~>** *[LemonSignal](<https://github.com/Data-Oriented-House/LemonSignal>)*
-- **[GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)** (Apache-2.0)
+- **[GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)**
+
+	> **MPL-2.0**
+	>
+	> **[Useful-Modules/GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)**
+	> 
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vGreatUIDrag/1.0.0>)**
+	> ```toml
+	> GreatUIDrag = "github.com/Coffilhg/Useful-Modules@GreatUIDrag/1.0.0"
+	> ```
+	> **[Wally](<https://wally.run/package/coffilhg/greatuidrag>)**
+	> ```toml
+	> GreatUIDrag = "coffilhg/greatuidrag@1.0.0"
+	> ```
+	> **Dependencies ~>** *[CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>) | [GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>) | [_Spring (by @crusherfire | https://www.roblox.com/users/80102935/profile)](<https://create.roblox.com/store/asset/71132874095126/Spring-Module>)*
 - **[HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>)**
 
 	> **Apache-2.0**
@@ -361,6 +375,13 @@ const Ds: {[string]: Dependency} = {
     CoffeeObjects = {
         Name = `CoffeeObjects`,
     },
+    GUICompatibility = {
+        Name = `GUICompatibility`,
+    },
+    _Spring = {
+        Name = `_Spring (by @crusherfire | https://www.roblox.com/users/80102935/profile)`,
+        Link = `https://create.roblox.com/store/asset/71132874095126/Spring-Module`,
+    },
 }
 
 local Branches: {[number]: BranchInfo} = {
@@ -439,7 +460,7 @@ local Branches: {[number]: BranchInfo} = {
                 Content = `GUICompatibility = "coffilhg/guicompatibility@1.0.0"`,
             },
             Rotriever = {
-                Content = `GUICompatibility = "github.com/Coffilhg/Useful-Modules@GUICompatibility/1.0.0"`
+                Content = `GUICompatibility = "github.com/Coffilhg/Useful-Modules@GUICompatibility/1.0.0"`,
             },
         },
         Dependencies = {
@@ -447,7 +468,21 @@ local Branches: {[number]: BranchInfo} = {
         },
     },
     {
-       ModuleNamePascalCase = "GreatUIDrag"
+        ModuleNamePascalCase = "GreatUIDrag",
+        License = "MPL-2.0",
+        Links = {
+            Wally = {
+                Content = `GreatUIDrag = "coffilhg/greatuidrag@1.0.0"`,
+            },
+            Rotriever = {
+                Content = `GreatUIDrag = "github.com/Coffilhg/Useful-Modules@GreatUIDrag/1.0.0"`,
+            },
+        },
+        Dependencies = {
+            Ds.CoffeeObjects,
+            Ds.GUICompatibility,
+            Ds._Spring,
+        },
     },
     {
        ModuleNamePascalCase = "ServerMessages"
