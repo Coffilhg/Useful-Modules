@@ -3,6 +3,23 @@
 Draggable UIs made easy!
 Supports desktop and mobile, GUI insets, anchor points, viewport resizing, and CSS-like padding limits. Console support is untested but should work for cursor-based input.
 
+
+
+## Available Here!
+- **[This repository](src/init.luau) ~ [src/init.luau](src/init.luau)**
+- **[Wally](<https://wally.run/package/coffilhg/greatuidrag>)**
+
+    ```toml
+    GreatUIDrag = "coffilhg/greatuidrag@1.0.0"
+    ```
+- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vGreatUIDrag/1.0.0>)**
+
+    ```toml
+    GreatUIDrag = "github.com/Coffilhg/Useful-Modules@GreatUIDrag/1.0.0"
+    ```
+
+<!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[GreatUIDrag](<https://create.roblox.com/store/asset/123456789/GreatUIDrag>)**-->
+
 ---
 
 ## Features

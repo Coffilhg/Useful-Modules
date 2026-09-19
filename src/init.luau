@@ -1,5 +1,5 @@
 --[[--
-    GreatUIDrag V0.0.2
+    GreatUIDrag V1.0.0
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
 
     This Source Code Form is subject to the terms of the Mozilla Public
