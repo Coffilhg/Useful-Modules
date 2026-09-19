@@ -1,0 +1,16 @@
+{
+  "name": "Testing",
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedStorage": {
+      "Packages": {
+        "$path": "Packages",
+        "GUICompatibility": {
+            "$path": "src/"
+        }
+      }
+    }
+    
+  }
+}

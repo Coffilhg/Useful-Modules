@@ -11,32 +11,38 @@
     Stars are appreciated!
 --]]--
 
-local Players = game:GetService("Players")
-local WS = game:GetService("Workspace")
+--!strict
+--!optimize 2
+
+local Players = game:GetService(`Players`)
+local WS = game:GetService(`Workspace`)
 
 --- Dependencies (By @Coffilhg) ---
 
 -- CoffeeObjects's Source Repository: https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
-local CoffeeObjects = require(script.CoffeeObjects) -- or wherever it's located and whatever it's named
+local CoffeeObjects = require(script.Parent.CoffeeObjects) -- or wherever it's located and whatever it's named
 local CoffeeBaseValue = CoffeeObjects.CoffeeBaseValue
 
 --- /E Dependencies (By @Coffilhg) ---
 
-local player = Players.LocalPlayer
-local camera = WS.CurrentCamera
+local player = Players.LocalPlayer :: Player
+local camera = WS.CurrentCamera :: Camera
 local PG = player.PlayerGui
 
 
 
-local someGUI = Instance.new("ScreenGui", PG)
+local someGUI = Instance.new("ScreenGui")
 someGUI.Name = "AbsoluteSizeGUI"
 someGUI.IgnoreGuiInset = true
 someGUI.ClipToDeviceSafeArea = true
 someGUI.SafeAreaCompatibility = Enum.SafeAreaCompatibility.FullscreenExtension
+someGUI.ResetOnSpawn = false
+someGUI.Parent = PG
 
 local cloneGUI = someGUI:Clone()
 cloneGUI.Name = `Cloned{someGUI.Name}`
 cloneGUI.IgnoreGuiInset = false
+cloneGUI.ResetOnSpawn = false
 cloneGUI.Parent = someGUI.Parent
 
 -- camera.ViewportSize is actually same as someGUI.AbsoluteSize
@@ -103,5 +109,7 @@ function module:GetSafeInsetsSize()
 	local diff = fullscreenSize - safeSize
 	return Vector2.new(math.abs(diff.X), math.abs(diff.Y))
 end
+
+table.freeze(module)
 
 return module
