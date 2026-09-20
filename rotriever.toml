@@ -2,9 +2,10 @@
 name = "coffilhg/greatuidrag"
 author = "Coffilhg"
 content_root = "src"
-version = "1.0.0"
+version = "2.0.0"
 license = "MPL-2.0"
 
 [dependencies]
 GUICompatibility = "github.com/Coffilhg/Useful-Modules@GUICompatibility/1.0.0"
 CoffeeObjects = "github.com/Coffilhg/Useful-Modules@CoffeeObjects/2.4.0"
+LemonSignal = "github.com/Data-Oriented-House/LemonSignal/releases/tag/v2.0.0"

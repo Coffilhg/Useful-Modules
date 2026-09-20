@@ -13,6 +13,8 @@ Impulse() fix by crusherfire (https://www.roblox.com/users/80102935/profile)
 This software depends on (but does not vendor or redistribute) software developed by:
 - Coffilhg
     - GUICompatibility (MPL-2.0): https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility
+- Data-Oriented-House
+    - LemonSignal (MIT License): https://github.com/Data-Oriented-House/LemonSignal
 - Any associated nested transitive dependencies of the above modules (NOT VENDORED OR REDISTRIBUTED)
 
 Licensed under the Mozilla Public License, v. 2.0 (the "License");
