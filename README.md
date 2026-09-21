@@ -1,5 +1,5 @@
 # RichGradient
-ModuleDescription
+Apply Gradients Using RichText
 
 
 

@@ -1,6 +1,6 @@
 [package]
 name = "coffilhg/richgradient"
-description = "ModuleDescription"
+description = "Apply Gradients Using RichText"
 version = "0.0.0"
 license = "MPL-2.0"
 authors = ["Coffilhg <coffilhg@gmail.com>"]
