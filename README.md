@@ -217,6 +217,21 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> NamespaceSync = "coffilhg/namespacesync@0.0.1"
 	> ```
 	> **Dependencies ~>** *[ClassNameTypePairs](<https://github.com/Coffilhg/ClassNameTypePairs>) | [LemonSignal](<https://github.com/Data-Oriented-House/LemonSignal>)*
+- **[RichGradient](<https://github.com/Coffilhg/Useful-Modules/tree/RichGradient>)**
+
+	> **MPL-2.0**
+	>
+	> **[Useful-Modules/RichGradient](<https://github.com/Coffilhg/Useful-Modules/tree/RichGradient>)**
+	> 
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vRichGradient/0.0.0>)**
+	> ```toml
+	> RichGradient = "github.com/Coffilhg/Useful-Modules@RichGradient/0.0.0"
+	> ```
+	> **[Wally](<https://wally.run/package/coffilhg/richgradient>)**
+	> ```toml
+	> RichGradient = "coffilhg/richgradient@0.0.0"
+	> ```
+	> **Dependencies ~> *None :3***
 - **[ServerMessages](<https://github.com/Coffilhg/Useful-Modules/tree/ServerMessages>)** (Apache-2.0)
 
 ---
@@ -588,7 +603,20 @@ local Branches: {[number]: BranchInfo} = {
             Ds.LemonSignal,
             Ds.ClassNameTypePairs,
         },
-    }
+    },
+    {
+        ModuleNamePascalCase = `RichGradient`,
+        License = "MPL-2.0",
+        Links = {
+            Wally = {
+                Content = `RichGradient = "coffilhg/richgradient@0.0.0"`,
+            },
+            Rotriever = {
+                Content = `RichGradient = "github.com/Coffilhg/Useful-Modules@RichGradient/0.0.0"`,
+            },
+        },
+        -- no Dependencies
+    },
 }
 
 -- Sort Alphabetically
