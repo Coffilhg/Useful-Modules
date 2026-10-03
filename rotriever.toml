@@ -2,7 +2,7 @@
 name = "coffilhg/modulenamelowercase"
 author = "Coffilhg"
 content_root = "src"
-version = "ModuleVersion"
+version = "1.0.0"
 license = "MPL-2.0"
 
 [dependencies]
