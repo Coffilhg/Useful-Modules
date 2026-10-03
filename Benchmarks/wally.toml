@@ -1,0 +1,11 @@
+[package]
+name = "coffilhg/reaction-benchmarks"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "dev"
+
+[dependencies]
+Vision = "thekingofspace/vision@1.1.6"
+Vide = "centau/vide@0.4.1"
+Fluid = "ffrostfall/fluid@0.6.5"
+Seam = "miagobble/seam@1.0.1"

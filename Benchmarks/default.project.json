@@ -1,0 +1,16 @@
+{
+  "name": "ReactivityBenchmark",
+  "tree": {
+    "$className": "DataModel",
+
+    "ServerScriptService": {
+      "$path": "src/",
+      "Packages": {
+        "$path": "Packages",
+        "Reaction": {
+          "$path": "../src/"
+        }
+      }
+    }
+  }
+}
