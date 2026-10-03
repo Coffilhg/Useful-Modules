@@ -87,7 +87,7 @@ function Benchmarks.WriteSourceWithNObservers(self: Benchmarks, nObservers: numb
 	Reaction.rmV(v)
 	
 	if n ~= no then
-		Warn(`Not all observers have captured the write. {no} expected, {n} captured`)
+		Warn(`[{script.Name}] Not all observers have captured the write. {no} expected, {n} captured`)
 	end
 	return e - s
 end
@@ -113,7 +113,7 @@ function Benchmarks.CreateNObservers(self: Benchmarks, nObservers: number?): num
 	Reaction.rmV(v)
 	
 	if n ~= no then
-		Warn(`Not all observers have captured the write. {no} expected, {n} captured`)
+		Warn(`[{script.Name}] Not all observers have captured the write. {no} expected, {n} captured`)
 	end
 	return e - s
 end
@@ -139,7 +139,7 @@ function Benchmarks.UnseeNObservers(self: Benchmarks, nObservers: number?): numb
 	Reaction.rmV(v)
 
 	if n ~= no then
-		Warn(`Not all observers have captured the write. {no} expected, {n} captured`)
+		Warn(`[{script.Name}] Not all observers have captured the write. {no} expected, {n} captured`)
 	end
 	return e - s
 end
@@ -173,7 +173,7 @@ function Benchmarks.ReadDerive(self: Benchmarks): number
 	const got = v()
 	const expected = a() + b()
 	if got ~= expected then
-		Warn(`Derive did not initialize value correctly. Expected {expected}, got {got}`)
+		Warn(`[{script.Name}] Derive did not initialize value correctly. Expected {expected}, got {got}`)
 	end
 	
 	Reaction.rmV(a)
@@ -195,7 +195,7 @@ function Benchmarks.RecomputeDerive(self: Benchmarks): number
 	const got = v()
 	const expected = a() + b()
 	if got ~= expected then
-		Warn(`Derive did not recompute or wrong. Expected {expected}, got {got}`)
+		Warn(`[{script.Name}] Derive did not recompute or wrong. Expected {expected}, got {got}`)
 	end
 	
 	Reaction.rmV(a)
@@ -220,7 +220,7 @@ end
 
 function Benchmarks.CreateDeriveWithNDependencies(self: Benchmarks, nDependencies: number?): number
 	const no = math.max(1, if type(nDependencies) == `number` then nDependencies else 1)
-	const deps = {}
+	const deps: {Reaction.V<number>} = {}
 	for i = 1, no do
 		table.insert(deps, Reaction.V(i))
 	end
@@ -238,7 +238,7 @@ function Benchmarks.CreateDeriveWithNDependencies(self: Benchmarks, nDependencie
 	const got = v()
 	const expected = (no * (no + 1)) / 2 -- simply sigma
 	if got ~= expected then
-		Warn(`Derive did not initialize value correctly. Expected {expected}, got {got}`)
+		Warn(`[{script.Name}] Derive did not initialize value correctly. Expected {expected}, got {got}`)
 	end
 	
 	Reaction.rmV(v)
@@ -250,7 +250,7 @@ end
 
 function Benchmarks.RecomputeDeriveWithNDependencies(self: Benchmarks, nDependencies: number?): number
 	const no = math.max(1, if type(nDependencies) == `number` then nDependencies else 1)
-	const deps = {}
+	const deps: {Reaction.V<number>} = {}
 	for i = 1, no do
 		table.insert(deps, Reaction.V(i))
 	end
@@ -271,7 +271,7 @@ function Benchmarks.RecomputeDeriveWithNDependencies(self: Benchmarks, nDependen
 	const got = v()
 	const expected = (no * (no + 1)) / 2 --[[simply sigma and minus one]] - 1
 	if got ~= expected then
-		Warn(`Derive did not recompute or wrong. Expected {expected}, got {got}`)
+		Warn(`[{script.Name}] Derive did not recompute or wrong. Expected {expected}, got {got}`)
 	end
 
 	Reaction.rmV(v)
@@ -301,7 +301,7 @@ function Benchmarks.RecomputeDeriveSwitch(self: Benchmarks): number
 	b(-1)
 	const e1 = timeFunction()
 	if changesObserved > 0 then
-		Warn(`Derive recomputed without a reason [#1].`)
+		Warn(`[{script.Name}] Derive recomputed without a reason [#1].`)
 	end
 	
 	-- recomputation expected
@@ -309,7 +309,7 @@ function Benchmarks.RecomputeDeriveSwitch(self: Benchmarks): number
 	a(2)
 	const e2 = timeFunction()
 	if v() ~= a() then
-		Warn(`Derive did not recompute or wrong, but was expected to [#1].`)
+		Warn(`[{script.Name}] Derive did not recompute or wrong, but was expected to [#1].`)
 	end
 	
 	-- recomputation expected
@@ -317,7 +317,7 @@ function Benchmarks.RecomputeDeriveSwitch(self: Benchmarks): number
 	c(false)
 	const e3 = timeFunction()
 	if v() ~= b() then
-		Warn(`Derive did not recompute or wrong, but was expected to [#2].`)
+		Warn(`[{script.Name}] Derive did not recompute or wrong, but was expected to [#2].`)
 	end
 	
 	-- no recomputation expected
@@ -325,7 +325,7 @@ function Benchmarks.RecomputeDeriveSwitch(self: Benchmarks): number
 	a(-1)
 	const e4 = timeFunction()
 	if changesObserved > 2 then
-		Warn(`Derive recomputed without a reason [#2].`)
+		Warn(`[{script.Name}] Derive recomputed without a reason [#2].`)
 	end
 	
 	-- recomputation expected
@@ -333,7 +333,7 @@ function Benchmarks.RecomputeDeriveSwitch(self: Benchmarks): number
 	b(1)
 	const e5 = timeFunction()
 	if v() ~= b() then
-		Warn(`Derive did not recompute or wrong, but was expected to [#3].`)
+		Warn(`[{script.Name}] Derive did not recompute or wrong, but was expected to [#3].`)
 	end
 	
 	
@@ -353,7 +353,7 @@ end
 function Benchmarks.CreateDeriveChain(self: Benchmarks): number
 	const a = Reaction.V(3)
 	const vs = {}
-	local last = a
+	local last: Reaction.V<number> = a
 	const s = timeFunction()
 	for i = 1, 1000 do
 		const prev = last
@@ -366,7 +366,7 @@ function Benchmarks.CreateDeriveChain(self: Benchmarks): number
 	const e = timeFunction()
 	
 	if last() ~= a() then
-		Warn(`Derive did not initialize value correctly. Expected {a()}, got {last()}`)
+		Warn(`[{script.Name}] Derive did not initialize value correctly. Expected {a()}, got {last()}`)
 	end
 	
 	Reaction.rmV(a)
@@ -379,7 +379,7 @@ end
 function Benchmarks.RecomputeDeriveChain(self: Benchmarks): number
 	const a = Reaction.V(3)
 	const vs = {}
-	local last = a
+	local last: Reaction.V<number> = a
 	for i = 1, 1000 do
 		const prev = last
 		const v = Reaction.C(function()
@@ -393,7 +393,7 @@ function Benchmarks.RecomputeDeriveChain(self: Benchmarks): number
 	const e = timeFunction()
 	
 	if last() ~= a() then
-		Warn(`Derive did not recompute or wrong. Expected {a()}, got {last()}`)
+		Warn(`[{script.Name}] Derive did not recompute or wrong. Expected {a()}, got {last()}`)
 	end
 	
 	Reaction.rmV(a)
