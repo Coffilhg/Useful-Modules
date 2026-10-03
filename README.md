@@ -217,6 +217,21 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> NamespaceSync = "coffilhg/namespacesync@0.0.1"
 	> ```
 	> **Dependencies ~>** *[ClassNameTypePairs](<https://github.com/Coffilhg/ClassNameTypePairs>) | [LemonSignal](<https://github.com/Data-Oriented-House/LemonSignal>)*
+- **[Reaction](<https://github.com/Coffilhg/Useful-Modules/tree/Reaction>)**
+
+	> **MPL-2.0**
+	>
+	> **[Useful-Modules/Reaction](<https://github.com/Coffilhg/Useful-Modules/tree/Reaction>)**
+	> 
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vReaction/1.0.0>)**
+	> ```toml
+	> Reaction = "github.com/Coffilhg/Useful-Modules@Reaction/1.0.0"
+	> ```
+	> **[Wally](<https://wally.run/package/coffilhg/reaction>)**
+	> ```toml
+	> Reaction = "coffilhg/modulenamelowercase@1.0.0"
+	> ```
+	> **Dependencies ~> *None :3***
 - **[RichGradient](<https://github.com/Coffilhg/Useful-Modules/tree/RichGradient>)**
 
 	> **MPL-2.0**
@@ -613,6 +628,19 @@ local Branches: {[number]: BranchInfo} = {
             },
             Rotriever = {
                 Content = `RichGradient = "github.com/Coffilhg/Useful-Modules@RichGradient/0.0.0"`,
+            },
+        },
+        -- no Dependencies
+    },
+    {
+        ModuleNamePascalCase = `Reaction`,
+        License = "MPL-2.0",
+        Links = {
+            Wally = {
+                Content = `Reaction = "coffilhg/modulenamelowercase@1.0.0"`,
+            },
+            Rotriever = {
+                Content = `Reaction = "github.com/Coffilhg/Useful-Modules@Reaction/1.0.0"`,
             },
         },
         -- no Dependencies
