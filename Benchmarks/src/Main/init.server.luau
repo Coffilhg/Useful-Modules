@@ -2,6 +2,8 @@
 --!optimize 2
 -- warm up before launching benchmark
 
+-- this is only for benchmarks in lune!!!
+-- const task = require("@lune/task") :: any
 print(`Running`)
 
 -- if it isn't running make sure the RunContext is "Server";
@@ -16,11 +18,11 @@ for i = 1, 100_000_000 do
 				print(`No more spam - clear the output now and wait!`)
 			end
 		end
-		task.wait()
+		-- task.wait()
 	end
 end
 
-const Benchmark = require(`./Reactivity.bench`)
+const Benchmark = require(`../Reactivity.bench`)
 -- Benchmark can be launched as a function.
 -- The first argument mast be the result of
 -- requiring a module with compatible api.
@@ -32,13 +34,13 @@ const Benchmark = require(`./Reactivity.bench`)
 
 
 
---Benchmark(require(`./Reactivity.bench/Reaction`), `[Reaction] `)
+Benchmark(require(`../Reactivity.bench/Reaction`), `[Reaction] `)
 
 --const Vide = require(`./Packages/Vide`)
 --Vide.root(function()
 --	Benchmark(require(`./Reactivity.bench/Vide`), `[Vide] `)
 --end)
 
-Benchmark(require(`./Reactivity.bench/Vision`), `[Vision] `, {
-	medium = 100
-})
+-- Benchmark(require(`./Reactivity.bench/Vision`), `[Vision] `, {
+-- 	medium = 100
+-- })

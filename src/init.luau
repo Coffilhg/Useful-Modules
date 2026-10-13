@@ -1,5 +1,5 @@
 --[[--
-    Reaction V1.0.0
+    Reaction V1.1.0
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -14,6 +14,9 @@
 --!strict
 --!optimize 2
 
+-- this is only for benchmarks in lune!!!
+const task = require("@lune/task") :: any
+
 const Reaction = {}
 const Reactions: {[V<Vt>]: El} = {}
 const Cells: {[V<Vt>]: {[number]: {pos: number?}}} = {}
@@ -22,7 +25,7 @@ const Cleanups: {[V<Vt>]: () -> ()} = {}
 const DestroyedFn = function() end
 
 type Vt = any
-export type V<T> = (T?, true?) -> (T)
+export type V<T> = (T?) -> (T)
 type Ou = () -> () --Observer: unsee
 type E<T> = (T, true?) -> () -- Event (or can also be called a reaction)
 type El = {[number]: E<Vt>} -- Event List
@@ -152,25 +155,30 @@ const function C<T>(c: () -> (T)): V<T>
 	HyperReactions[thread] = nil
 	const value = V(initial)
 
-	const heads = {}
+	const heads: {[V<Vt>]: Ou} = {}
 	local destroyed = false
+	local recomputeId = 0
+	local inflight = 0
+	local recompute: () -> ()
+
 	Cleanups[value] = function()
 		destroyed = true
-		for headOs in heads do
-			for oo in headOs do
-				oo()
-			end
+		for _, o in heads do
+			o()
 		end
 	end
 
-	const function processDeps()
-		const Os = {} -- "Observer"s
-		heads[Os] = true
-		for dependency in dependencies do
-			if destroyed then
-				break
+	const function processDeps(deps: {[V<Vt>]: true})
+		for dependency, o in heads do
+			if fiV(dependency) or not deps[dependency] then
+				heads[dependency] = nil
+				o()
+			else
+				deps[dependency] = nil -- already observed
 			end
-			dependencies[dependency] = nil
+		end
+		for dependency in deps do
+			deps[dependency] = nil
 			if fiV(dependency) then
 				-- don't create a function closures, if dependency was rmVed
 				-- i.e. Reaction.O is still capable of creating an unsee fn
@@ -180,25 +188,43 @@ const function C<T>(c: () -> (T)): V<T>
 
 			local o: Ou
 			o = O(dependency, function(_, isDestroyed)
-				heads[Os] = nil
-				for oo in Os do
-					-- oo -> other or this observer
-					oo()
-				end
 				if destroyed or isDestroyed then
+					heads[dependency] = nil
+					o()
 					return
 				end
-
-				const t = coroutine.running()
-				HyperReactions[t] = dependencies
-				const i = c()
-				HyperReactions[t] = nil
-				processDeps(dependencies)
-				value(i)
+				recompute()
 			end)
-			Os[o] = true
+			heads[dependency] = o
 		end
 	end
+
+	recompute = function()
+		recomputeId += 1
+		const thisRecomputeId = recomputeId
+		-- allocate new only when runs overlap, otherwise reuse
+		local deps
+		if inflight > 0 then
+			deps = {}
+		else
+			table.clear(dependencies)
+			deps = dependencies
+		end
+		const t = coroutine.running()
+		const prev = HyperReactions[t] -- support for nested/recursive writes
+		HyperReactions[t] = deps
+		inflight += 1
+		const i = c()
+		inflight -= 1
+		HyperReactions[t] = prev
+
+		if destroyed or thisRecomputeId ~= recomputeId then
+			return -- a newer recompute started meanwhile
+		end
+		processDeps(deps)
+		value(i)
+	end
+
 	processDeps(dependencies)
 
 	return value

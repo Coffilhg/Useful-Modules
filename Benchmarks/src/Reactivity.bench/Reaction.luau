@@ -1,6 +1,8 @@
 --!strict
 --!optimize 2
-const Reaction = require(`../Packages/Reaction`)
+const Reaction = require(`../../Packages/_Index/coffilhg_reaction@1.0.0/reaction/src`)
+-- use this for latest public release --	require(`../../Packages/_Index/coffilhg_reaction@1.0.0/reaction/src`)
+-- use this for latesr work --				require(`../../../src`)
 const Warn = require(`./Warn`)
 const timeFunction = os.clock
 
