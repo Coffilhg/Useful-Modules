@@ -1,4 +1,5 @@
 # 3 Runs for every project
+Each run is a separate test session in Roblox studio. All runs were made on the same device and the same Roblox Studio version. Only one project is tested per run.
 
 # Benchmark results `[Reaction@1.0.0]`
 

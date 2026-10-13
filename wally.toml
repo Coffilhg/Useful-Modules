@@ -1,5 +1,5 @@
 [package]
-name = "coffilhg/modulenamelowercase"
+name = "coffilhg/reaction"
 description = "Simple lightweight reactivity core balancing memory and speed. Just Source (V), Effect (O) and Derive (C). No complicated graphs or scheduling."
 version = "1.0.0"
 license = "MPL-2.0"

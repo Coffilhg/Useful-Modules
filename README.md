@@ -5,10 +5,10 @@ The aim is to run with no dependencies and with as little implementation as poss
 
 ## Available Here!
 - **[This repository](src/init.luau) ~ [src/init.luau](src/init.luau)**
-- **[Wally](<https://wally.run/package/coffilhg/modulenamelowercase>)**
+- **[Wally](<https://wally.run/package/coffilhg/reaction>)**
 
     ```toml
-    Reaction = "coffilhg/modulenamelowercase@1.0.0"
+    Reaction = "coffilhg/reaction@1.0.0"
     ```
 - **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vReaction/1.0.0>)**
 
@@ -22,7 +22,11 @@ The aim is to run with no dependencies and with as little implementation as poss
 ---
 
 ## Benchmarks
-Benchmark results can be seen **[here at Benchmarks/Results.md](Benchmarks/Results.md)**. Currently they only cover **Reaction**'s own speed. Benchmarks for comparison are planned with Vision, Vide, Fluid and Seam.
+Benchmark results can be seen **[here at Benchmarks/Results.md](Benchmarks/Results.md)**. ~~Currently they only cover **Reaction**'s own speed. Benchmarks for comparison are planned with Vision, Vide, Fluid and Seam.~~
+
+Benchmarks now cover Vide and Vision too. They were ai-generated, then human-audited and slightly edited. The initial Benchmark for Reaction was human made.
+
+Looks like it's better to only compare Reaction, Vide and Vision.
 
 ---
 
