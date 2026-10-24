@@ -7,7 +7,7 @@
       "$path": "src/",
       "Packages": {
         "$path": "Packages",
-        "Reaction": {
+        "ReactionLatestWorkingDir": {
           "$path": "../src/"
         }
       }

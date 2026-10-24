@@ -15,7 +15,7 @@
 --!optimize 2
 
 -- this is only for benchmarks in lune!!!
-const task = require("@lune/task") :: any
+-- const task = require("@lune/task") :: any
 
 const Reaction = {}
 const Reactions: {[V<Vt>]: El} = {}
@@ -26,8 +26,8 @@ const DestroyedFn = function() end
 
 type Vt = any
 export type V<T> = (T?) -> (T)
-type Ou = () -> () --Observer: unsee
-type E<T> = (T, true?) -> () -- Event (or can also be called a reaction)
+export type Ou = () -> () --Observer: unsee
+export type E<T> = (T, true?) -> () -- Event (or can also be called a reaction)
 type El = {[number]: E<Vt>} -- Event List
 
 -- Value ("Source")
@@ -88,7 +88,7 @@ const function ifV<T>(V: V<T>): boolean
 end
 Reaction.ifV = ifV
 
--- fi Value (returns whether you the value was removed ("Destroyed") using rmV)
+-- fi Value (returns whether the value was removed ("Destroyed") using rmV)
 -- why does this exist? So that you won't have to do `not Reaction.ifV` (not is
 -- an additional operation and this module aims to be as fast&memory efficient as possible)
 const function fiV<T>(V: V<T>): boolean
@@ -98,6 +98,7 @@ Reaction.fiV = fiV
 
 -- Observe ("Effect")
 -- e - event
+-- v is auto-inferred as unknown; when you try to type it, the first autocomplete option is correct
 const function O<T>(V: V<T>, e: E<T>): Ou
 	const reactions: El = Reactions[V]
 	const cells = Cells[V]
@@ -231,5 +232,10 @@ const function C<T>(c: () -> (T)): V<T>
 end
 Reaction.C = C
 
+function Reaction.Unpack(self: Reaction)
+    return V, O, C, rmV, ifV, fiV
+end
+
 table.freeze(Reaction)
+export type Reaction = typeof(Reaction)
 return Reaction

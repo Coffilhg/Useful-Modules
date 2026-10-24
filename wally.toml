@@ -1,7 +1,7 @@
 [package]
 name = "coffilhg/reaction"
 description = "Simple lightweight reactivity core balancing memory and speed. Just Source (V), Effect (O) and Derive (C). No complicated graphs or scheduling."
-version = "1.0.0"
+version = "1.1.0"
 license = "MPL-2.0"
 authors = ["Coffilhg <coffilhg@gmail.com>"]
 repository = "https://github.com/Coffilhg/Useful-Modules/tree/Reaction"
