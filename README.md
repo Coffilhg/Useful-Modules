@@ -223,13 +223,13 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	>
 	> **[Useful-Modules/Reaction](<https://github.com/Coffilhg/Useful-Modules/tree/Reaction>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vReaction/1.0.0>)**
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vReaction/1.1.0>)**
 	> ```toml
-	> Reaction = "github.com/Coffilhg/Useful-Modules@Reaction/1.0.0"
+	> Reaction = "github.com/Coffilhg/Useful-Modules@Reaction/1.1.0"
 	> ```
 	> **[Wally](<https://wally.run/package/coffilhg/reaction>)**
 	> ```toml
-	> Reaction = "coffilhg/modulenamelowercase@1.0.0"
+	> Reaction = "coffilhg/reaction@1.1.0"
 	> ```
 	> **Dependencies ~> *None :3***
 - **[RichGradient](<https://github.com/Coffilhg/Useful-Modules/tree/RichGradient>)**
@@ -637,10 +637,10 @@ local Branches: {[number]: BranchInfo} = {
         License = "MPL-2.0",
         Links = {
             Wally = {
-                Content = `Reaction = "coffilhg/modulenamelowercase@1.0.0"`,
+                Content = `Reaction = "coffilhg/reaction@1.1.0"`,
             },
             Rotriever = {
-                Content = `Reaction = "github.com/Coffilhg/Useful-Modules@Reaction/1.0.0"`,
+                Content = `Reaction = "github.com/Coffilhg/Useful-Modules@Reaction/1.1.0"`,
             },
         },
         -- no Dependencies
