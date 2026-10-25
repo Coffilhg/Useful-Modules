@@ -2,8 +2,8 @@
 name = "coffilhg/createinstance"
 author = "Coffilhg"
 content_root = "src"
-version = "0.1.0"
+version = "0.1.1"
 license = "MPL-2.0"
 
 [dependencies]
-ClassNameTypePairs = "github.com/Coffilhg/Useful-Modules@*"
+ClassNameTypePairs = "github.com/Coffilhg/ClassNameTypePairs@*"

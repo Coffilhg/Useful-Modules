@@ -23,12 +23,12 @@ All **number indexed Instances** in props become children of the new Instance
 - **[Wally](<https://wally.run/package/coffilhg/createinstance>)**
 
     ```toml
-    CreateInstance = "coffilhg/createinstance@0.1.0"
+    CreateInstance = "coffilhg/createinstance@0.1.1"
     ```
-- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstance/0.1.0>)**
+- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstance/0.1.1>)**
 
     ```toml
-    CreateInstance = "github.com/Coffilhg/Useful-Modules@CreateInstance/0.1.0"
+    CreateInstance = "github.com/Coffilhg/Useful-Modules@CreateInstance/0.1.1"
     ```
 
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[CreateInstance](<https://create.roblox.com/store/asset/123456789/CreateInstance>)**-->
@@ -38,12 +38,12 @@ All **number indexed Instances** in props become children of the new Instance
 - **[Wally](<https://wally.run/package/coffilhg/createinstancecoffee>)**
 
     ```toml
-    CreateInstanceCoffee = "coffilhg/createinstancecoffee@0.1.0"
+    CreateInstanceCoffee = "coffilhg/createinstancecoffee@0.1.1"
     ```
-- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceCoffee/0.1.0>)**
+- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceCoffee/0.1.1>)**
 
     ```toml
-    CreateInstanceCoffee = "github.com/Coffilhg/Useful-Modules@CreateInstanceCoffee/0.1.0"
+    CreateInstanceCoffee = "github.com/Coffilhg/Useful-Modules@CreateInstanceCoffee/0.1.1"
     ```
 
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[CreateInstanceCoffee](<https://create.roblox.com/store/asset/123456789/CreateInstanceCoffee>)**-->
@@ -53,12 +53,12 @@ All **number indexed Instances** in props become children of the new Instance
 - **[Wally](<https://wally.run/package/coffilhg/createinstancereaction>)**
 
     ```toml
-    CreateInstanceReaction = "coffilhg/createinstancereaction@0.1.0"
+    CreateInstanceReaction = "coffilhg/createinstancereaction@0.1.1"
     ```
-- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceReaction/0.1.0>)**
+- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceReaction/0.1.1>)**
 
     ```toml
-    CreateInstanceReaction = "github.com/Coffilhg/Useful-Modules@CreateInstanceReaction/0.1.0"
+    CreateInstanceReaction = "github.com/Coffilhg/Useful-Modules@CreateInstanceReaction/0.1.1"
     ```
 
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[CreateInstanceReaction](<https://create.roblox.com/store/asset/123456789/CreateInstanceReaction>)**-->
