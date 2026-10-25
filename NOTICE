@@ -1,0 +1,13 @@
+CreateInstance (& CreateInstanceCoffee & CreateInstanceReaction)
+Copyright © 2026 @Coffilhg (Roblox UserId 517222346)
+
+This software depends on (but does not vendor or redistribute) software developed by:
+- Coffilhg
+    - ClassNameTypePairs (Unlicense): https://github.com/Coffilhg/ClassNameTypePairs
+    - CoffeeObjects (Apache-2.0): https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects
+    - Reaction (MPL-2.0): https://github.com/Coffilhg/Useful-Modules/tree/Reaction
+- Any associated nested transitive dependencies of the above modules (NOT VENDORED OR REDISTRIBUTED)
+
+Licensed under the Mozilla Public License, v. 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at https://mozilla.org/MPL/2.0/

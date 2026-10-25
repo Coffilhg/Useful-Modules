@@ -1,0 +1,13 @@
+[package]
+name = "coffilhg/createinstancecoffee"
+description = "A quicker way to use Instance.new + supports Coffilhg/CoffeeObjects' objects!"
+version = "0.1.0"
+license = "MPL-2.0"
+authors = ["Coffilhg <coffilhg@gmail.com>"]
+repository = "https://github.com/Coffilhg/Useful-Modules/tree/CreateInstance"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
+ClassNameTypePairs = "coffilhg/classnametypepairs@*"
+CoffeeObjects = "coffilhg/coffeeobjects@2.4.0"
