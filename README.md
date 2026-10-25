@@ -97,6 +97,37 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> Counter = "coffilhg/counter@1.0.1"
 	> ```
 	> **Dependencies ~>** *[LemonSignal](<https://github.com/Data-Oriented-House/LemonSignal>)*
+- **[CreateInstance](<https://github.com/Coffilhg/Useful-Modules/tree/CreateInstance>)**
+
+	> **MPL-2.0**
+	>
+	> **[Useful-Modules/CreateInstance](<https://github.com/Coffilhg/Useful-Modules/tree/CreateInstance>)**
+	> 
+	> **1! [Wally CreateInstance](<https://wally.run/package/coffilhg/createinstance>)**
+	> ```toml
+	> CreateInstance = "coffilhg/createinstance@0.1.1"
+	> ```
+	> **2" [Wally CreateInstanceCoffee](<https://wally.run/package/coffilhg/createinstancecoffee>)**
+	> ```toml
+	> CreateInstanceCoffee = "coffilhg/createinstancecoffee@0.1.1"
+	> ```
+	> **3# [Wally CreateInstanceReaction](<https://wally.run/package/coffilhg/createinstancereaction>)**
+	> ```toml
+	> CreateInstanceReaction = "coffilhg/createinstancereaction@0.1.1"
+	> ```
+	> **1! [Rotriever CreateInstance](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstance/0.1.1>)**
+	> ```toml
+	> CreateInstance = "github.com/Coffilhg/Useful-Modules@CreateInstance/0.1.1"
+	> ```
+	> **2" [Rotriever CreateInstanceCoffee](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceCoffee/0.1.1>)**
+	> ```toml
+	> CreateInstanceCoffee = "github.com/Coffilhg/Useful-Modules@CreateInstanceCoffee/0.1.1"
+	> ```
+	> **3# [Rotriever CreateInstanceReaction](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceReaction/0.1.1>)**
+	> ```toml
+	> CreateInstanceReaction = "github.com/Coffilhg/Useful-Modules@CreateInstanceReaction/0.1.1"
+	> ```
+	> **Dependencies ~>** *[ClassNameTypePairs](<https://github.com/Coffilhg/ClassNameTypePairs>) | [CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>) | [Reaction](<https://github.com/Coffilhg/Useful-Modules/tree/Reaction>)*
 - **[EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
 
 	> **MPL-2.0**
@@ -412,6 +443,9 @@ const Ds: {[string]: Dependency} = {
         Name = `_Spring (by @crusherfire | https://www.roblox.com/users/80102935/profile)`,
         Link = `https://create.roblox.com/store/asset/71132874095126/Spring-Module`,
     },
+    Reaction = {
+        Name = `Reaction`,
+    },
 }
 
 local Branches: {[number]: BranchInfo} = {
@@ -644,6 +678,35 @@ local Branches: {[number]: BranchInfo} = {
             },
         },
         -- no Dependencies
+    },
+    {
+      ModuleNamePascalCase = "CreateInstance",
+      License = "MPL-2.0",
+      Links = {
+        [`1! [Rotriever CreateInstance](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstance/0.1.1>)`] = {
+            Content = `CreateInstance = "github.com/Coffilhg/Useful-Modules@CreateInstance/0.1.1"`,
+        },
+        [`1! [Wally CreateInstance](<https://wally.run/package/coffilhg/createinstance>)`] = {
+            Content = `CreateInstance = "coffilhg/createinstance@0.1.1"`,
+        },
+        [`2" [Rotriever CreateInstanceCoffee](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceCoffee/0.1.1>)`] = {
+            Content = `CreateInstanceCoffee = "github.com/Coffilhg/Useful-Modules@CreateInstanceCoffee/0.1.1"`,
+        },
+        [`2" [Wally CreateInstanceCoffee](<https://wally.run/package/coffilhg/createinstancecoffee>)`] = {
+            Content = `CreateInstanceCoffee = "coffilhg/createinstancecoffee@0.1.1"`,
+        },
+        [`3# [Rotriever CreateInstanceReaction](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceReaction/0.1.1>)`] = {
+            Content = `CreateInstanceReaction = "github.com/Coffilhg/Useful-Modules@CreateInstanceReaction/0.1.1"`,
+        },
+        [`3# [Wally CreateInstanceReaction](<https://wally.run/package/coffilhg/createinstancereaction>)`] = {
+            Content = `CreateInstanceReaction = "coffilhg/createinstancereaction@0.1.1"`,
+          },
+      },
+      Dependencies = {
+          Ds.ClassNameTypePairs,
+          Ds.CoffeeObjects,
+          Ds.Reaction,
+      },
     },
 }
 
