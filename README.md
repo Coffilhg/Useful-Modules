@@ -194,13 +194,13 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	>
 	> **[Useful-Modules/GreatUIButton](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIButton>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vGreatUIButton/0.0.0>)**
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vGreatUIButton/0.0.1>)**
 	> ```toml
-	> GreatUIButton = "github.com/Coffilhg/Useful-Modules@GreatUIButton/0.0.0"
+	> GreatUIButton = "github.com/Coffilhg/Useful-Modules@GreatUIButton/0.0.1"
 	> ```
 	> **[Wally](<https://wally.run/package/coffilhg/greatuibutton>)**
 	> ```toml
-	> GreatUIButton = "coffilhg/greatuibutton@0.0.0"
+	> GreatUIButton = "coffilhg/greatuibutton@0.0.1"
 	> ```
 	> **Dependencies ~>** *[LemonSignal](<https://github.com/Data-Oriented-House/LemonSignal>)*
 - **[GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)**
@@ -209,13 +209,13 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	>
 	> **[Useful-Modules/GreatUIDrag](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIDrag>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vGreatUIDrag/2.0.0>)**
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vGreatUIDrag/2.0.1>)**
 	> ```toml
-	> GreatUIDrag = "github.com/Coffilhg/Useful-Modules@GreatUIDrag/2.0.0"
+	> GreatUIDrag = "github.com/Coffilhg/Useful-Modules@GreatUIDrag/2.0.1"
 	> ```
 	> **[Wally](<https://wally.run/package/coffilhg/greatuidrag>)**
 	> ```toml
-	> GreatUIDrag = "coffilhg/greatuidrag@2.0.0"
+	> GreatUIDrag = "coffilhg/greatuidrag@2.0.1"
 	> ```
 	> **Dependencies ~>** *[CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>) | [GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>) | [LemonSignal](<https://github.com/Data-Oriented-House/LemonSignal>) | [_Spring (by @crusherfire | https://www.roblox.com/users/80102935/profile)](<https://create.roblox.com/store/asset/71132874095126/Spring-Module>)*
 - **[HumanoidCameraOffsetController](<https://github.com/Coffilhg/Useful-Modules/tree/HumanoidCameraOffsetController>)**
@@ -536,10 +536,10 @@ local Branches: {[number]: BranchInfo} = {
         License = "MPL-2.0",
         Links = {
             Wally = {
-                Content = `GreatUIDrag = "coffilhg/greatuidrag@2.0.0"`,
+                Content = `GreatUIDrag = "coffilhg/greatuidrag@2.0.1"`,
             },
             Rotriever = {
-                Content = `GreatUIDrag = "github.com/Coffilhg/Useful-Modules@GreatUIDrag/2.0.0"`,
+                Content = `GreatUIDrag = "github.com/Coffilhg/Useful-Modules@GreatUIDrag/2.0.1"`,
             },
         },
         Dependencies = {
@@ -629,10 +629,10 @@ local Branches: {[number]: BranchInfo} = {
       License = "MPL-2.0",
       Links = {
         Wally = {
-            Content = `GreatUIButton = "coffilhg/greatuibutton@0.0.0"`,
+            Content = `GreatUIButton = "coffilhg/greatuibutton@0.0.1"`,
         },
         Rotriever = {
-          Content = `GreatUIButton = "github.com/Coffilhg/Useful-Modules@GreatUIButton/0.0.0"`
+          Content = `GreatUIButton = "github.com/Coffilhg/Useful-Modules@GreatUIButton/0.0.1"`
         },
        },
         Dependencies = {Ds.LemonSignal},
