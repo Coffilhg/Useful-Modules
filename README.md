@@ -10,12 +10,12 @@ Supports desktop and mobile, GUI insets, anchor points, viewport resizing, and C
 - **[Wally](<https://wally.run/package/coffilhg/greatuidrag>)**
 
     ```toml
-    GreatUIDrag = "coffilhg/greatuidrag@2.0.0"
+    GreatUIDrag = "coffilhg/greatuidrag@2.0.1"
     ```
-- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vGreatUIDrag/2.0.0>)**
+- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vGreatUIDrag/2.0.1>)**
 
     ```toml
-    GreatUIDrag = "github.com/Coffilhg/Useful-Modules@GreatUIDrag/2.0.0"
+    GreatUIDrag = "github.com/Coffilhg/Useful-Modules@GreatUIDrag/2.0.1"
     ```
 
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[GreatUIDrag](<https://create.roblox.com/store/asset/123456789/GreatUIDrag>)**-->

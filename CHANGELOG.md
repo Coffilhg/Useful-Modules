@@ -1,3 +1,8 @@
+# v2.0.1
+
+- Found the cause of ``Type Error: (1,1) Type inference failed to complete, you may see some confusing types and type errors.`` and fixed it; ([More info and why](<https://github.com/luau-lang/luau/issues/2663>))
+    - Also added more declarations in the ``types compliance`` part, because fixing the confusing type errors made this visible.
+
 # v2.0.0
 
 > This version was actually a fork of the before wally-publish version, it doesn't include changes from v1.0.0, but it has them covered in a different way

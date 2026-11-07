@@ -1,5 +1,5 @@
 --[[--
-    GreatUIDrag V2.0.0
+    GreatUIDrag V2.0.1
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -262,8 +262,9 @@ function DragElement._KeepAlive(
 	end
 
 	self._springConnection = RunS.Heartbeat:Connect(function()
-		if self._position:IsAtRest() and not self._isActive then
-			self._springConnection:Disconnect()
+		local isActive = self._isActive
+		if self._position:IsAtRest() and not isActive then
+			(self._springConnection :: RBXScriptConnection):Disconnect()
 			self._springConnection = nil
 
 			self.OnDragCompleted:Fire(self._position.Target, self._contactConfirmed, self._lastTriggerHandle)
@@ -286,13 +287,13 @@ function DragElement.Reposition(self : DragElement)
 	end
 	
 	-- Never been dragged yet: nothing to reposition
-	if not (self._startObjectPos and self._startMousePos) then
+	local startObjectPos = self._startObjectPos
+	local startMousePos = self._startMousePos
+	if not (startObjectPos and startMousePos) then
 		return
 	end
 
-	local startObjectPos = self._startObjectPos
 	local currentSpringState = self._position.Position
-	local startMousePos = self._startMousePos
 
 	local sensibility = self._sensibility
 	local absoluteSize = self._absoluteSize
@@ -321,7 +322,8 @@ function DragElement.Reposition(self : DragElement)
 	-- Only keep the spring loop alive while something is still moving.
 	-- A plain re-clamp (viewport resize, IgnoreGuiInset change) must not start a loop,
 	-- otherwise it would fire OnDragCompleted for a drag that never happened.
-	if self._isActive or not self._position:IsAtRest() then
+	local isActive = self._isActive
+	if isActive or not self._position:IsAtRest() then
 		self:_KeepAlive(true)
         return
 	end
@@ -574,6 +576,10 @@ return function(
 	self._InitInsetVector = GUIInsetSizeVector :: sVal<Vector2>
 	self._GUIInset = GUIInsetZero :: sVal<number>
 	self._GUIInsetVector = GUIInsetZeroVector :: sVal<Vector2>
+    self._startMousePos = nil :: Vector2?
+	self._startObjectPos = nil :: Vector2?
+	self._springConnection = nil :: RBXScriptConnection?
+	self._ancestorConnection = nil :: RBXScriptConnection?
 
     --self._startMousePos = Vector2.zero :: Vector2
 	--self._startObjectPos = Vector2.zero :: Vector2
