@@ -8,12 +8,12 @@ Great for making interactive UI Buttons
 - **[Wally](<https://wally.run/package/coffilhg/greatuibutton>)**
 
     ```toml
-    GreatUIButton = "coffilhg/greatuibutton@0.0.0"
+    GreatUIButton = "coffilhg/greatuibutton@0.0.1"
     ```
-- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vGreatUIButton/0.0.0>)**
+- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vGreatUIButton/0.0.1>)**
 
     ```toml
-    GreatUIButton = "github.com/Coffilhg/Useful-Modules@GreatUIButton/0.0.0"
+    GreatUIButton = "github.com/Coffilhg/Useful-Modules@GreatUIButton/0.0.1"
     ```
 
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[GreatUIButton](<https://create.roblox.com/store/asset/123456789/GreatUIButton>)**-->

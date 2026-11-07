@@ -1,5 +1,5 @@
 --[[--
-    GreatUIButton V0.0.0
+    GreatUIButton V0.0.1
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -834,9 +834,10 @@ function GreatUIButton.ApplyAppearance(
 end
 --]]
 local function EvaluateActiveAppearanceType(self: GreatUIButton) : AppearanceType
-	if self.isHolding then
+	local isHolding, isHovering = self.isHolding, self.isHovering
+	if isHolding then
 		return `Press`
-	elseif self.isHovering then
+	elseif isHovering then
 		return `Hover`
 	end
 	return `Default`
@@ -844,7 +845,9 @@ end
 
 function GreatUIButton.ApplyAppearance(
 	self : GreatUIButton,
-	appearanceType : AppearanceType?
+	appearanceType : AppearanceType?,
+	isBypassingPriorities : boolean?,
+	isRedundant : boolean?
 ) : GreatUIButton
 	-- 1. If an explicit override is requested (like 'Click' or 'Disabled'), use it.
 	-- Otherwise, evaluate the physical mouse/touch state context automatically.
@@ -855,7 +858,7 @@ function GreatUIButton.ApplyAppearance(
 		targetAppearance = `Disabled`
 	end
 	
-	if self.DisplayedState == targetAppearance then
+	if not isRedundant and self.DisplayedState == targetAppearance then
 		-- already in the desired state
 		return self
 	end
@@ -880,7 +883,7 @@ function GreatUIButton.ApplyAppearance(
 	local debounce = self.DebouncePerApperanceType[self.DisplayedState]
 	local isDebounceActive = self._DebounceActive
 
-	if isDebounceActive and debounce and incomingPriority < currentPriority then
+	if not isBypassingPriorities and isDebounceActive and debounce and incomingPriority < currentPriority then
 		-- Lower priority cannot interrupt an active higher priority debounce task
 		return self
 	end
@@ -1113,10 +1116,8 @@ return function(
 		}
 	)
 	self:AddHitbox(buttonHitbox)
-	self:SetAppearance(`Default`, defaultAppearance)
-	self:ApplyAppearance(`Default`)
-	
-	
+	self:SetAppearance(`Default`, defaultAppearance, true)
+	self:ApplyAppearance(`Default`, true, true)
 	
 	return self
 end
