@@ -3,7 +3,7 @@ A quicker way to use Instance.new
 
 This module is inspired by **[this part of Vide](<https://github.com/centau/vide/blob/f3bfc65607834370ce84a6e16722282c4d30316c/src/create.luau>)**
 
-This module shows ALL class names that exist in the autocomplete, although most of them are not creatable using `Instance.new`
+The autocomplete for `Create` only shows the ClassNames that are creatable using `Instance.new` (client-side, in-game), provided by **[ClassNameTypePairsClientInGameCreatableExtended](<https://github.com/Coffilhg/ClassNameTypePairsClientInGameCreatableExtended>)**; `Apply` works with an Instance of any class
 
 `Parent` is given like any other prop, but it is set last (after all other props and children are applied) [as per official recommended way of using `Instance.new`](https://create.roblox.com/docs/en-us/reference/engine/datatypes/Instance#:~:text=Set%20new%20instance's%20parent%20last%20(recommended))
 
@@ -23,12 +23,12 @@ All **number indexed Instances** in props become children of the new Instance
 - **[Wally](<https://wally.run/package/coffilhg/createinstance>)**
 
     ```toml
-    CreateInstance = "coffilhg/createinstance@0.1.1"
+    CreateInstance = "coffilhg/createinstance@0.2.0"
     ```
-- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstance/0.1.1>)**
+- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstance/0.2.0>)**
 
     ```toml
-    CreateInstance = "github.com/Coffilhg/Useful-Modules@CreateInstance/0.1.1"
+    CreateInstance = "github.com/Coffilhg/Useful-Modules@CreateInstance/0.2.0"
     ```
 
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[CreateInstance](<https://create.roblox.com/store/asset/123456789/CreateInstance>)**-->
@@ -38,12 +38,12 @@ All **number indexed Instances** in props become children of the new Instance
 - **[Wally](<https://wally.run/package/coffilhg/createinstancecoffee>)**
 
     ```toml
-    CreateInstanceCoffee = "coffilhg/createinstancecoffee@0.1.1"
+    CreateInstanceCoffee = "coffilhg/createinstancecoffee@0.2.0"
     ```
-- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceCoffee/0.1.1>)**
+- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceCoffee/0.2.0>)**
 
     ```toml
-    CreateInstanceCoffee = "github.com/Coffilhg/Useful-Modules@CreateInstanceCoffee/0.1.1"
+    CreateInstanceCoffee = "github.com/Coffilhg/Useful-Modules@CreateInstanceCoffee/0.2.0"
     ```
 
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[CreateInstanceCoffee](<https://create.roblox.com/store/asset/123456789/CreateInstanceCoffee>)**-->
@@ -53,12 +53,12 @@ All **number indexed Instances** in props become children of the new Instance
 - **[Wally](<https://wally.run/package/coffilhg/createinstancereaction>)**
 
     ```toml
-    CreateInstanceReaction = "coffilhg/createinstancereaction@0.1.1"
+    CreateInstanceReaction = "coffilhg/createinstancereaction@0.2.0"
     ```
-- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceReaction/0.1.1>)**
+- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceReaction/0.2.0>)**
 
     ```toml
-    CreateInstanceReaction = "github.com/Coffilhg/Useful-Modules@CreateInstanceReaction/0.1.1"
+    CreateInstanceReaction = "github.com/Coffilhg/Useful-Modules@CreateInstanceReaction/0.2.0"
     ```
 
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[CreateInstanceReaction](<https://create.roblox.com/store/asset/123456789/CreateInstanceReaction>)**-->
@@ -67,7 +67,7 @@ All **number indexed Instances** in props become children of the new Instance
 
 ```lua
 const CreateInstance = require(`@game/ReplicatedStorage/Packages/CreateInstance`)
-const Create, CreateMissing = CreateInstance:Unpack()
+const Create, Apply = CreateInstance:Unpack()
 
 -- this does
 -- Instance.new("Part")
@@ -83,13 +83,11 @@ const part = Create "Part" {
   Parent = workspace,
 }
 
--- if existingInstance is an Instance with the same ClassName,
--- it is returned as is (props are ignored);
--- otherwise this is the same as Create
-const existingPart = workspace:FindFirstChild("SomePart")
-const somePart = CreateMissing(existingPart) "Part" {
-  Anchored = true,
-  Parent = workspace,
+-- the same as Create, but for an Instance that already exists
+-- this is useful when you need to apply reactive/changing values
+-- to an Instance of a Class you can't create via `Instance.new`
+Apply(workspace) {
+  Gravity = 100,
 }
 ```
 
@@ -99,7 +97,7 @@ just read the code, it's about 150 lines
 
 ## DEPENDENCIES (if any)
 
-- **[ClassNameTypePairs](<https://github.com/Coffilhg/ClassNameTypePairs>)**
+- **[ClassNameTypePairsClientInGameCreatableExtended](<https://github.com/Coffilhg/ClassNameTypePairsClientInGameCreatableExtended>)**
 
 ### Additional Dependencies (if using either extension version)
 
