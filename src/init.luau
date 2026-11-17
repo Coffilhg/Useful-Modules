@@ -1,5 +1,5 @@
 --[[--
-    Reaction V1.1.0
+    Reaction V1.1.1
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -31,7 +31,7 @@ export type E<T> = (T, true?) -> () -- Event (or can also be called a reaction)
 type El = {[number]: E<Vt>} -- Event List
 
 -- Value ("Source")
-const function V<T>(val: T | Vt): V<T>
+const function V<T>(val: T): V<T>
 	const reactions: El = {}
 
 	const function value(...)

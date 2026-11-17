@@ -10,12 +10,12 @@ Since V1.1.0 it uses the Roblox' `task` library and doesn't replace it automatic
 - **[Wally](<https://wally.run/package/coffilhg/reaction>)**
 
     ```toml
-    Reaction = "coffilhg/reaction@1.1.0"
+    Reaction = "coffilhg/reaction@1.1.1"
     ```
-- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vReaction/1.1.0>)**
+- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vReaction/1.1.1>)**
 
     ```toml
-    Reaction = "github.com/Coffilhg/Useful-Modules@Reaction/1.1.0"
+    Reaction = "github.com/Coffilhg/Useful-Modules@Reaction/1.1.1"
     ```
 
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[Reaction](<https://create.roblox.com/store/asset/123456789/Reaction>)**-->
