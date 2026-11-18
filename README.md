@@ -105,29 +105,29 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	> 
 	> **1! [Wally CreateInstance](<https://wally.run/package/coffilhg/createinstance>)**
 	> ```toml
-	> CreateInstance = "coffilhg/createinstance@0.1.1"
+	> CreateInstance = "coffilhg/createinstance@0.2.0"
 	> ```
 	> **2" [Wally CreateInstanceCoffee](<https://wally.run/package/coffilhg/createinstancecoffee>)**
 	> ```toml
-	> CreateInstanceCoffee = "coffilhg/createinstancecoffee@0.1.1"
+	> CreateInstanceCoffee = "coffilhg/createinstancecoffee@0.2.0"
 	> ```
 	> **3# [Wally CreateInstanceReaction](<https://wally.run/package/coffilhg/createinstancereaction>)**
 	> ```toml
-	> CreateInstanceReaction = "coffilhg/createinstancereaction@0.1.1"
+	> CreateInstanceReaction = "coffilhg/createinstancereaction@0.2.0"
 	> ```
-	> **1! [Rotriever CreateInstance](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstance/0.1.1>)**
+	> **1! [Rotriever CreateInstance](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstance/0.2.0>)**
 	> ```toml
-	> CreateInstance = "github.com/Coffilhg/Useful-Modules@CreateInstance/0.1.1"
+	> CreateInstance = "github.com/Coffilhg/Useful-Modules@CreateInstance/0.2.0"
 	> ```
-	> **2" [Rotriever CreateInstanceCoffee](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceCoffee/0.1.1>)**
+	> **2" [Rotriever CreateInstanceCoffee](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceCoffee/0.2.0>)**
 	> ```toml
-	> CreateInstanceCoffee = "github.com/Coffilhg/Useful-Modules@CreateInstanceCoffee/0.1.1"
+	> CreateInstanceCoffee = "github.com/Coffilhg/Useful-Modules@CreateInstanceCoffee/0.2.0"
 	> ```
-	> **3# [Rotriever CreateInstanceReaction](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceReaction/0.1.1>)**
+	> **3# [Rotriever CreateInstanceReaction](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceReaction/0.2.0>)**
 	> ```toml
-	> CreateInstanceReaction = "github.com/Coffilhg/Useful-Modules@CreateInstanceReaction/0.1.1"
+	> CreateInstanceReaction = "github.com/Coffilhg/Useful-Modules@CreateInstanceReaction/0.2.0"
 	> ```
-	> **Dependencies ~>** *[ClassNameTypePairs](<https://github.com/Coffilhg/ClassNameTypePairs>) | [CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>) | [Reaction](<https://github.com/Coffilhg/Useful-Modules/tree/Reaction>)*
+	> **Dependencies ~>** *[ClassNameTypePairsClientInGameCreatableExtended](<https://github.com/Coffilhg/ClassNameTypePairsClientInGameCreatableExtended>) | [CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>) | [Reaction](<https://github.com/Coffilhg/Useful-Modules/tree/Reaction>)*
 - **[EasySmoothDamp](<https://github.com/Coffilhg/Useful-Modules/tree/EasySmoothDamp>)**
 
 	> **MPL-2.0**
@@ -430,6 +430,10 @@ const Ds: {[string]: Dependency} = {
         Name = `ClassNameTypePairs`,
         Link = `https://github.com/Coffilhg/ClassNameTypePairs`,
     },
+    ClassNameTypePairsClientInGameCreatableExtended = {
+        Name = `ClassNameTypePairsClientInGameCreatableExtended`,
+        Link = `https://github.com/Coffilhg/ClassNameTypePairsClientInGameCreatableExtended`,
+    },
     NamespaceSync = {
         Name = `NamespaceSync`,
     },
@@ -683,27 +687,27 @@ local Branches: {[number]: BranchInfo} = {
       ModuleNamePascalCase = "CreateInstance",
       License = "MPL-2.0",
       Links = {
-        [`1! [Rotriever CreateInstance](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstance/0.1.1>)`] = {
-            Content = `CreateInstance = "github.com/Coffilhg/Useful-Modules@CreateInstance/0.1.1"`,
+        [`1! [Rotriever CreateInstance](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstance/0.2.0>)`] = {
+            Content = `CreateInstance = "github.com/Coffilhg/Useful-Modules@CreateInstance/0.2.0"`,
         },
         [`1! [Wally CreateInstance](<https://wally.run/package/coffilhg/createinstance>)`] = {
-            Content = `CreateInstance = "coffilhg/createinstance@0.1.1"`,
+            Content = `CreateInstance = "coffilhg/createinstance@0.2.0"`,
         },
-        [`2" [Rotriever CreateInstanceCoffee](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceCoffee/0.1.1>)`] = {
-            Content = `CreateInstanceCoffee = "github.com/Coffilhg/Useful-Modules@CreateInstanceCoffee/0.1.1"`,
+        [`2" [Rotriever CreateInstanceCoffee](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceCoffee/0.2.0>)`] = {
+            Content = `CreateInstanceCoffee = "github.com/Coffilhg/Useful-Modules@CreateInstanceCoffee/0.2.0"`,
         },
         [`2" [Wally CreateInstanceCoffee](<https://wally.run/package/coffilhg/createinstancecoffee>)`] = {
-            Content = `CreateInstanceCoffee = "coffilhg/createinstancecoffee@0.1.1"`,
+            Content = `CreateInstanceCoffee = "coffilhg/createinstancecoffee@0.2.0"`,
         },
-        [`3# [Rotriever CreateInstanceReaction](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceReaction/0.1.1>)`] = {
-            Content = `CreateInstanceReaction = "github.com/Coffilhg/Useful-Modules@CreateInstanceReaction/0.1.1"`,
+        [`3# [Rotriever CreateInstanceReaction](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vCreateInstanceReaction/0.2.0>)`] = {
+            Content = `CreateInstanceReaction = "github.com/Coffilhg/Useful-Modules@CreateInstanceReaction/0.2.0"`,
         },
         [`3# [Wally CreateInstanceReaction](<https://wally.run/package/coffilhg/createinstancereaction>)`] = {
-            Content = `CreateInstanceReaction = "coffilhg/createinstancereaction@0.1.1"`,
+            Content = `CreateInstanceReaction = "coffilhg/createinstancereaction@0.2.0"`,
           },
       },
       Dependencies = {
-          Ds.ClassNameTypePairs,
+          Ds.ClassNameTypePairsClientInGameCreatableExtended,
           Ds.CoffeeObjects,
           Ds.Reaction,
       },
