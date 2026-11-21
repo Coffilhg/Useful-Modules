@@ -179,15 +179,15 @@ Each branch is a separate module/collection, the LICENSE may vary (but is mostly
 	>
 	> **[Useful-Modules/GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>)**
 	> 
-	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vGUICompatibility/1.0.0>)**
+	> **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vGUICompatibility/2.0.0>)**
 	> ```toml
-	> GUICompatibility = "github.com/Coffilhg/Useful-Modules@GUICompatibility/1.0.0"
+	> GUICompatibility = "github.com/Coffilhg/Useful-Modules@GUICompatibility/2.0.0"
 	> ```
 	> **[Wally](<https://wally.run/package/coffilhg/guicompatibility>)**
 	> ```toml
-	> GUICompatibility = "coffilhg/guicompatibility@1.0.0"
+	> GUICompatibility = "coffilhg/guicompatibility@2.0.0"
 	> ```
-	> **Dependencies ~>** *[CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>)*
+	> **Dependencies ~>** *[Reaction](<https://github.com/Coffilhg/Useful-Modules/tree/Reaction>)*
 - **[GreatUIButton](<https://github.com/Coffilhg/Useful-Modules/tree/GreatUIButton>)**
 
 	> **MPL-2.0**
@@ -525,14 +525,14 @@ local Branches: {[number]: BranchInfo} = {
         License = "MPL-2.0",
         Links = {
             Wally = {
-                Content = `GUICompatibility = "coffilhg/guicompatibility@1.0.0"`,
+                Content = `GUICompatibility = "coffilhg/guicompatibility@2.0.0"`,
             },
             Rotriever = {
-                Content = `GUICompatibility = "github.com/Coffilhg/Useful-Modules@GUICompatibility/1.0.0"`,
+                Content = `GUICompatibility = "github.com/Coffilhg/Useful-Modules@GUICompatibility/2.0.0"`,
             },
         },
         Dependencies = {
-            Ds.CoffeeObjects,
+            Ds.Reaction,
         },
     },
     {
