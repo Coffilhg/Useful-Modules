@@ -4,6 +4,12 @@
     "$className": "DataModel",
 
     "ReplicatedStorage": {
+      "Test": {
+        "$path": "tests/.",
+        "$properties": {
+          "RunContext": "Client"
+        }
+      },
       "Packages": {
         "$path": "Packages",
         "GUICompatibility": {
