@@ -9,6 +9,15 @@
         "GreatUIDrag": {
             "$path": "src/"
         }
+      },
+      "DevPackages": {
+        "$path": "DevPackages"
+      },
+      "DragTest": {
+        "$path": "Tests/DragTest",
+        "$properties": {
+          "RunContext": "Client"
+        }
       }
     }
     

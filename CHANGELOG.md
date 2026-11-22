@@ -1,3 +1,21 @@
+# v2.1.0
+
+- Removed the dependencies [GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>) and [CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>). Everything is now calculated in the space of `AbsolutePosition` and `InputObject.Position`, so no GUI inset values are needed anymore.
+
+### Fixed
+- Clicking an element (without dragging) moved it slightly to the left and/or up when the game was started in a mobile device (or emulation of)
+- After switching the device during a playtest, the next drag was offset
+- Elements inside a Frame or ScrollingFrame (not directly in the ScreenGui) were positioned relative to the ScreenGui
+- Dragging on mobile no longer uses `TouchTap`, which never fired when tested on a phone; `MouseButton1Down` fires for touches too and is the only trigger now
+- Gamepad thumbsticks, the mouse wheel and device motion no longer move a dragged element (`InputChanged` is limited to `MouseMovement` and `Touch`)
+- Incompatibility with wally-package-types **[more info](<https://github.com/JohnnyMorganz/wally-package-types/issues/34>)**
+
+### Changed
+- Works with every `ScreenInsets` / `IgnoreGuiInset` / `SafeAreaCompatibility` combination; the bounds are the ScreenGui's own area
+- Bounds are re-fitted when the ScreenGui's `AbsoluteSize` / `AbsolutePosition` changes (instead of listening to `Camera.ViewportSize` and `IgnoreGuiInset`); the values are already final when these signals fire, so no delayed re-fit like in **[GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/blob/GUICompatibility/CHANGELOG.md#:~:text=Everything%20is%20re>)** is needed
+- `OnPositionChanged` arguments renamed to `offsetX, offsetY` (they were always the offsets written to `Position`); now they are also fixed/correct for the cases where previous versions positioned the element wrong (see Fixed)
+- The `DragElement` class table is frozen
+
 # v2.0.1
 
 - Found the cause of ``Type Error: (1,1) Type inference failed to complete, you may see some confusing types and type errors.`` and fixed it; ([More info and why](<https://github.com/luau-lang/luau/issues/2663>))

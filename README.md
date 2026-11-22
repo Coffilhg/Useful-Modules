@@ -10,12 +10,12 @@ Supports desktop and mobile, GUI insets, anchor points, viewport resizing, and C
 - **[Wally](<https://wally.run/package/coffilhg/greatuidrag>)**
 
     ```toml
-    GreatUIDrag = "coffilhg/greatuidrag@2.0.1"
+    GreatUIDrag = "coffilhg/greatuidrag@2.1.0"
     ```
-- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vGreatUIDrag/2.0.1>)**
+- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vGreatUIDrag/2.1.0>)**
 
     ```toml
-    GreatUIDrag = "github.com/Coffilhg/Useful-Modules@GreatUIDrag/2.0.1"
+    GreatUIDrag = "github.com/Coffilhg/Useful-Modules@GreatUIDrag/2.1.0"
     ```
 
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[GreatUIDrag](<https://create.roblox.com/store/asset/123456789/GreatUIDrag>)**-->
@@ -28,9 +28,10 @@ Supports desktop and mobile, GUI insets, anchor points, viewport resizing, and C
 - Optionally multiple drag handles
 - Sensibility, speed and damping control
 - Automatically handles
-    - IgnoreGuiInset changes
+    - Every `ScreenInsets` / `IgnoreGuiInset` / `SafeAreaCompatibility` combination, and changes to them
+    - Elements nested in Frames and ScrollingFrames
     - AnchorPoint
-    - Viewport resizing (Non-fullscreen players and mobile players rotating their screen)
+    - Viewport resizing and device switches (Non-fullscreen players and mobile players rotating their screen)
 - Events for contact, start, release, completion and position changes (Click vs drag detection)
 
 ---
@@ -44,8 +45,6 @@ Place the module and its dependencies somewhere accessible (e.g. `ReplicatedStor
 ```
 Packages
 ├── _Index
-├── CoffeeObjects
-├── GUICompatibility
 ├── GreatUIDrag
 │   └── _Spring
 └── LemonSignal
@@ -203,7 +202,7 @@ All of the events are **Signal** Objects instantiated via **LemonSignal**
 | `OnDragStarted`        | `triggerHandle`                          | The pointer moved after `dragStartDelay` (a real drag); Fires after OnDragContact and dragStartDelay if not OnDragReleased                                                               |
 | `OnDragReleased`       | `finalGoal, wasDragged, triggerHandle`   | Released, or another element started dragging; the spring keeps going; Fires after dragElement gets released or another dragElement is starting, continues moving towards the final goal |
 | `OnDragCompleted`      | `finalGoal, wasDragged, triggerHandle`   | The spring settled at the final goal; Fires after the final goal was reached                                                                                                             |
-| `OnPositionChanged`    | `currentAbsoluteX, currentAbsoluteY`     | The element was repositioned (the offsets written to `Position`); Fires on Reposition / UIS.InputChanged while used                                                                      |
+| `OnPositionChanged`    | `offsetX, offsetY`                       | The element was repositioned (the offsets written to `Position`, relative to the element's parent); Fires on Reposition / UIS.InputChanged while used                                       |
 
 `wasDragged` is `true` if `OnDragStarted` fired, otherwise `nil`, so you can tell a click from a drag:
 > `wasDragged` is an alias for `IsDragStartFiredBeforeReleased` (how it is commented in the source)
@@ -224,18 +223,16 @@ end)
     - Pressing another element's handle stops this one (its `OnDragReleased` fires)
 - Uses `RunService.Heartbeat` only while active or on-the-way to complete the latest goal
 - Automatically updates bounds based on:
-    - Viewport resize (`game.Workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize")`)
+    - The ScreenGui's `AbsoluteSize` / `AbsolutePosition` changes (viewport resize, device switch, `IgnoreGuiInset` / `ScreenInsets` changes)
     - AnchorPoint change (`dragElement:GetPropertyChangedSignal("AnchorPoint")`)
-    - GuiInset change (`GUICompatibility:GetGuiInsetSize().Value`)
-- The element won't move unless it's inside a `ScreenGui`. This is re-checked when its parent changes
+- The element won't move unless it's inside a `ScreenGui`. This is re-checked when its ancestry changes
+- The element is kept inside its ScreenGui's area (minus the padding), so with `ScreenInsets.None` it can be dragged under a phone's notch (given 0 padding)
 - To react to a `DragElement` being destroyed, connect to the `dragElement`'s own `Destroying` event. Check `:IsDestroyed()` if you need to know later
 - Setting `dragElement.Parent = nil` is not `dragElement:Destroy()`, therefore it does not automatically call `DragElement:Destroy()`
 
 ---
 
 ## Dependencies
-- [GUICompatibility](https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility)
-- [CoffeeObjects](https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects)
 - [_Spring](https://create.roblox.com/store/asset/71132874095126/Spring-Module) (by @crusherfire | https://www.roblox.com/users/80102935/profile)
 - [LemonSignal](<https://github.com/Data-Oriented-House/LemonSignal>)
 
