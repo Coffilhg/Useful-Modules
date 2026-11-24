@@ -10,12 +10,12 @@ Supports desktop and mobile, GUI insets, anchor points, viewport resizing, and C
 - **[Wally](<https://wally.run/package/coffilhg/greatuidrag>)**
 
     ```toml
-    GreatUIDrag = "coffilhg/greatuidrag@2.1.0"
+    GreatUIDrag = "coffilhg/greatuidrag@3.0.0"
     ```
-- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vGreatUIDrag/2.1.0>)**
+- **[Rotriever](<https://github.com/Coffilhg/Useful-Modules/releases/tag/vGreatUIDrag/3.0.0>)**
 
     ```toml
-    GreatUIDrag = "github.com/Coffilhg/Useful-Modules@GreatUIDrag/2.1.0"
+    GreatUIDrag = "github.com/Coffilhg/Useful-Modules@GreatUIDrag/3.0.0"
     ```
 
 <!-- **[Creator Store](<https://create.roblox.com/store/category/gameplay?creatorName=coffilhg>)** ~ **[GreatUIDrag](<https://create.roblox.com/store/asset/123456789/GreatUIDrag>)**-->
@@ -118,7 +118,9 @@ GreatUIDrag(
 ### `speed` (optional)
 > Spring speed
 >
-> Default = `27 / sensibilityMultiplier`
+> Default = `27`
+>
+> Before v3.0.0 the default was `27 / sensibilityMultiplier`
 
 ### `paddingOptions` (optional)
 > CSS-like syntax:
@@ -186,6 +188,21 @@ local MyDragElement = GreatUIDrag(...)
 > Places the element immediately and resets the spring, without animating
 > 
 > If `typeof(position) ~= "UDim2"` (e.g. not given), it uses the mouse location
+
+### `MyDragElement:SetDamping(damping: number?): DragElement`
+### `MyDragElement:SetSpeed(speed: number?): DragElement`
+### `MyDragElement:SetPadding(paddingOptions: ( number | UDim | {number | UDim} )?): DragElement`
+### `MyDragElement:SetSensibilityMultiplier(sensibilityMultiplier: number?): DragElement`
+### `MyDragElement:SetDragStartDelay(dragStartDelay: number?): DragElement`
+> Change the options given on creation (see [Parameters](#parameters)), with the same defaults: if the value isn't a number/expected type (e.g. not given), the default is applied
+>
+> They return the `DragElement`, so they can be chained:
+> ```lua
+> MyDragElement:SetSpeed(40):SetPadding({10, 20})
+> ```
+>
+> - `SetPadding` re-fits the element into the new bounds right away
+> - `SetSensibilityMultiplier` can be called mid-drag, the element continues from where it is
 
 ### `MyDragElement:Stop()`
 > Stops active dragging (client input signals) but allows spring to reach the latest goal

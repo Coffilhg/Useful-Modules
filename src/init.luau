@@ -1,5 +1,5 @@
 --[[--
-    GreatUIDrag V2.1.0
+    GreatUIDrag V3.0.0
     Copyright © 2026 Coffilhg (Roblox UserId 517222346)
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -35,6 +35,12 @@ const Signal = require(`./LemonSignal`) -- or wherever it's located and whatever
 --- Default Side Padding for when Dragging ---
 const Padding : UDim = UDim.new(0, 30)
 
+--- Defaults (used on creation and by the setters whenever the given value isn't a number) ---
+const DefaultDamping = 1
+const DefaultSpeed = 27
+const DefaultSensibility = 1
+const DefaultDragStartDelay = 0.24
+
 
 --- Utilities ---
 
@@ -43,11 +49,12 @@ const function sgn(value : number | any, default : number) : number
 	return type(value) == "number" and value or default
 end
 
-type UDimConvertable = UDim | number | any
+type UDimConvertable = UDim | number
 type PaddingConverterCallbackKeys = "0" | "1" | "2" | "3" | "4"
 type PaddingConverterCallbacks = {
 	[PaddingConverterCallbackKeys]: (({[number]: UDimConvertable} | {})) -> (UDim, UDim, UDim, UDim),
 }
+type PaddingOptions = (number | UDim | {[number]: UDimConvertable} | {})?
 
 const function toUDim(v : UDimConvertable) : UDim
 	if typeof(v) == "UDim" then
@@ -83,7 +90,7 @@ const cbs: PaddingConverterCallbacks = {
 	end,
 }
 
-const function normalizePadding(p : (number | UDim | {[number]: UDimConvertable} | {})?)
+const function normalizePadding(p : PaddingOptions)
 	p = type(p) == "table" and p or (p and {p} or {})
 
 	const k = `{math.min(#p, 4)}` :: PaddingConverterCallbackKeys
@@ -411,6 +418,82 @@ function DragElement.SetPosition(
 	self["_blocked"] = previouslyBlocked
 end
 
+-- Setters: when the value isn't a number (e.g. not given), the same default as on creation is applied
+-- All of them return self, so they can be chained
+
+-- Spring damping; Lower = jelly, Higher = rock
+function DragElement.SetDamping(
+	self : DragElement,
+	damping : number?
+) : DragElement
+	if self:IsDestroyed() then
+		return self
+	end
+
+	self._position.Damping = sgn(damping, DefaultDamping)
+	return self
+end
+
+-- Spring speed; More = faster interpolation
+function DragElement.SetSpeed(
+	self : DragElement,
+	speed : number?
+) : DragElement
+	if self:IsDestroyed() then
+		return self
+	end
+
+	self._position.Speed = sgn(speed, DefaultSpeed)
+	return self
+end
+
+-- Same options as the constructor's paddingOptions; the element is re-fitted into the new bounds right away
+function DragElement.SetPadding(
+	self : DragElement,
+	paddingOptions : PaddingOptions
+) : DragElement
+	if self:IsDestroyed() then
+		return self
+	end
+
+	self._rawPadding = normalizePadding(paddingOptions)
+	-- recalculates the bounds and re-clamps; a never dragged element gets its bounds on the first drag
+	self:_Refit()
+	return self
+end
+
+function DragElement.SetSensibilityMultiplier(
+	self : DragElement,
+	sensibilityMultiplier : number?
+) : DragElement
+	if self:IsDestroyed() then
+		return self
+	end
+
+	self._sensibility = sgn(sensibilityMultiplier, DefaultSensibility)
+
+	-- The movement since the drag start is multiplied by the sensibility, so changing it
+	-- mid-drag (or while the spring settles) would make the element jump; start from here instead
+	if self._startObjectPos then
+		self._startObjectPos = self._dragElement.AbsolutePosition
+		self._startMousePos = self._position.Position
+	end
+	return self
+end
+
+-- Minimal press & hold time before OnDragStarted fires and the element starts following the pointer
+function DragElement.SetDragStartDelay(
+	self : DragElement,
+	dragStartDelay : number?
+) : DragElement
+	if self:IsDestroyed() then
+		return self
+	end
+
+	self._delay = sgn(dragStartDelay, DefaultDragStartDelay)
+	return self
+end
+
 function DragElement.InitDrag(
 	self : DragElement,
 	triggerHandle : DragHandle
@@ -544,7 +627,7 @@ return function(
 	dragHandle : ( DragHandle | {DragHandle} )?,
 	damping : number?,
 	speed : number?,
-	paddingOptions : (number | UDim | {number | UDim})?,
+	paddingOptions : PaddingOptions,
 	sensibilityMultiplier : number?,
 	dragStartDelay : number?
 ) : DragElement
@@ -562,10 +645,10 @@ return function(
 	self._rawPadding = normalizePadding(paddingOptions)
 	self._dragElement = dragElement
 	self._absoluteSize = dragElement.AbsoluteSize
-	self._position = Spring.new(dragElement.AbsolutePosition, sgn(damping, 1), sgn(speed, 27 / sgn(sensibilityMultiplier, 1)) ) :: Spring.Spring<Vector2>
+	self._position = Spring.new(dragElement.AbsolutePosition, sgn(damping, DefaultDamping), sgn(speed, DefaultSpeed) ) :: Spring.Spring<Vector2>
 	self._isActive = false
-	self._sensibility = sgn(sensibilityMultiplier, 1)
-	self._delay = sgn(dragStartDelay, 0.24)
+	self._sensibility = sgn(sensibilityMultiplier, DefaultSensibility)
+	self._delay = sgn(dragStartDelay, DefaultDragStartDelay)
 	self._startTime = time()
 	self._contactConfirmed = nil :: boolean?
 	self._lastTriggerHandle = nil :: DragHandle?

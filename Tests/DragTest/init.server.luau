@@ -230,6 +230,14 @@ UIS.InputEnded:Connect(function(inputObject: InputObject, isProcessed: boolean)
 	ScreenGui.ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets
 end)
 
+--- SENSIBILITY TEST ---
+-- UIS.InputChanged:Connect(function(inputObject: InputObject, isProcessed: boolean)
+-- 	if inputObject.UserInputType == Enum.UserInputType.MouseWheel then
+-- 		Drag:SetSensibilityMultiplier(Drag._sensibility + inputObject.Position.Z)
+-- 	end
+-- end)
+--- /E SENSIBILITY TEST ---
+
 -- CR(`Frame`)({
 -- 	AnchorPoint = Vector2.new(0.5, 0.5),
 -- 	Position = UDim2.fromScale(0.5, 0.5),

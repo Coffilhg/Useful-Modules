@@ -1,3 +1,15 @@
+# v3.0.0
+
+### Added
+- Setters for every option the constructor takes: `:SetDamping(damping)`, `:SetSpeed(speed)`, `:SetPadding(paddingOptions)`, `:SetSensibilityMultiplier(sensibilityMultiplier)` and `:SetDragStartDelay(dragStartDelay)`
+    - If the value isn't a number (or valid padding options / expectd value type), the same default as on creation is applied, so e.g. `:SetSpeed()` restores the default speed
+    - All of them return the `DragElement`, so they can be chained
+    - `:SetPadding` re-fits the element into the new bounds right away
+    - `:SetSensibilityMultiplier` can be used mid-drag without the element jumping
+
+### Changed
+- The default `speed` is now always `27`; it used to be `27 / sensibilityMultiplier`. The spring runs in pointer space and its settle time doesn't depend on the distance, so dividing the speed only made drags with a higher sensibility lag behind more. **If you passed a `sensibilityMultiplier` but no `speed`, the spring is now faster** (e.g. twice as fast with a sensibility of `2`); pass `27 / sensibilityMultiplier` as the `speed` to keep the old feel
+
 # v2.1.0
 
 - Removed the dependencies [GUICompatibility](<https://github.com/Coffilhg/Useful-Modules/tree/GUICompatibility>) and [CoffeeObjects](<https://github.com/Coffilhg/Useful-Modules/tree/CoffeeObjects>). Everything is now calculated in the space of `AbsolutePosition` and `InputObject.Position`, so no GUI inset values are needed anymore.
